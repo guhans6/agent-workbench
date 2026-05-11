@@ -4,7 +4,7 @@
 
 ### Codex skills
 
-- `platforms/codex/skills/commit-and-push`
+- `platforms/codex/skills/publish-workflow`
 - `platforms/codex/skills/apple-ci-bootstrap`
 - `platforms/codex/skills/ios-macos-repo-workflow`
 

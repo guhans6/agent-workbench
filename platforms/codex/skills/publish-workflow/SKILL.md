@@ -1,12 +1,12 @@
 ---
-name: commit-and-push
-description: Commit and push code changes with issue-aware scope, clean commit grouping, and intentional PR follow-up. Use when user asks to commit, push, publish local changes, prepare a PR after pushing, or wants issue-linked git hygiene without generic agent attribution.
+name: publish-workflow
+description: Create or reuse the right branch, commit and optionally push code changes with issue-aware scope, then recommend PR follow-up without creating or editing the PR unless approved. Use when user asks to create a branch, commit, push, publish local changes, or prepare PR-ready git output with disciplined workflow hygiene.
 ---
 
-# Commit And Push
+# Publish Workflow
 
-Commit and push with deliberate scope, issue hygiene, and clean history.
-Default behavior is `commit` + `push`.
+Create the right branch when needed, then commit and optionally push with deliberate scope, issue hygiene, and clean history.
+Default behavior is branch if needed, then `commit` + `push` only when the user asked to publish or push.
 PR creation or PR metadata updates require explicit approval after push.
 Pushing new commits to a branch with an existing PR is allowed unless the user says to hold push for review.
 
@@ -14,6 +14,7 @@ Pushing new commits to a branch with an existing PR is allowed unless the user s
 
 Use this skill when the user says:
 
+- "create a branch for this"
 - "commit this"
 - "commit and push"
 - "publish these changes"
@@ -22,6 +23,12 @@ Use this skill when the user says:
 ## Rules
 
 - Use current conversation context first to infer scope.
+- For non-trivial implementation work, prefer a dedicated branch over working on the default branch.
+- If already on a clearly scoped non-default branch that matches the task, reuse it.
+- If on the default branch, do not commit there without explicit approval. Create a branch before staging or committing unless the user clearly asked to stay on the default branch.
+- Do not use issue-number-only branch names by default.
+- Default branch naming should be semantic and prefixed by work type, such as `feature/<slug>`, `fix/<slug>`, `refactor/<slug>`, or `chore/<slug>`.
+- Add an issue identifier in the branch name only when issue mapping is explicit and useful. Prefer semantic slug first, then issue, for example `feature/editor-selection-188`.
 - Add issue references only when issue IDs or issue-reference convention are confirmed by explicit user input, repo-local docs, or tracker evidence.
 - If issue mapping is unclear, inspect repo issue-tracker docs or tracker state before committing. If still unclear, omit issue refs and report that no reliable mapping was found, or stop and ask if issue linkage is materially important.
 - Never add AI attribution, agent names, or generated-by text to commits or PRs.
@@ -44,27 +51,34 @@ Use this skill when the user says:
 
 1. Inspect `git status`, `git diff`, `git diff --cached`, and untracked files separately.
 2. Infer which files belong to the current request from conversation context and repo state.
-3. Check for issue-tracker truth in repo docs such as `docs/agents/issue-tracker.md`, `docs/agents/triage-labels.md`, `AGENTS.md`, or equivalent local guidance.
-4. If issue linkage is still unclear and the user expects issue-aware publishing, inspect the tracker before committing. If no reliable issue mapping is found, omit issue refs or stop and ask when issue linkage materially changes the result.
-5. Propose an internal commit grouping plan and apply it directly unless scope is ambiguous.
-6. Stage only the files for the first coherent commit.
-7. Write a clean Conventional Commit message. Add body only when needed. Add footer refs when relevant.
-8. Repeat for each meaningful commit group.
-9. Check branch name, upstream, default branch, and whether the branch already backs an open PR.
-10. Push the branch when the target is safe.
-11. Stop and present a concise PR recommendation summary:
-   - branch pushed
+3. Check the current branch, default branch base, and remote tracking state against the task.
+4. If a new branch is needed, ensure the default branch base is validated by remote-tracking evidence, an approved fetch/update step, or explicit user acceptance of branching from the current local base. Otherwise stop and ask.
+5. If a new branch is needed, create one with a semantic prefix and concise slug before staging or committing.
+6. Check whether the chosen branch already backs an open PR and confirm that updating that branch is in scope when it matters.
+7. Check for issue-tracker truth in repo docs such as `docs/agents/issue-tracker.md`, `docs/agents/triage-labels.md`, `AGENTS.md`, or equivalent local guidance.
+8. If issue linkage is still unclear and the user expects issue-aware publishing, inspect the tracker before committing. If no reliable issue mapping is found, omit issue refs or stop and ask when issue linkage materially changes the result.
+9. Propose an internal commit grouping plan and apply it directly unless scope is ambiguous.
+10. Stage only the files for the first coherent commit.
+11. Write a clean Conventional Commit message. Add body only when needed. Add footer refs when relevant.
+12. Repeat for each meaningful commit group.
+13. If the user asked to publish or push, check branch name, upstream, default branch, and whether the branch already backs an open PR.
+14. If the user asked to publish or push, push the branch when the target is safe.
+15. Stop and present a concise summary:
+   - branch created or reused
    - commits created
+   - whether the branch was pushed
    - linked issues, if reliably known
    - whether the branch already has an open PR
    - recommended PR title
    - whether the PR should close any issues
    - observed validation or `unverified`
-12. Create or update the PR only after explicit approval.
+16. Create or update the PR only after explicit approval.
 
 ## When To Stop And Ask
 
 - unrelated or surprising local changes are mixed into the worktree
+- current branch is unrelated to the task or branch naming intent is ambiguous
+- the default branch base is stale or unclear before creating a new branch
 - issue mapping materially affects commit grouping or wording
 - no reliable issue mapping exists and issue linkage matters
 - the diff could reasonably belong to multiple unrelated issues
@@ -74,11 +88,12 @@ Use this skill when the user says:
 - the branch has no upstream and there is no single obvious remote target
 - the branch already backs an open PR and the user asked not to update it yet
 
-## Commit Policy
+## Branch And Commit Policy
 
+- Branch: semantic work-type prefix plus concise slug, no issue-only names by default, optional issue suffix only when explicit
 - Subject: Conventional Commit form, short, imperative, no issue numbers by default
 - Body: only when rationale, risk, migration, or behavior change is not obvious
 - Footer: structured metadata using the repo's issue-reference convention
 - Small self-explanatory commit may omit body and footer when no issue mapping is needed
 
-See [REFERENCE.md](REFERENCE.md) for grouping rules, commit standards, and PR policy.
+See [REFERENCE.md](REFERENCE.md) for branch strategy, grouping rules, commit standards, and PR policy.

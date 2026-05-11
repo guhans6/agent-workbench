@@ -8,5 +8,6 @@
 
 ## Commit / Issue Hygiene
 
-- Before committing or opening a PR, check whether the work maps to issues/PRD tasks. If yes, reference issue numbers in commits/PRs and use `Closes/Fixes/Resolves #N` in the PR body when merge should close them. 
+- Use `publish-workflow` for normal branch, commit, push, and PR-boundary operations.
+- Before committing or opening a PR, check whether the work maps to issues/PRD tasks. If yes, reference issue numbers in commits/PRs and use `Closes/Fixes/Resolves #N` in the PR body when merge should close them.
 - Don't assume and commit.

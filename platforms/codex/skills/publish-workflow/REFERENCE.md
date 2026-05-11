@@ -1,9 +1,33 @@
-# Commit And Push Reference
+# Publish Workflow Reference
 
 ## Purpose
 
-This skill handles publish hygiene after implementation work.
+This skill handles branch creation, publish hygiene, and PR-boundary discipline after implementation work.
 It is not a generic PR bot, release manager, or issue triage system.
+
+## Branch Strategy
+
+Default posture:
+
+- use a dedicated branch for most non-trivial work
+- avoid normal implementation directly on the default branch
+- reuse the current branch only when it is already clearly scoped to the task
+
+Branch creation rules:
+
+- if starting from the default branch, create a branch before committing unless the user explicitly wants direct work there
+- if starting from the default branch, verify the local base using remote-tracking evidence, an approved fetch/update step, or explicit user acceptance of branching from the current local base
+- if the current branch is unrelated, mixed-purpose, or unclear, stop and ask
+- if local changes are mixed before branching, stop and ask rather than carrying ambiguity forward
+- do not commit on the default branch without explicit approval
+
+Branch naming rules:
+
+- use a semantic work-type prefix such as `feature/`, `fix/`, `refactor/`, `chore/`, `docs/`, `test/`, `ci/`, or `perf/`
+- branch names should be concise, human-readable, and task-descriptive
+- do not use issue-number-only names by default
+- include an issue identifier only when mapping is explicit and useful, preferably as a suffix, for example `fix/sync-retry-188`
+- keep the slug lower-case and hyphenated unless repo convention differs
 
 ## Scope Inference
 
@@ -125,7 +149,8 @@ Never:
 - use `git add -A` on a mixed worktree without clear scope
 - close issues from commit messages by default
 - invent validation that did not run
-- recover from push rejection with pull, rebase, merge, or force-push unless the next step is clearly safe and in scope
+- force-push as part of normal publish flow
+- recover from push rejection with pull, rebase, or merge unless the next step is a narrow, clearly safe fetch-and-retry path already consistent with repo policy
 - create or update a PR without explicit approval after push
 
 ## Push Safety
@@ -140,6 +165,14 @@ For no-upstream branches:
 - do not guess between fork and upstream remotes
 
 ## Examples
+
+Branch names:
+
+```text
+feature/editor-selection-preservation
+fix/sync-retry-classification-188
+refactor/navigation-state-cleanup
+```
 
 Small scoped fix:
 

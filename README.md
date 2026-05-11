@@ -27,7 +27,7 @@ It excludes auth tokens, session history, caches, logs, plugin caches, and other
 
 ## Included Now
 
-- `commit-and-push`
+- `publish-workflow`
 - `apple-ci-bootstrap`
 - `ios-macos-repo-workflow`
 - Codex global `AGENTS.md`
