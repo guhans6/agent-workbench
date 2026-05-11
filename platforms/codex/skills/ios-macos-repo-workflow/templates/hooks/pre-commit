@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Managed by ios-macos-repo-workflow v0.1
+#
+# This is an inactive hook template.
+# Render __VERIFY_FAST_PATH__ first, then copy this file into .git/hooks/pre-commit
+# or a repo-managed hooks path only when you explicitly want local pre-commit
+# verification. Run chmod +x on the installed hook file.
+
+ROOT_DIR="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
+VERIFY_FAST="$ROOT_DIR/__VERIFY_FAST_PATH__"
+
+if [[ ! -x "$VERIFY_FAST" ]]; then
+  echo "Missing canonical verification entrypoint: $VERIFY_FAST" >&2
+  exit 1
+fi
+
+"$VERIFY_FAST"
