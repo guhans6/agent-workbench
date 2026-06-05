@@ -116,6 +116,11 @@ Use when:
 Use when:
 
 - the task is design-oriented and needs an MCP-backed design workflow
+- the target machine has `idesign` enabled
+
+Do not use when:
+
+- the current platform config disables it
 
 ### `ifallow`
 
@@ -137,7 +142,7 @@ Use when:
 | Use installed app or connector tools | `codex_apps` | App-backed capabilities |
 | Diagramming | `excalidraw` | Whiteboard and diagram tasks |
 | `.pen` design editing | `pencil` | Use only through Pencil tools |
-| General design workflow from MCP surface | `idesign` | Design-oriented fallback |
+| General design workflow from MCP surface | `excalidraw` or `pencil` | `idesign` is disabled in the current config snapshot |
 | Policy-aware tool flow | `ifallow` | Specialized policy surface |
 
 ## Selection Rules

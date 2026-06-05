@@ -44,7 +44,7 @@ task_routes:
   - task: Edit or validate .pen design documents
     preferred_mcps: [pencil]
   - task: Design-oriented MCP workflow
-    preferred_mcps: [idesign]
+    preferred_mcps: [excalidraw, pencil]
   - task: Policy-aware gating or allowlist-style flow
     preferred_mcps: [ifallow]
 
@@ -65,7 +65,6 @@ families:
   - family: design_and_diagrams
     mcps:
       - excalidraw
-      - idesign
       - pencil
   - family: host_automation_and_policy
     mcps:
@@ -105,10 +104,10 @@ mcps:
     avoid_when: The task is not about repo structure or file discovery.
   - name: idesign
     category: design_and_diagrams
-    availability: enabled
+    availability: disabled_in_config_snapshot
     platform_scope: cross_agent_if_installed
-    use_when: Design and visual-generation oriented workflows.
-    avoid_when: A more specific design MCP such as pencil or excalidraw is clearly a better fit.
+    use_when: Design and visual-generation oriented workflows when it is enabled in the target machine's config.
+    avoid_when: The current config snapshot disables it, or a more specific design MCP such as pencil or excalidraw is clearly a better fit.
   - name: ifallow
     category: host_automation_and_policy
     availability: enabled

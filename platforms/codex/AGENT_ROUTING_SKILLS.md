@@ -131,6 +131,12 @@ There are two layers of skills here:
 Use this file as the fast router.
 Use `AGENT_ROUTING_SKILLS.yaml` when you need the broader inventory.
 
+For shared local skills:
+
+- on the same machine, resolve them from `~/.agents/skills/<skill-name>/SKILL.md`
+- on a new machine, do not assume that path exists
+- if the shared skill set is missing, tell the agent to install or sync the shared skills for that machine, or fall back to repo-curated skills when possible
+
 ### `ios-macos-repo-workflow`
 
 Description:

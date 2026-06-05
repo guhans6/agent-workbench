@@ -85,7 +85,8 @@
     {
       "task": "Design-oriented MCP workflow",
       "preferred_mcps": [
-        "idesign"
+        "excalidraw",
+        "pencil"
       ]
     },
     {
@@ -122,7 +123,6 @@
       "family": "design_and_diagrams",
       "mcps": [
         "excalidraw",
-        "idesign",
         "pencil"
       ]
     },
@@ -178,10 +178,10 @@
     {
       "name": "idesign",
       "category": "design_and_diagrams",
-      "availability": "enabled",
+      "availability": "disabled_in_config_snapshot",
       "platform_scope": "cross_agent_if_installed",
-      "use_when": "Design and visual-generation oriented workflows.",
-      "avoid_when": "A more specific design MCP such as pencil or excalidraw is clearly a better fit."
+      "use_when": "Design and visual-generation oriented workflows when it is enabled in the target machine's config.",
+      "avoid_when": "The current config snapshot disables it, or a more specific design MCP such as pencil or excalidraw is clearly a better fit."
     },
     {
       "name": "ifallow",
