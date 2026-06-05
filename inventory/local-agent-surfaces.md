@@ -11,6 +11,15 @@
 ### Codex config
 
 - `platforms/codex/AGENTS.md`
+- `platforms/codex/AGENT_ROUTING_INDEX.md`
+- `platforms/codex/AGENT_ROUTING_INDEX.yaml`
+- `platforms/codex/AGENT_ROUTING_INDEX.json`
+- `platforms/codex/AGENT_ROUTING_SKILLS.yaml`
+- `platforms/codex/AGENT_ROUTING_SKILLS.json`
+- `platforms/codex/AGENT_ROUTING_MCPS.yaml`
+- `platforms/codex/AGENT_ROUTING_MCPS.json`
+- `platforms/codex/AGENT_ROUTING_MCPS.md`
+- `platforms/codex/AGENT_ROUTING_SKILLS.md`
 - `platforms/codex/config.redacted.toml`
 - `platforms/codex/rules/default.rules`
 - `platforms/codex/agents/*.toml`
