@@ -1,0 +1,979 @@
+{
+  "schema_version": 1,
+  "generated_on": "2026-06-05",
+  "purpose": "Agent-only routing and capability catalog for skill and agent selection. Use this file to select the right agent, skill, product, or MCP surface for a task before implementation starts.\n",
+  "path_rules": {
+    "repo_curated": {
+      "meaning": "Repo-relative path that should exist in this checkout."
+    },
+    "shared_agents": {
+      "meaning": "User-local shared skill outside the repo; do not assume it exists on another machine.",
+      "same_machine_locator": "~/.agents/skills/<skill-name>/SKILL.md",
+      "remote_machine_policy": "If the shared local skill is missing on this machine, do not try to open a user-specific absolute path. Tell the agent to either install or sync the shared skill set for the target machine, or fall back to repo-curated routing assets when possible.\n"
+    }
+  },
+  "entrypoints": {
+    "human_router": {
+      "path": "platforms/codex/AGENT_ROUTING_SKILLS.md",
+      "purpose": "Short human-readable routing guide."
+    },
+    "machine_catalog": {
+      "path": "platforms/codex/AGENT_ROUTING_SKILLS.yaml",
+      "purpose": "Full machine-readable capability inventory and routing rules."
+    },
+    "source_rules": [
+      "platforms/codex/AGENTS.md",
+      "platforms/codex/agents/*.toml",
+      "platforms/codex/skills/*/SKILL.md"
+    ]
+  },
+  "selection_rules": [
+    "Prefer swift_explorer over explorer in Swift, iOS, macOS, Xcode, SwiftUI, UIKit, AppKit, SwiftData, and XCTest repositories.",
+    "Prefer spark_editor only for tiny localized edits after the target files and scope are already clear.",
+    "Prefer xcode_triager before deep_debugger for build, test, simulator, scheme, and log failures.",
+    "Prefer apple_docs_researcher when Apple framework semantics, platform availability, or API behavior is uncertain.",
+    "Attach a skill only when the task clearly matches that skill's trigger boundary.",
+    "Use publish-workflow only after the implementation scope is stable enough to commit intentionally.",
+    "If a task needs current third-party library docs, prefer the context7 MCP surface and the context7-mcp skill."
+  ],
+  "task_routes": [
+    {
+      "task": "Understand an Apple codebase before editing",
+      "preferred_agents": [
+        "swift_explorer"
+      ],
+      "preferred_skills": []
+    },
+    {
+      "task": "Understand a non-Apple codebase before editing",
+      "preferred_agents": [
+        "explorer"
+      ],
+      "preferred_skills": []
+    },
+    {
+      "task": "Make a tiny localized code or UI tweak",
+      "preferred_agents": [
+        "spark_editor"
+      ],
+      "preferred_skills": []
+    },
+    {
+      "task": "Implement a normal Apple feature or medium refactor",
+      "preferred_agents": [
+        "swift_worker"
+      ],
+      "preferred_skills": []
+    },
+    {
+      "task": "Triage build, test, simulator, or scheme failures",
+      "preferred_agents": [
+        "xcode_triager"
+      ],
+      "preferred_skills": []
+    },
+    {
+      "task": "Investigate a hard runtime, concurrency, or migration bug",
+      "preferred_agents": [
+        "deep_debugger"
+      ],
+      "preferred_skills": [
+        "diagnose"
+      ]
+    },
+    {
+      "task": "Check Apple API behavior or availability",
+      "preferred_agents": [
+        "apple_docs_researcher"
+      ],
+      "preferred_skills": []
+    },
+    {
+      "task": "Review a diff for regressions or missing tests",
+      "preferred_agents": [
+        "swift_reviewer"
+      ],
+      "preferred_skills": []
+    },
+    {
+      "task": "Run an exhaustive pre-submit review",
+      "preferred_agents": [
+        "gatekeeper"
+      ],
+      "preferred_skills": [
+        "thermo-nuclear-code-quality-review"
+      ]
+    },
+    {
+      "task": "Bootstrap or refresh repo-local Apple workflow scripts and AGENTS guidance",
+      "preferred_agents": [
+        "swift_explorer",
+        "swift_worker"
+      ],
+      "preferred_skills": [
+        "ios-macos-repo-workflow"
+      ]
+    },
+    {
+      "task": "Bootstrap or refresh Apple CI workflows",
+      "preferred_agents": [
+        "swift_explorer",
+        "swift_worker"
+      ],
+      "preferred_skills": [
+        "apple-ci-bootstrap"
+      ]
+    },
+    {
+      "task": "Create a branch, commit, push, and prepare PR-ready output",
+      "preferred_agents": [
+        "swift_worker"
+      ],
+      "preferred_skills": [
+        "publish-workflow"
+      ]
+    },
+    {
+      "task": "Research current third-party framework or library docs",
+      "preferred_agents": [
+        "explorer"
+      ],
+      "preferred_skills": [
+        "context7-mcp"
+      ]
+    },
+    {
+      "task": "Turn a broad request into a PRD or implementation issue breakdown",
+      "preferred_agents": [
+        "explorer"
+      ],
+      "preferred_skills": [
+        "to-prd",
+        "to-issues"
+      ]
+    }
+  ],
+  "products": [
+    {
+      "name": "Browser",
+      "kind": "plugin",
+      "platform_scope": "codex_only",
+      "use_when": "Open, inspect, navigate, test, click, type into, or screenshot local web targets in the Codex in-app browser."
+    },
+    {
+      "name": "Build iOS Apps",
+      "kind": "plugin",
+      "platform_scope": "codex_only",
+      "use_when": "Build, run, debug, profile, or inspect iOS apps and simulators."
+    },
+    {
+      "name": "Build macOS Apps",
+      "kind": "plugin",
+      "platform_scope": "codex_only",
+      "use_when": "Build, run, test, debug, instrument, or package local macOS apps."
+    },
+    {
+      "name": "Canva",
+      "kind": "plugin",
+      "platform_scope": "codex_only",
+      "use_when": "Create, edit, resize, or translate Canva designs."
+    },
+    {
+      "name": "Chrome",
+      "kind": "plugin",
+      "platform_scope": "codex_only",
+      "use_when": "Automate the user's real Chrome state with existing tabs, cookies, and logged-in sessions."
+    },
+    {
+      "name": "Documents",
+      "kind": "plugin",
+      "platform_scope": "codex_only",
+      "use_when": "Create or edit Word and document artifacts."
+    },
+    {
+      "name": "Figma",
+      "kind": "plugin",
+      "platform_scope": "codex_only",
+      "use_when": "Read, generate, edit, sync, or implement Figma designs and design systems."
+    },
+    {
+      "name": "GitHub",
+      "kind": "plugin",
+      "platform_scope": "codex_only",
+      "use_when": "Inspect repos, PRs, issues, comments, and CI from GitHub-connected workflows."
+    },
+    {
+      "name": "Presentations",
+      "kind": "plugin",
+      "platform_scope": "codex_only",
+      "use_when": "Create, edit, render, verify, or export slide decks and PPTX artifacts."
+    },
+    {
+      "name": "Remotion",
+      "kind": "plugin",
+      "platform_scope": "codex_only",
+      "use_when": "Build programmatic videos and motion-heavy React video outputs."
+    },
+    {
+      "name": "Spreadsheets",
+      "kind": "plugin",
+      "platform_scope": "codex_only",
+      "use_when": "Create, edit, analyze, visualize, render, and export spreadsheet artifacts."
+    },
+    {
+      "name": "Superpowers",
+      "kind": "plugin",
+      "platform_scope": "codex_only",
+      "use_when": "Apply planning, TDD, debugging, parallelization, review, and verification workflows."
+    }
+  ],
+  "mcp_servers": [
+    {
+      "name": "apple-docs",
+      "platform_scope": "codex_current_env",
+      "use_when": "Apple API docs, platform availability, and official Apple framework references."
+    },
+    {
+      "name": "codex_apps",
+      "platform_scope": "codex_only",
+      "use_when": "Installed apps and connector-backed tools."
+    },
+    {
+      "name": "context7",
+      "platform_scope": "cross_agent_if_installed",
+      "use_when": "Current non-Apple library and framework documentation."
+    },
+    {
+      "name": "excalidraw",
+      "platform_scope": "cross_agent_if_installed",
+      "use_when": "Diagram and whiteboard workflows."
+    },
+    {
+      "name": "fff",
+      "platform_scope": "cross_agent_if_installed",
+      "use_when": "Fast file finding and project-local file exploration."
+    },
+    {
+      "name": "idesign",
+      "platform_scope": "cross_agent_if_installed",
+      "use_when": "Design and visual-generation oriented workflows."
+    },
+    {
+      "name": "ifallow",
+      "platform_scope": "cross_agent_if_installed",
+      "use_when": "Policy-aware gating and allowlist-style tool workflows."
+    },
+    {
+      "name": "macpilot",
+      "platform_scope": "cross_agent_if_installed",
+      "use_when": "macOS automation and host interaction workflows."
+    },
+    {
+      "name": "node_repl",
+      "platform_scope": "codex_only",
+      "use_when": "Persistent JavaScript execution, browser control helpers, and scripted automation."
+    },
+    {
+      "name": "pencil",
+      "platform_scope": "cross_agent_if_installed",
+      "use_when": ".pen design-document editing and validation."
+    },
+    {
+      "name": "xcode",
+      "platform_scope": "cross_agent_if_installed",
+      "use_when": "Request Xcode to perform Apple-platform IDE actions."
+    },
+    {
+      "name": "xcodebuildmcp",
+      "platform_scope": "cross_agent_if_installed",
+      "use_when": "Discover, build, run, test, inspect, and automate Apple projects and simulators."
+    }
+  ],
+  "agents": [
+    {
+      "name": "apple_docs_researcher",
+      "source": "repo_curated",
+      "path": "platforms/codex/agents/apple_docs_researcher.toml",
+      "description": "Read-only Apple documentation specialist for SwiftUI, UIKit, AppKit, SwiftData, XCTest, concurrency, platform availability, and Xcode behavior."
+    },
+    {
+      "name": "deep_debugger",
+      "source": "repo_curated",
+      "path": "platforms/codex/agents/deep_debugger.toml",
+      "description": "High-effort Apple debugging agent for hard bugs, concurrency, SwiftData, simulator or runtime failures, and major migration or architecture shifts."
+    },
+    {
+      "name": "explorer",
+      "source": "repo_curated",
+      "path": "platforms/codex/agents/explorer.toml",
+      "description": "Generic read-only explorer for locating files, symbols, references, dependencies, and likely change areas before edits begin."
+    },
+    {
+      "name": "gatekeeper",
+      "source": "repo_curated",
+      "path": "platforms/codex/agents/gatekeeper.toml",
+      "description": "Manual-only, strict read-only gatekeeper reviewer for code, docs, specs, prompts, plans, and diffs."
+    },
+    {
+      "name": "spark_editor",
+      "source": "repo_curated",
+      "path": "platforms/codex/agents/spark_editor.toml",
+      "description": "Fast tiny-edit agent for small localized code changes, renames, preview stubs, boilerplate, and simple UI glue."
+    },
+    {
+      "name": "swift_explorer",
+      "source": "repo_curated",
+      "path": "platforms/codex/agents/swift_explorer.toml",
+      "description": "Apple-platform read-only explorer for Swift, SwiftUI, UIKit, AppKit, SwiftData, XCTest, and Xcode repos."
+    },
+    {
+      "name": "swift_reviewer",
+      "source": "repo_curated",
+      "path": "platforms/codex/agents/swift_reviewer.toml",
+      "description": "Read-only Apple code reviewer for diffs, bugs, regressions, architecture drift, concurrency risks, and missing tests."
+    },
+    {
+      "name": "swift_worker",
+      "source": "repo_curated",
+      "path": "platforms/codex/agents/swift_worker.toml",
+      "description": "Default Apple implementation agent for normal SwiftUI, UIKit, AppKit, MVVM, tests, and medium refactors."
+    },
+    {
+      "name": "xcode_triager",
+      "source": "repo_curated",
+      "path": "platforms/codex/agents/xcode_triager.toml",
+      "description": "Focused Apple build and test triage agent for xcodebuild, SwiftPM, schemes, simulators, failing tests, and log analysis."
+    }
+  ],
+  "skill_families": [
+    {
+      "family": "apple_platform",
+      "skills": [
+        "apple-on-device-ai",
+        "apple-ci-bootstrap",
+        "ios-debugger-agent",
+        "ios-hig",
+        "ios-macos-repo-workflow",
+        "mobile-ios-design",
+        "swift-architecture-skill",
+        "swift-concurrency-expert",
+        "swift-testing-expert",
+        "swiftdata-pro",
+        "swiftui-pro"
+      ]
+    },
+    {
+      "family": "workflow_git_ci",
+      "skills": [
+        "apple-ci-bootstrap",
+        "caveman-commit",
+        "gh-address-comments",
+        "gh-fix-ci",
+        "publish-workflow",
+        "setup-matt-pocock-skills",
+        "yeet"
+      ]
+    },
+    {
+      "family": "planning_product",
+      "skills": [
+        "define-goal",
+        "grill-me",
+        "grill-with-docs",
+        "handoff",
+        "improve-codebase-architecture",
+        "prototype",
+        "to-issues",
+        "to-prd",
+        "triage",
+        "zoom-out"
+      ]
+    },
+    {
+      "family": "docs_research",
+      "skills": [
+        "aspnet-core",
+        "context7-mcp",
+        "openai-docs",
+        "pdf",
+        "screenshot"
+      ]
+    },
+    {
+      "family": "design_visual",
+      "skills": [
+        "figma",
+        "figma-code-connect-components",
+        "figma-create-design-system-rules",
+        "figma-create-new-file",
+        "figma-generate-design",
+        "figma-generate-library",
+        "figma-implement-design",
+        "figma-use",
+        "graphify",
+        "hatch-pet",
+        "huashu-design"
+      ]
+    },
+    {
+      "family": "deployment_platforms",
+      "skills": [
+        "cloudflare-deploy",
+        "netlify-deploy",
+        "render-deploy",
+        "vercel-deploy"
+      ]
+    },
+    {
+      "family": "quality_debugging",
+      "skills": [
+        "caveman-review",
+        "diagnose",
+        "security-best-practices",
+        "security-ownership-map",
+        "security-threat-model",
+        "sentry",
+        "tdd",
+        "thermo-nuclear-code-quality-review"
+      ]
+    },
+    {
+      "family": "content_media",
+      "skills": [
+        "jupyter-notebook",
+        "notion-knowledge-capture",
+        "notion-meeting-intelligence",
+        "notion-research-documentation",
+        "notion-spec-to-implementation",
+        "speech",
+        "transcribe"
+      ]
+    },
+    {
+      "family": "devtools_and_meta",
+      "skills": [
+        "caveman",
+        "caveman-compress",
+        "caveman-help",
+        "chatgpt-apps",
+        "cli-creator",
+        "linear",
+        "migrate-to-codex",
+        "playwright",
+        "playwright-interactive",
+        "winui-app",
+        "write-a-skill"
+      ]
+    }
+  ],
+  "skills": [
+    {
+      "name": "apple-ci-bootstrap",
+      "source": "repo_curated",
+      "path": "platforms/codex/skills/apple-ci-bootstrap/SKILL.md",
+      "description": "Proposes and creates narrow GitHub Actions CI for Apple-platform repositories with repo-truth-first command selection, fast/deep verification structure, and concise diagnostics. Use when bootstrapping, auditing, or refreshing CI workflows for iOS, macOS, Xcode-first, or SwiftPM Apple repos."
+    },
+    {
+      "name": "ios-macos-repo-workflow",
+      "source": "repo_curated",
+      "path": "platforms/codex/skills/ios-macos-repo-workflow/SKILL.md",
+      "description": "Creates and maintains a small repo-local workflow contract for Xcode-first Apple app repositories and SwiftPM-only Apple codebases. Use when bootstrapping, refreshing, or auditing build/test/verify commands, AGENTS.md workflow guidance, or lightweight repo workflow scripts for iOS/macOS projects and Swift packages."
+    },
+    {
+      "name": "publish-workflow",
+      "source": "repo_curated",
+      "path": "platforms/codex/skills/publish-workflow/SKILL.md",
+      "description": "Create or reuse the right branch, commit and optionally push code changes with issue-aware scope, then recommend PR follow-up without creating or editing the PR unless approved. Use when user asks to create a branch, commit, push, publish local changes, or prepare PR-ready git output with disciplined workflow hygiene."
+    },
+    {
+      "name": "apple-on-device-ai",
+      "source": "shared_agents",
+      "path_kind": "user_local_not_portable",
+      "same_machine_locator": "~/.agents/skills/apple-on-device-ai/SKILL.md",
+      "description": "Integrate on-device AI using Foundation Models framework, Core ML, and open-source LLM runtimes on Apple Silicon. Use when building tool-calling AI features, working with guided generation schemas, converting models, or running on-device inference."
+    },
+    {
+      "name": "aspnet-core",
+      "source": "shared_agents",
+      "path_kind": "user_local_not_portable",
+      "same_machine_locator": "~/.agents/skills/aspnet-core/SKILL.md",
+      "description": "Build, review, refactor, or architect ASP.NET Core web applications using current official guidance for .NET web development."
+    },
+    {
+      "name": "caveman",
+      "source": "shared_agents",
+      "path_kind": "user_local_not_portable",
+      "same_machine_locator": "~/.agents/skills/caveman/SKILL.md",
+      "description": "Ultra-compressed communication mode. Use when the user asks for briefer, lower-token responses."
+    },
+    {
+      "name": "caveman-commit",
+      "source": "shared_agents",
+      "path_kind": "user_local_not_portable",
+      "same_machine_locator": "~/.agents/skills/caveman-commit/SKILL.md",
+      "description": "Ultra-compressed commit message generator for Conventional Commits and terse commit text."
+    },
+    {
+      "name": "caveman-compress",
+      "source": "shared_agents",
+      "path_kind": "user_local_not_portable",
+      "same_machine_locator": "~/.agents/skills/caveman-compress/SKILL.md",
+      "description": "Compress natural language memory files into caveman format to save tokens while preserving technical content."
+    },
+    {
+      "name": "caveman-help",
+      "source": "shared_agents",
+      "path_kind": "user_local_not_portable",
+      "same_machine_locator": "~/.agents/skills/caveman-help/SKILL.md",
+      "description": "Quick-reference card for caveman modes, skills, and commands."
+    },
+    {
+      "name": "caveman-review",
+      "source": "shared_agents",
+      "path_kind": "user_local_not_portable",
+      "same_machine_locator": "~/.agents/skills/caveman-review/SKILL.md",
+      "description": "Ultra-compressed code review comment format for terse actionable PR feedback."
+    },
+    {
+      "name": "chatgpt-apps",
+      "source": "shared_agents",
+      "path_kind": "user_local_not_portable",
+      "same_machine_locator": "~/.agents/skills/chatgpt-apps/SKILL.md",
+      "description": "Build, scaffold, refactor, and troubleshoot ChatGPT Apps SDK applications that combine an MCP server and widget UI."
+    },
+    {
+      "name": "cli-creator",
+      "source": "shared_agents",
+      "path_kind": "user_local_not_portable",
+      "same_machine_locator": "~/.agents/skills/cli-creator/SKILL.md",
+      "description": "Build a composable CLI for Codex from API docs, OpenAPI, SDKs, web apps, or local scripts."
+    },
+    {
+      "name": "cloudflare-deploy",
+      "source": "shared_agents",
+      "path_kind": "user_local_not_portable",
+      "same_machine_locator": "~/.agents/skills/cloudflare-deploy/SKILL.md",
+      "description": "Deploy applications and infrastructure to Cloudflare using Workers, Pages, and related platform services."
+    },
+    {
+      "name": "context7-mcp",
+      "source": "shared_agents",
+      "path_kind": "user_local_not_portable",
+      "same_machine_locator": "~/.agents/skills/context7-mcp/SKILL.md",
+      "description": "Use when the user asks about libraries, frameworks, API references, or needs code examples from current docs."
+    },
+    {
+      "name": "define-goal",
+      "source": "shared_agents",
+      "path_kind": "user_local_not_portable",
+      "same_machine_locator": "~/.agents/skills/define-goal/SKILL.md",
+      "description": "Help the user define a concrete, measurable goal before starting work."
+    },
+    {
+      "name": "diagnose",
+      "source": "shared_agents",
+      "path_kind": "user_local_not_portable",
+      "same_machine_locator": "~/.agents/skills/diagnose/SKILL.md",
+      "description": "Disciplined diagnosis loop for hard bugs and performance regressions."
+    },
+    {
+      "name": "figma",
+      "source": "shared_agents",
+      "path_kind": "user_local_not_portable",
+      "same_machine_locator": "~/.agents/skills/figma/SKILL.md",
+      "description": "Use the Figma MCP server to fetch design context, screenshots, variables, and assets from Figma, and to translate Figma nodes into production code."
+    },
+    {
+      "name": "figma-code-connect-components",
+      "source": "shared_agents",
+      "path_kind": "user_local_not_portable",
+      "same_machine_locator": "~/.agents/skills/figma-code-connect-components/SKILL.md",
+      "description": "Connect Figma design components to code components using Code Connect mapping tools."
+    },
+    {
+      "name": "figma-create-design-system-rules",
+      "source": "shared_agents",
+      "path_kind": "user_local_not_portable",
+      "same_machine_locator": "~/.agents/skills/figma-create-design-system-rules/SKILL.md",
+      "description": "Generate custom design system rules for the user's codebase and Figma workflows."
+    },
+    {
+      "name": "figma-create-new-file",
+      "source": "shared_agents",
+      "path_kind": "user_local_not_portable",
+      "same_machine_locator": "~/.agents/skills/figma-create-new-file/SKILL.md",
+      "description": "Create a new blank Figma or FigJam file."
+    },
+    {
+      "name": "figma-generate-design",
+      "source": "shared_agents",
+      "path_kind": "user_local_not_portable",
+      "same_machine_locator": "~/.agents/skills/figma-generate-design/SKILL.md",
+      "description": "Translate an application page, view, or multi-section layout into Figma using design-system-aware composition."
+    },
+    {
+      "name": "figma-generate-library",
+      "source": "shared_agents",
+      "path_kind": "user_local_not_portable",
+      "same_machine_locator": "~/.agents/skills/figma-generate-library/SKILL.md",
+      "description": "Build or update a professional-grade design system in Figma from a codebase."
+    },
+    {
+      "name": "figma-implement-design",
+      "source": "shared_agents",
+      "path_kind": "user_local_not_portable",
+      "same_machine_locator": "~/.agents/skills/figma-implement-design/SKILL.md",
+      "description": "Translate Figma designs into production-ready application code with close visual fidelity."
+    },
+    {
+      "name": "figma-use",
+      "source": "shared_agents",
+      "path_kind": "user_local_not_portable",
+      "same_machine_locator": "~/.agents/skills/figma-use/SKILL.md",
+      "description": "Mandatory prerequisite before Figma write actions or JavaScript-driven unique reads in the Figma file context."
+    },
+    {
+      "name": "gh-address-comments",
+      "source": "shared_agents",
+      "path_kind": "user_local_not_portable",
+      "same_machine_locator": "~/.agents/skills/gh-address-comments/SKILL.md",
+      "description": "Address review or issue comments on the open GitHub PR for the current branch using gh."
+    },
+    {
+      "name": "gh-fix-ci",
+      "source": "shared_agents",
+      "path_kind": "user_local_not_portable",
+      "same_machine_locator": "~/.agents/skills/gh-fix-ci/SKILL.md",
+      "description": "Debug or fix failing GitHub PR checks that run in GitHub Actions."
+    },
+    {
+      "name": "graphify",
+      "source": "shared_agents",
+      "path_kind": "user_local_not_portable",
+      "same_machine_locator": "~/.agents/skills/graphify/SKILL.md",
+      "description": "Turn code, docs, papers, or images into a knowledge graph with HTML, JSON, and audit output."
+    },
+    {
+      "name": "grill-me",
+      "source": "shared_agents",
+      "path_kind": "user_local_not_portable",
+      "same_machine_locator": "~/.agents/skills/grill-me/SKILL.md",
+      "description": "Interview the user relentlessly about a plan or design until reaching shared understanding."
+    },
+    {
+      "name": "grill-with-docs",
+      "source": "shared_agents",
+      "path_kind": "user_local_not_portable",
+      "same_machine_locator": "~/.agents/skills/grill-with-docs/SKILL.md",
+      "description": "Stress-test a plan against the project's domain model and documented decisions."
+    },
+    {
+      "name": "handoff",
+      "source": "shared_agents",
+      "path_kind": "user_local_not_portable",
+      "same_machine_locator": "~/.agents/skills/handoff/SKILL.md",
+      "description": "Compact the current conversation into a handoff document for another agent."
+    },
+    {
+      "name": "hatch-pet",
+      "source": "shared_agents",
+      "path_kind": "user_local_not_portable",
+      "same_machine_locator": "~/.agents/skills/hatch-pet/SKILL.md",
+      "description": "Create, repair, validate, visually QA, and package Codex-compatible animated pets and spritesheets."
+    },
+    {
+      "name": "huashu-design",
+      "source": "shared_agents",
+      "path_kind": "user_local_not_portable",
+      "same_machine_locator": "~/.agents/skills/huashu-design/SKILL.md",
+      "description": "Use HTML to build high-fidelity prototypes, interaction demos, presentations, animations, and design explorations."
+    },
+    {
+      "name": "improve-codebase-architecture",
+      "source": "shared_agents",
+      "path_kind": "user_local_not_portable",
+      "same_machine_locator": "~/.agents/skills/improve-codebase-architecture/SKILL.md",
+      "description": "Find deepening opportunities in a codebase and improve architecture, modularity, and AI navigability."
+    },
+    {
+      "name": "ios-debugger-agent",
+      "source": "shared_agents",
+      "path_kind": "user_local_not_portable",
+      "same_machine_locator": "~/.agents/skills/ios-debugger-agent/SKILL.md",
+      "description": "Use XcodeBuildMCP to build, run, launch, and debug the current iOS project on a simulator."
+    },
+    {
+      "name": "ios-hig",
+      "source": "shared_agents",
+      "path_kind": "user_local_not_portable",
+      "same_machine_locator": "~/.agents/skills/ios-hig/SKILL.md",
+      "description": "Use when designing iOS interfaces, accessibility, dark mode, touch targets, animation, haptics, and permission flows."
+    },
+    {
+      "name": "jupyter-notebook",
+      "source": "shared_agents",
+      "path_kind": "user_local_not_portable",
+      "same_machine_locator": "~/.agents/skills/jupyter-notebook/SKILL.md",
+      "description": "Create, scaffold, or edit Jupyter notebooks for experiments, explorations, or tutorials."
+    },
+    {
+      "name": "linear",
+      "source": "shared_agents",
+      "path_kind": "user_local_not_portable",
+      "same_machine_locator": "~/.agents/skills/linear/SKILL.md",
+      "description": "Manage issues, projects, and team workflows in Linear."
+    },
+    {
+      "name": "migrate-to-codex",
+      "source": "shared_agents",
+      "path_kind": "user_local_not_portable",
+      "same_machine_locator": "~/.agents/skills/migrate-to-codex/SKILL.md",
+      "description": "Migrate supported instruction files, skills, agents, and MCP config into Codex project and global files."
+    },
+    {
+      "name": "mobile-ios-design",
+      "source": "shared_agents",
+      "path_kind": "user_local_not_portable",
+      "same_machine_locator": "~/.agents/skills/mobile-ios-design/SKILL.md",
+      "description": "Use when designing iOS interfaces, implementing SwiftUI views, or aligning with Apple's design principles."
+    },
+    {
+      "name": "netlify-deploy",
+      "source": "shared_agents",
+      "path_kind": "user_local_not_portable",
+      "same_machine_locator": "~/.agents/skills/netlify-deploy/SKILL.md",
+      "description": "Deploy web projects to Netlify using the Netlify CLI."
+    },
+    {
+      "name": "notion-knowledge-capture",
+      "source": "shared_agents",
+      "path_kind": "user_local_not_portable",
+      "same_machine_locator": "~/.agents/skills/notion-knowledge-capture/SKILL.md",
+      "description": "Capture conversations and decisions into structured Notion pages."
+    },
+    {
+      "name": "notion-meeting-intelligence",
+      "source": "shared_agents",
+      "path_kind": "user_local_not_portable",
+      "same_machine_locator": "~/.agents/skills/notion-meeting-intelligence/SKILL.md",
+      "description": "Prepare meeting materials with Notion context and Codex research."
+    },
+    {
+      "name": "notion-research-documentation",
+      "source": "shared_agents",
+      "path_kind": "user_local_not_portable",
+      "same_machine_locator": "~/.agents/skills/notion-research-documentation/SKILL.md",
+      "description": "Research across Notion and synthesize into structured documentation."
+    },
+    {
+      "name": "notion-spec-to-implementation",
+      "source": "shared_agents",
+      "path_kind": "user_local_not_portable",
+      "same_machine_locator": "~/.agents/skills/notion-spec-to-implementation/SKILL.md",
+      "description": "Turn Notion specs into implementation plans, tasks, and progress tracking."
+    },
+    {
+      "name": "openai-docs",
+      "source": "shared_agents",
+      "path_kind": "user_local_not_portable",
+      "same_machine_locator": "~/.agents/skills/openai-docs/SKILL.md",
+      "description": "Use when the user asks how to build with OpenAI products or APIs, asks about Codex itself, or needs current official OpenAI documentation."
+    },
+    {
+      "name": "pdf",
+      "source": "shared_agents",
+      "path_kind": "user_local_not_portable",
+      "same_machine_locator": "~/.agents/skills/pdf/SKILL.md",
+      "description": "Use when tasks involve reading, creating, or reviewing PDF files where rendering and layout matter."
+    },
+    {
+      "name": "playwright",
+      "source": "shared_agents",
+      "path_kind": "user_local_not_portable",
+      "same_machine_locator": "~/.agents/skills/playwright/SKILL.md",
+      "description": "Automate a real browser from the terminal for navigation, forms, screenshots, extraction, or UI-flow debugging."
+    },
+    {
+      "name": "playwright-interactive",
+      "source": "shared_agents",
+      "path_kind": "user_local_not_portable",
+      "same_machine_locator": "~/.agents/skills/playwright-interactive/SKILL.md",
+      "description": "Persistent browser and Electron interaction through a JavaScript REPL for fast iterative UI debugging."
+    },
+    {
+      "name": "prototype",
+      "source": "shared_agents",
+      "path_kind": "user_local_not_portable",
+      "same_machine_locator": "~/.agents/skills/prototype/SKILL.md",
+      "description": "Build a throwaway prototype to flesh out a design before committing to it."
+    },
+    {
+      "name": "render-deploy",
+      "source": "shared_agents",
+      "path_kind": "user_local_not_portable",
+      "same_machine_locator": "~/.agents/skills/render-deploy/SKILL.md",
+      "description": "Deploy applications to Render by analyzing codebases and generating Render blueprints."
+    },
+    {
+      "name": "screenshot",
+      "source": "shared_agents",
+      "path_kind": "user_local_not_portable",
+      "same_machine_locator": "~/.agents/skills/screenshot/SKILL.md",
+      "description": "Use when the user explicitly asks for a desktop or system screenshot."
+    },
+    {
+      "name": "security-best-practices",
+      "source": "shared_agents",
+      "path_kind": "user_local_not_portable",
+      "same_machine_locator": "~/.agents/skills/security-best-practices/SKILL.md",
+      "description": "Perform language and framework specific security best-practice reviews and suggest improvements."
+    },
+    {
+      "name": "security-ownership-map",
+      "source": "shared_agents",
+      "path_kind": "user_local_not_portable",
+      "same_machine_locator": "~/.agents/skills/security-ownership-map/SKILL.md",
+      "description": "Analyze git repositories to build a security ownership topology and bus-factor view grounded in history."
+    },
+    {
+      "name": "security-threat-model",
+      "source": "shared_agents",
+      "path_kind": "user_local_not_portable",
+      "same_machine_locator": "~/.agents/skills/security-threat-model/SKILL.md",
+      "description": "Repository-grounded threat modeling that enumerates trust boundaries, assets, abuse paths, and mitigations."
+    },
+    {
+      "name": "sentry",
+      "source": "shared_agents",
+      "path_kind": "user_local_not_portable",
+      "same_machine_locator": "~/.agents/skills/sentry/SKILL.md",
+      "description": "Inspect Sentry issues or events and summarize recent production errors using the Sentry CLI."
+    },
+    {
+      "name": "setup-matt-pocock-skills",
+      "source": "shared_agents",
+      "path_kind": "user_local_not_portable",
+      "same_machine_locator": "~/.agents/skills/setup-matt-pocock-skills/SKILL.md",
+      "description": "Set up repo issue-tracker, triage-label, and domain-doc context for planning and engineering skills."
+    },
+    {
+      "name": "speech",
+      "source": "shared_agents",
+      "path_kind": "user_local_not_portable",
+      "same_machine_locator": "~/.agents/skills/speech/SKILL.md",
+      "description": "Use when the user asks for text-to-speech narration, voiceover, accessibility reads, or audio prompt generation."
+    },
+    {
+      "name": "swift-architecture-skill",
+      "source": "shared_agents",
+      "path_kind": "user_local_not_portable",
+      "same_machine_locator": "~/.agents/skills/swift-architecture-skill/SKILL.md",
+      "description": "Swift architecture patterns and playbooks for MVVM, TCA, Clean Architecture, and related approaches."
+    },
+    {
+      "name": "swift-concurrency-expert",
+      "source": "shared_agents",
+      "path_kind": "user_local_not_portable",
+      "same_machine_locator": "~/.agents/skills/swift-concurrency-expert/SKILL.md",
+      "description": "Review and remediate Swift Concurrency usage, compiler errors, actor isolation, and Sendable conformance."
+    },
+    {
+      "name": "swift-testing-expert",
+      "source": "shared_agents",
+      "path_kind": "user_local_not_portable",
+      "same_machine_locator": "~/.agents/skills/swift-testing-expert/SKILL.md",
+      "description": "Expert guidance for Swift Testing structure, macros, traits, parameterized tests, async waiting, and XCTest migration."
+    },
+    {
+      "name": "swiftdata-pro",
+      "source": "shared_agents",
+      "path_kind": "user_local_not_portable",
+      "same_machine_locator": "~/.agents/skills/swiftdata-pro/SKILL.md",
+      "description": "Write, review, and improve SwiftData code using modern APIs and best practices."
+    },
+    {
+      "name": "swiftui-pro",
+      "source": "shared_agents",
+      "path_kind": "user_local_not_portable",
+      "same_machine_locator": "~/.agents/skills/swiftui-pro/SKILL.md",
+      "description": "Comprehensive SwiftUI review guidance for modern APIs, maintainability, and performance."
+    },
+    {
+      "name": "tdd",
+      "source": "shared_agents",
+      "path_kind": "user_local_not_portable",
+      "same_machine_locator": "~/.agents/skills/tdd/SKILL.md",
+      "description": "Test-driven development with the red-green-refactor loop for features and bug fixes."
+    },
+    {
+      "name": "thermo-nuclear-code-quality-review",
+      "source": "shared_agents",
+      "path_kind": "user_local_not_portable",
+      "same_machine_locator": "~/.agents/skills/thermo-nuclear-code-quality-review/SKILL.md",
+      "description": "Extremely strict maintainability review focused on abstraction quality, giant files, and spaghetti-condition growth."
+    },
+    {
+      "name": "to-issues",
+      "source": "shared_agents",
+      "path_kind": "user_local_not_portable",
+      "same_machine_locator": "~/.agents/skills/to-issues/SKILL.md",
+      "description": "Break a plan, spec, or PRD into independently grabbable issues using tracer-bullet vertical slices."
+    },
+    {
+      "name": "to-prd",
+      "source": "shared_agents",
+      "path_kind": "user_local_not_portable",
+      "same_machine_locator": "~/.agents/skills/to-prd/SKILL.md",
+      "description": "Turn the current conversation context into a PRD and publish it to the project issue tracker."
+    },
+    {
+      "name": "transcribe",
+      "source": "shared_agents",
+      "path_kind": "user_local_not_portable",
+      "same_machine_locator": "~/.agents/skills/transcribe/SKILL.md",
+      "description": "Transcribe audio files to text with optional diarization and known-speaker hints."
+    },
+    {
+      "name": "triage",
+      "source": "shared_agents",
+      "path_kind": "user_local_not_portable",
+      "same_machine_locator": "~/.agents/skills/triage/SKILL.md",
+      "description": "Triage issues through a state machine driven by triage roles."
+    },
+    {
+      "name": "vercel-deploy",
+      "source": "shared_agents",
+      "path_kind": "user_local_not_portable",
+      "same_machine_locator": "~/.agents/skills/vercel-deploy/SKILL.md",
+      "description": "Deploy applications and websites to Vercel, usually as preview deployments unless the user asks for production."
+    },
+    {
+      "name": "winui-app",
+      "source": "shared_agents",
+      "path_kind": "user_local_not_portable",
+      "same_machine_locator": "~/.agents/skills/winui-app/SKILL.md",
+      "description": "Bootstrap, develop, and design modern WinUI 3 desktop applications with C# and the Windows App SDK."
+    },
+    {
+      "name": "write-a-skill",
+      "source": "shared_agents",
+      "path_kind": "user_local_not_portable",
+      "same_machine_locator": "~/.agents/skills/write-a-skill/SKILL.md",
+      "description": "Create new agent skills with proper structure, progressive disclosure, and bundled resources."
+    },
+    {
+      "name": "yeet",
+      "source": "shared_agents",
+      "path_kind": "user_local_not_portable",
+      "same_machine_locator": "~/.agents/skills/yeet/SKILL.md",
+      "description": "Use only when the user explicitly asks to stage, commit, push, and open a GitHub pull request in one flow using gh."
+    },
+    {
+      "name": "zoom-out",
+      "source": "shared_agents",
+      "path_kind": "user_local_not_portable",
+      "same_machine_locator": "~/.agents/skills/zoom-out/SKILL.md",
+      "description": "Tell the agent to zoom out and give broader context or a higher-level perspective."
+    }
+  ]
+}

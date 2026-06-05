@@ -1,0 +1,235 @@
+{
+  "schema_version": 1,
+  "generated_on": "2026-06-05",
+  "purpose": "Agent-only routing and capability catalog for MCP server selection. Use this file to choose the right MCP surface before using skills, shell tools, or broader fallbacks.\n",
+  "entrypoints": {
+    "human_router": {
+      "path": "platforms/codex/AGENT_ROUTING_MCPS.md",
+      "purpose": "Short human-readable MCP routing guide."
+    },
+    "machine_catalog": {
+      "path": "platforms/codex/AGENT_ROUTING_MCPS.yaml",
+      "purpose": "Full machine-readable MCP inventory and routing rules."
+    }
+  },
+  "selection_rules": [
+    "Prefer apple-docs for Apple framework and API questions.",
+    "Prefer context7 for current non-Apple library and framework docs.",
+    "Prefer fff for file discovery before broad manual repo crawling.",
+    "Prefer xcodebuildmcp for Apple build, run, test, simulator, log, and automation workflows.",
+    "Prefer xcode only for Xcode-directed IDE actions.",
+    "Prefer node_repl when persistent JavaScript execution or JS-based automation loops are needed.",
+    "Prefer specialized MCPs over generic execution surfaces."
+  ],
+  "task_routes": [
+    {
+      "task": "Apple API docs, framework semantics, and platform availability",
+      "preferred_mcps": [
+        "apple-docs"
+      ]
+    },
+    {
+      "task": "Current non-Apple framework, SDK, or library docs",
+      "preferred_mcps": [
+        "context7"
+      ]
+    },
+    {
+      "task": "Find relevant files or modules in a repo",
+      "preferred_mcps": [
+        "fff"
+      ]
+    },
+    {
+      "task": "Build, run, test, inspect, or automate an Apple project",
+      "preferred_mcps": [
+        "xcodebuildmcp"
+      ]
+    },
+    {
+      "task": "Ask Xcode to perform an IDE-specific action",
+      "preferred_mcps": [
+        "xcode"
+      ]
+    },
+    {
+      "task": "Automate macOS host or app behavior",
+      "preferred_mcps": [
+        "macpilot"
+      ]
+    },
+    {
+      "task": "Run persistent JavaScript-driven automation",
+      "preferred_mcps": [
+        "node_repl"
+      ]
+    },
+    {
+      "task": "Use installed app or connector-backed capabilities",
+      "preferred_mcps": [
+        "codex_apps"
+      ]
+    },
+    {
+      "task": "Diagramming and whiteboard-style visuals",
+      "preferred_mcps": [
+        "excalidraw"
+      ]
+    },
+    {
+      "task": "Edit or validate .pen design documents",
+      "preferred_mcps": [
+        "pencil"
+      ]
+    },
+    {
+      "task": "Design-oriented MCP workflow",
+      "preferred_mcps": [
+        "excalidraw",
+        "pencil"
+      ]
+    },
+    {
+      "task": "Policy-aware gating or allowlist-style flow",
+      "preferred_mcps": [
+        "ifallow"
+      ]
+    }
+  ],
+  "families": [
+    {
+      "family": "docs_and_references",
+      "mcps": [
+        "apple-docs",
+        "context7"
+      ]
+    },
+    {
+      "family": "repo_and_execution",
+      "mcps": [
+        "fff",
+        "node_repl",
+        "codex_apps"
+      ]
+    },
+    {
+      "family": "apple_platform",
+      "mcps": [
+        "xcode",
+        "xcodebuildmcp"
+      ]
+    },
+    {
+      "family": "design_and_diagrams",
+      "mcps": [
+        "excalidraw",
+        "pencil"
+      ]
+    },
+    {
+      "family": "host_automation_and_policy",
+      "mcps": [
+        "macpilot",
+        "ifallow"
+      ]
+    }
+  ],
+  "mcps": [
+    {
+      "name": "apple-docs",
+      "category": "docs_and_references",
+      "availability": "enabled",
+      "platform_scope": "codex_current_env",
+      "use_when": "Apple API docs, platform availability, and official Apple framework references.",
+      "avoid_when": "Non-Apple library docs are the primary need."
+    },
+    {
+      "name": "codex_apps",
+      "category": "repo_and_execution",
+      "availability": "enabled",
+      "platform_scope": "codex_only",
+      "use_when": "Installed apps and connector-backed tools exposed through Codex apps.",
+      "avoid_when": "A direct MCP already covers the task more narrowly."
+    },
+    {
+      "name": "context7",
+      "category": "docs_and_references",
+      "availability": "enabled",
+      "platform_scope": "cross_agent_if_installed",
+      "use_when": "Current non-Apple library and framework documentation, migration notes, setup guidance, and API references.",
+      "avoid_when": "The task is Apple-framework specific."
+    },
+    {
+      "name": "excalidraw",
+      "category": "design_and_diagrams",
+      "availability": "enabled",
+      "platform_scope": "cross_agent_if_installed",
+      "use_when": "Diagram and whiteboard workflows.",
+      "avoid_when": "The task is code execution or documentation lookup."
+    },
+    {
+      "name": "fff",
+      "category": "repo_and_execution",
+      "availability": "enabled",
+      "platform_scope": "cross_agent_if_installed",
+      "use_when": "Fast file finding and project-local file exploration.",
+      "avoid_when": "The task is not about repo structure or file discovery."
+    },
+    {
+      "name": "idesign",
+      "category": "design_and_diagrams",
+      "availability": "disabled_in_config_snapshot",
+      "platform_scope": "cross_agent_if_installed",
+      "use_when": "Design and visual-generation oriented workflows when it is enabled in the target machine's config.",
+      "avoid_when": "The current config snapshot disables it, or a more specific design MCP such as pencil or excalidraw is clearly a better fit."
+    },
+    {
+      "name": "ifallow",
+      "category": "host_automation_and_policy",
+      "availability": "enabled",
+      "platform_scope": "cross_agent_if_installed",
+      "use_when": "Policy-aware gating and allowlist-style tool workflows.",
+      "avoid_when": "The task does not depend on policy enforcement behavior."
+    },
+    {
+      "name": "macpilot",
+      "category": "host_automation_and_policy",
+      "availability": "enabled",
+      "platform_scope": "cross_agent_if_installed",
+      "use_when": "macOS automation and host interaction workflows.",
+      "avoid_when": "Repo-local tools already cover the task without host control."
+    },
+    {
+      "name": "node_repl",
+      "category": "repo_and_execution",
+      "availability": "enabled",
+      "platform_scope": "codex_only",
+      "use_when": "Persistent JavaScript execution, browser control helpers, and scripted automation.",
+      "avoid_when": "A specialized MCP directly solves the task."
+    },
+    {
+      "name": "pencil",
+      "category": "design_and_diagrams",
+      "availability": "enabled",
+      "platform_scope": "cross_agent_if_installed",
+      "use_when": ".pen design-document editing and validation.",
+      "avoid_when": "The task does not involve Pencil design files."
+    },
+    {
+      "name": "xcode",
+      "category": "apple_platform",
+      "availability": "enabled",
+      "platform_scope": "cross_agent_if_installed",
+      "use_when": "Request Xcode to perform Apple-platform IDE actions.",
+      "avoid_when": "The task is better served by xcodebuildmcp workflow tools."
+    },
+    {
+      "name": "xcodebuildmcp",
+      "category": "apple_platform",
+      "availability": "enabled",
+      "platform_scope": "cross_agent_if_installed",
+      "use_when": "Discover, build, run, test, inspect, and automate Apple projects and simulators.",
+      "avoid_when": "The task is only a docs lookup."
+    }
+  ]
+}

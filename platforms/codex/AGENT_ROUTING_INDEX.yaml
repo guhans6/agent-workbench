@@ -1,0 +1,47 @@
+schema_version: 1
+generated_on: "2026-06-05"
+purpose: >
+  Top-level master index for agent routing assets in this platform directory.
+  Use this file as the single machine-readable entrypoint before loading the
+  skill-routing or MCP-routing catalogs.
+
+platform:
+  name: codex
+  scope: platform_specific_container
+  notes:
+    - Routing files are agent-neutral where possible.
+    - Codex-only surfaces are explicitly marked in downstream catalogs.
+
+entrypoints:
+  human:
+    - path: platforms/codex/AGENT_ROUTING_INDEX.md
+      purpose: Single human-facing starting point.
+    - path: platforms/codex/AGENT_ROUTING_SKILLS.md
+      purpose: Human router for agents and skills.
+    - path: platforms/codex/AGENT_ROUTING_MCPS.md
+      purpose: Human router for MCP selection.
+    - path: platforms/codex/AGENTS.md
+      purpose: High-level platform guidance and routing rules.
+  machine:
+    - path: platforms/codex/AGENT_ROUTING_INDEX.yaml
+      purpose: Master machine index.
+    - path: platforms/codex/AGENT_ROUTING_SKILLS.yaml
+      purpose: Machine catalog for agents, skills, products, and related routing.
+    - path: platforms/codex/AGENT_ROUTING_MCPS.yaml
+      purpose: Machine catalog for MCP routing.
+    - path: platforms/codex/AGENT_ROUTING_SKILLS.json
+      purpose: JSON export of the skills catalog.
+    - path: platforms/codex/AGENT_ROUTING_MCPS.json
+      purpose: JSON export of the MCP catalog.
+
+load_order:
+  - AGENT_ROUTING_INDEX.yaml
+  - AGENT_ROUTING_SKILLS.yaml
+  - AGENT_ROUTING_MCPS.yaml
+
+source_of_truth:
+  - platforms/codex/AGENTS.md
+  - platforms/codex/agents/*.toml
+  - platforms/codex/skills/*/SKILL.md
+  - platforms/codex/AGENT_ROUTING_SKILLS.yaml
+  - platforms/codex/AGENT_ROUTING_MCPS.yaml
