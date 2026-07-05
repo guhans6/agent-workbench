@@ -13,6 +13,14 @@ It intentionally omits secrets and local trust-state noise.
 
 ## Start Here
 
+For migration to a new machine or another agent environment, read:
+
+- `migration/README.md` for the migration entrypoint
+- `migration/install-playbook.md` for recreate steps
+- `migration/skills-catalog.md` for skill groups and sources
+- `migration/mcps-catalog.md` for MCP recreate commands and source links
+- `migration/surfaces.yaml` for structured install metadata
+
 If another agent needs to decide which agent, skill, or MCP surface to use for a task, read:
 
 - `AGENT_ROUTING_INDEX.md` for the single human starting point

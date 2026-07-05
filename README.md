@@ -8,6 +8,8 @@ It excludes auth tokens, session history, caches, logs, plugin caches, and other
 
 ## Structure
 
+- `platforms/codex/migration/`
+  - migration playbook, skill catalog, MCP catalog, and install metadata for recreating this setup on a new machine
 - `platforms/codex/skills/`
   - custom Codex skill sources
 - `platforms/codex/agents/`
@@ -30,6 +32,7 @@ It excludes auth tokens, session history, caches, logs, plugin caches, and other
 - `publish-workflow`
 - `apple-ci-bootstrap`
 - `ios-macos-repo-workflow`
+- Codex migration catalog for skills, plugins, and MCPs
 - Codex global `AGENTS.md`
 - Codex agent TOMLs
 - Codex `default.rules`
@@ -47,3 +50,5 @@ It excludes auth tokens, session history, caches, logs, plugin caches, and other
 - runtime-only temp files
 
 See [inventory/local-agent-surfaces.md](inventory/local-agent-surfaces.md).
+
+For a new-machine setup, start with [platforms/codex/migration/README.md](platforms/codex/migration/README.md).

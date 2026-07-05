@@ -10,6 +10,8 @@ Use this file when the agent should first decide:
 
 ## Start Order
 
+If the task is to recreate or migrate this Codex setup to a new machine, start with `migration/README.md` and `migration/install-playbook.md`.
+
 1. Read `AGENT_ROUTING_INDEX.yaml` if the consumer is machine-first.
 2. Read `AGENT_ROUTING_SKILLS.md` to choose agents and skills.
 3. Read `AGENT_ROUTING_MCPS.md` to choose MCP surfaces.
@@ -17,12 +19,15 @@ Use this file when the agent should first decide:
 
 ## Human Entry Points
 
+- `migration/README.md`: setup and migration starting point
+- `migration/install-playbook.md`: new-machine recreate flow
 - `AGENT_ROUTING_SKILLS.md`: fast routing for agents and skills
 - `AGENT_ROUTING_MCPS.md`: fast routing for MCP selection
 - `AGENTS.md`: higher-level repo guidance and routing rules
 
 ## Machine Entry Points
 
+- `migration/surfaces.yaml`: structured migration inventory for skills, plugins, and MCPs
 - `AGENT_ROUTING_INDEX.yaml`: master machine index
 - `AGENT_ROUTING_SKILLS.yaml`: machine catalog for agents, skills, products, and related routing
 - `AGENT_ROUTING_MCPS.yaml`: machine catalog for MCP routing
@@ -40,6 +45,7 @@ This directory is still the Codex platform surface:
 - `platforms/codex/AGENTS.md`
 - `platforms/codex/agents/*.toml`
 - `platforms/codex/skills/*/SKILL.md`
+- `platforms/codex/migration/surfaces.yaml`
 - `platforms/codex/AGENT_ROUTING_SKILLS.yaml`
 - `platforms/codex/AGENT_ROUTING_MCPS.yaml`
 
