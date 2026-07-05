@@ -1,6 +1,6 @@
 # agent-workbench
 
-Private home for reusable agent assets across Codex and other agent setups.
+Home for reusable agent assets across Codex and other agent setups.
 
 This repo is source-of-truth oriented, not a raw dump of runtime state.
 It keeps reusable skills, custom agent configs, and selected non-secret global config.
