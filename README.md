@@ -35,14 +35,4 @@ It keeps reusable skills, custom agent configs, and selected non-secret global c
 - redacted Codex `config.toml`
 - shared Graphify rule and workflow notes
 
-## Excluded On Purpose
-
-- `auth.json`
-- API keys and secrets
-- session history
-- logs and sqlite state
-- plugin caches
-- system or bundled skills
-- runtime-only temp files
-
 See [inventory/local-agent-surfaces.md](inventory/local-agent-surfaces.md).
