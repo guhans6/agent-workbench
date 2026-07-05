@@ -7,6 +7,8 @@ It keeps reusable skills, custom agent configs, and selected non-secret global c
 
 ## Structure
 
+- `platforms/codex/migration/`
+  - migration playbook, skill catalog, MCP catalog, and install metadata for recreating this setup on a new machine
 - `platforms/codex/skills/`
   - custom Codex skill sources
 - `platforms/codex/agents/`
@@ -29,6 +31,7 @@ It keeps reusable skills, custom agent configs, and selected non-secret global c
 - `publish-workflow`
 - `apple-ci-bootstrap`
 - `ios-macos-repo-workflow`
+- Codex migration catalog for skills, plugins, and MCPs
 - Codex global `AGENTS.md`
 - Codex agent TOMLs
 - Codex `default.rules`
@@ -36,3 +39,5 @@ It keeps reusable skills, custom agent configs, and selected non-secret global c
 - shared Graphify rule and workflow notes
 
 See [inventory/local-agent-surfaces.md](inventory/local-agent-surfaces.md).
+
+For a new-machine setup, start with [platforms/codex/migration/README.md](platforms/codex/migration/README.md).
