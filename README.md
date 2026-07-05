@@ -2,9 +2,8 @@
 
 Home for reusable agent assets across Codex and other agent setups.
 
-This repo is source-of-truth oriented, not a raw dump of runtime state.
+This repo contains usefuls skills and tools used for dev workflow.
 It keeps reusable skills, custom agent configs, and selected non-secret global config.
-It excludes auth tokens, session history, caches, logs, plugin caches, and other sensitive or machine-local runtime files.
 
 ## Structure
 
