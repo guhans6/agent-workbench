@@ -1,16 +1,10 @@
 # Agent Routing Index
 
-This is the single starting point for another agent.
+This is the single starting point when an agent needs to choose a Codex-specific agent, skill, or MCP surface.
 
-Use this file when the agent should first decide:
-
-- which human router to read
-- which machine catalog to load
-- which platform-specific surface is relevant
+For the repo-wide agent asset catalogue and install guidance, start at `../../catalog/README.md`.
 
 ## Start Order
-
-If the task is to recreate or migrate this Codex setup to a new machine, start with `migration/README.md` and `migration/install-playbook.md`.
 
 1. Read `AGENT_ROUTING_INDEX.yaml` if the consumer is machine-first.
 2. Read `AGENT_ROUTING_SKILLS.md` to choose agents and skills.
@@ -19,33 +13,33 @@ If the task is to recreate or migrate this Codex setup to a new machine, start w
 
 ## Human Entry Points
 
-- `migration/README.md`: setup and migration starting point
-- `migration/install-playbook.md`: new-machine recreate flow
+- `../../catalog/README.md`: repo-wide agent asset catalogue
 - `AGENT_ROUTING_SKILLS.md`: fast routing for agents and skills
 - `AGENT_ROUTING_MCPS.md`: fast routing for MCP selection
 - `AGENTS.md`: higher-level repo guidance and routing rules
 
 ## Machine Entry Points
 
-- `migration/surfaces.yaml`: structured migration inventory for skills, plugins, and MCPs
+- `../../catalog/surfaces.yaml`: repo-wide catalogue for skills, plugins, and MCPs
 - `AGENT_ROUTING_INDEX.yaml`: master machine index
 - `AGENT_ROUTING_SKILLS.yaml`: machine catalog for agents, skills, products, and related routing
 - `AGENT_ROUTING_MCPS.yaml`: machine catalog for MCP routing
 
 ## Platform Scope
 
-This directory is still the Codex platform surface:
+This directory is the Codex platform surface:
 
-- generic routing files here are written to be agent-neutral
+- generic routing files here are written to be agent-neutral where possible
 - Codex-only products or MCP surfaces are explicitly marked in the machine catalogs
-- cross-agent surfaces are marked as reusable when installed elsewhere
+- cross-agent skills live under `shared/skills/`
 
 ## Source Of Truth
 
+- `catalog/surfaces.yaml`
+- `shared/skills/*/SKILL.md`
 - `platforms/codex/AGENTS.md`
 - `platforms/codex/agents/*.toml`
 - `platforms/codex/skills/*/SKILL.md`
-- `platforms/codex/migration/surfaces.yaml`
 - `platforms/codex/AGENT_ROUTING_SKILLS.yaml`
 - `platforms/codex/AGENT_ROUTING_MCPS.yaml`
 

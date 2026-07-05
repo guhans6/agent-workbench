@@ -1,43 +1,28 @@
 # agent-workbench
 
-Home for reusable agent assets across Codex and other agent setups.
+Private home for reusable agent assets across Codex and other agent setups.
 
-This repo contains usefuls skills and tools used for dev workflow.
-It keeps reusable skills, custom agent configs, and selected non-secret global config.
+This repo is a source-of-truth catalogue, not a raw dump of runtime state. It keeps reusable skills, MCP setup notes, custom agent configs, and selected non-secret global config. It excludes auth tokens, session history, caches, logs, plugin caches, and other sensitive or machine-local runtime files.
+
+## Start Here
+
+- `catalog/README.md` is the agent-neutral entrypoint.
+- `catalog/skills.md` lists shared, Codex-specific, system, and plugin skills.
+- `catalog/mcps.md` lists configured MCP servers and install/verification notes.
+- `catalog/surfaces.yaml` is the structured catalogue for agents.
 
 ## Structure
 
-- `platforms/codex/migration/`
-  - migration playbook, skill catalog, MCP catalog, and install metadata for recreating this setup on a new machine
-- `platforms/codex/skills/`
-  - custom Codex skill sources
-- `platforms/codex/agents/`
-  - custom Codex subagent definitions
-- `platforms/codex/AGENTS.md`
-  - global Codex routing guidance
-- `platforms/codex/config.redacted.toml`
-  - redacted Codex global config snapshot
-- `platforms/codex/rules/`
-  - Codex rule files worth keeping
-- `shared/rules/`
-  - non-Codex agent rules
-- `shared/workflows/`
-  - shared workflow notes
-- `inventory/`
-  - local inventory and export notes
+- `shared/skills/`: vendored local skills intended for any compatible agent.
+- `shared/rules/` and `shared/workflows/`: cross-agent notes and workflows.
+- `platforms/codex/`: Codex-specific agents, routing, rules, config snapshots, and local Codex-home skills.
+- `inventory/`: local inventory and export notes.
 
-## Included Now
+## Excluded On Purpose
 
-- `publish-workflow`
-- `apple-ci-bootstrap`
-- `ios-macos-repo-workflow`
-- Codex migration catalog for skills, plugins, and MCPs
-- Codex global `AGENTS.md`
-- Codex agent TOMLs
-- Codex `default.rules`
-- redacted Codex `config.toml`
-- shared Graphify rule and workflow notes
+- auth tokens, API keys, and secrets
+- session history, logs, sqlite state, and runtime caches
+- plugin caches and bundled runtime files
+- generated build output
 
-See [inventory/local-agent-surfaces.md](inventory/local-agent-surfaces.md).
-
-For a new-machine setup, start with [platforms/codex/migration/README.md](platforms/codex/migration/README.md).
+See `catalog/README.md` before installing assets on a new machine or in a different agent.

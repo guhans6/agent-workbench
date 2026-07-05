@@ -1,27 +1,20 @@
-# Agent Platform Assets
+# Codex Platform Assets
 
-This directory contains reusable agent-facing assets for the Codex platform:
+This directory contains reusable assets for the Codex platform:
 
-- custom skills
+- Codex-specific skills
 - custom subagent configs
-- global routing guidance
+- routing guidance
 - non-secret config snapshots
 - rule files
 
-`config.redacted.toml` is a curated snapshot, not a raw runtime export.
-It intentionally omits secrets and local trust-state noise.
+For the agent-neutral catalogue, start at `../../catalog/README.md`.
+
+`config.redacted.toml` is a curated snapshot, not a raw runtime export. It intentionally omits secrets and local trust-state noise.
 
 ## Start Here
 
-For migration to a new machine or another agent environment, read:
-
-- `migration/README.md` for the migration entrypoint
-- `migration/install-playbook.md` for recreate steps
-- `migration/skills-catalog.md` for skill groups and sources
-- `migration/mcps-catalog.md` for MCP recreate commands and source links
-- `migration/surfaces.yaml` for structured install metadata
-
-If another agent needs to decide which agent, skill, or MCP surface to use for a task, read:
+If another agent needs to decide which Codex agent, skill, or MCP surface to use for a task, read:
 
 - `AGENT_ROUTING_INDEX.md` for the single human starting point
 - `AGENT_ROUTING_INDEX.yaml` for the single machine-readable starting point

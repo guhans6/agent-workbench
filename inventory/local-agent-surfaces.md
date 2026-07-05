@@ -1,79 +1,27 @@
 # Local Agent Surfaces
 
-## Copied Into This Repo
+This inventory summarizes what this repo currently carries.
 
-### Codex skills
+## Agent-Neutral Catalogue
 
-- `platforms/codex/skills/publish-workflow`
-- `platforms/codex/skills/apple-ci-bootstrap`
-- `platforms/codex/skills/ios-macos-repo-workflow`
+- `catalog/README.md`
+- `catalog/skills.md`
+- `catalog/mcps.md`
+- `catalog/surfaces.yaml`
 
-### Codex config
+## Shared Skills
 
-- `platforms/codex/AGENTS.md`
-- `platforms/codex/AGENT_ROUTING_INDEX.md`
-- `platforms/codex/AGENT_ROUTING_INDEX.yaml`
-- `platforms/codex/AGENT_ROUTING_INDEX.json`
-- `platforms/codex/AGENT_ROUTING_SKILLS.yaml`
-- `platforms/codex/AGENT_ROUTING_SKILLS.json`
-- `platforms/codex/AGENT_ROUTING_MCPS.yaml`
-- `platforms/codex/AGENT_ROUTING_MCPS.json`
-- `platforms/codex/AGENT_ROUTING_MCPS.md`
-- `platforms/codex/AGENT_ROUTING_SKILLS.md`
-- `platforms/codex/config.redacted.toml`
-- `platforms/codex/rules/default.rules`
-- `platforms/codex/agents/*.toml`
+The first-level skill folders from `~/.agents/skills` are vendored under `shared/skills/`, excluding backup/runtime folders.
 
-### Shared agent notes
+Shared skills count: 74
 
-- `shared/rules/graphify.md`
-- `shared/workflows/graphify.md`
+## Codex Platform Assets
 
-## Detected Locally But Not Copied By Default
-
-These were detected in user-local skill roots, but were not copied into this repo in the first pass because ownership or source-of-truth status is less clear than the curated assets above.
-
-### `~/.agents/skills`
-
-- `apple-on-device-ai`
-- `caveman`
-- `caveman-commit`
-- `caveman-compress`
-- `caveman-help`
-- `caveman-review`
-- `compress`
-- `context7-mcp`
-- `diagnose`
-- `graphify`
-- `grill-me`
-- `grill-with-docs`
-- `huashu-design`
-- `improve-codebase-architecture`
-- `ios-debugger-agent`
-- `ios-hig`
-- `ios-macos-repo-workflow`
-- `mobile-ios-design`
-- `prototype`
-- `setup-matt-pocock-skills`
-- `swift-architecture-skill`
-- `swift-concurrency-expert`
-- `swift-testing-expert`
-- `swiftdata-pro`
-- `swiftui-pro`
-- `tdd`
-- `to-issues`
-- `to-prd`
-- `triage`
-- `write-a-skill`
-- `zoom-out`
-
-### `~/.codex/skills`
-
-Excluded from copy when they were clearly system, bundled, or runtime-installed duplicates of source assets:
-
-- `.system/*`
-- local installed duplicates of source skills already copied from source workspace
-- other locally installed skills that appear to be runtime mirrors rather than source-of-truth
+- `platforms/codex/skills/`: Codex-home-specific local skills and existing Codex platform skill sources.
+- `platforms/codex/agents/*.toml`: Codex subagent definitions.
+- `platforms/codex/AGENT_ROUTING_*.{md,yaml,json}`: Codex routing catalogs.
+- `platforms/codex/config.redacted.toml`: redacted Codex config snapshot.
+- `platforms/codex/rules/default.rules`: Codex rule file.
 
 ## Redaction Notes
 
@@ -83,4 +31,4 @@ The exported Codex config snapshot is redacted:
 - project trust blocks omitted
 - auth/session/runtime files not copied
 
-If you want this repo to absorb more of `~/.agents/skills` later, do that as an explicit second curation pass instead of a blind dump.
+Plugin caches, system skills, and local runtime state are documented in the catalog but not vendored.
