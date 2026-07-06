@@ -1,5 +1,4 @@
 prefix_rule(pattern=["codex", "mcp"], decision="allow")
-prefix_rule(pattern=["/Users/guhan/.codex/plugins/cache/openai-curated/superpowers/6807e4de/skills/brainstorming/scripts/start-server.sh"], decision="allow")
 prefix_rule(pattern=["mkdir", "-p"], decision="allow")
 prefix_rule(pattern=["swift", "package"], decision="allow")
 prefix_rule(pattern=["git", "add"], decision="allow")
