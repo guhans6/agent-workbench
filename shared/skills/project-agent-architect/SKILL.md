@@ -1,11 +1,11 @@
 ---
 name: project-agent-architect
-description: Analyze a repository evidence-first and draft repo-local agent context, a project-team skill, Codex custom agents, and skill/MCP assignments. Use when the user asks to create project agents, a repo skill, local project context, subagent team, project profile, or Codex team configuration. Do not use for ordinary feature implementation.
+description: Analyze a repository evidence-first and draft or refresh repo-local agent context, a project-team skill, Codex custom agents, and skill/MCP assignments. Use when the user asks to create or update project agents, a repo skill, local project context, subagent team, project profile, Codex team configuration, or to refresh roles after new skills/MCPs/tools were installed. Do not use for ordinary feature implementation.
 ---
 
 # Project Agent Architect
 
-Create a repo-local agent operating model from evidence. Do not implement product features. First produce a draft for approval; write files only after the user approves.
+Create or refresh a repo-local agent operating model from evidence. Do not implement product features. First produce a draft for approval; write files only after the user approves.
 
 Read `references/role-model-policy.md` before drafting roles, model assignments, skill/MCP assignments, or research rules.
 
@@ -77,7 +77,38 @@ The main role must be domain-specific, not generic. Derive it from evidence, for
 
 Use subagents selectively, not by default. The smallest useful team wins.
 
-## Phase 4: Required Draft Output
+## Phase 4: Refresh an Existing Project Team
+
+Use refresh mode when repo-local project-agent files already exist or the user says they installed new global/local skills, MCPs, tools, or custom agents.
+
+Refresh mode is still read-only until approval.
+
+Compare:
+
+- current observable skills, MCPs, custom agents, and instructions
+- existing `.agents/skills/<repo-slug>-project-team/SKILL.md`
+- existing `.agents/project-profile/*.md`
+- existing `.codex/agents/*.toml`
+- existing `.codex/config.toml`
+- existing `AGENTS.md`
+
+Produce a delta draft instead of a full rewrite:
+
+| Change Type | Surface | Current State | New Evidence | Recommendation | Files Affected |
+|---|---|---|---|---|---|
+
+Allowed recommendations:
+
+- add a new skill/MCP as conditional use for an existing role
+- change a skill from conditional to always-use only when workflow-defining and justified
+- create a new role only when existing roles cannot cover the new capability
+- remove or deprecate stale assignments only when evidence shows the surface is unavailable
+- update model/reasoning/sandbox only when role risk or task type changed
+- update project profile evidence and roster notes
+
+Do not overwrite generated files wholesale. Propose minimal patches and preserve local manual edits.
+
+## Phase 5: Required Draft Output
 
 The first run must output a chat draft and stop for approval.
 
@@ -92,16 +123,17 @@ Include:
 7. Skill/MCP assignment proposal
 8. Model and reasoning proposal
 9. Research gate and when web/docs lookup is required
-10. Files proposed for creation/modification
-11. Risks and unknowns
-12. Approval checklist
+10. For refresh mode: skill/MCP/role delta table
+11. Files proposed for creation/modification
+12. Risks and unknowns
+13. Approval checklist
 
 For each proposed role, include:
 
 | Agent | Persona | Specialty | Thinking Style | Trigger | Model | Reasoning | Sandbox | Always-Use Skills | Conditional Skills | MCPs/Tools | Evidence |
 |---|---|---|---|---|---|---|---|---|---|---|---|
 
-## Phase 5: Proposed Files
+## Phase 6: Proposed Files
 
 Only propose files that are justified by repo evidence and user goals.
 
@@ -147,8 +179,9 @@ After approval I will create/modify only the listed files.
 1. Create only approved files.
 2. Preserve existing content.
 3. Use minimal patches for existing files.
-4. Validate that files exist.
-5. Parse TOML if a parser is available.
-6. Check skill frontmatter.
-7. Run `git diff --stat`.
-8. Report files changed, invocation commands, checks run, manual steps, and risks.
+4. In refresh mode, update only affected roles, assignments, project-profile notes, and catalog references.
+5. Validate that files exist.
+6. Parse TOML if a parser is available.
+7. Check skill frontmatter.
+8. Run `git diff --stat`.
+9. Report files changed, invocation commands, checks run, manual steps, and risks.

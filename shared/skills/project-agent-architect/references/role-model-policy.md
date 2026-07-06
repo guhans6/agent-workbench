@@ -106,6 +106,48 @@ For unclear failures, use the `diagnose` skill when available before proposing f
 If a required skill is unavailable, report the fallback approach.
 ```
 
+## Refresh and Reassignment Policy
+
+Use this policy when the user installed new skills, MCPs, custom agents, or local tools and wants an existing project team updated.
+
+Refresh starts with a delta inventory:
+
+| Surface | Name | Previous State | Current State | Change | Evidence |
+|---|---|---|---|---|---|
+
+Compare current inventory against:
+
+- existing project-team skill role roster
+- existing Codex custom-agent TOML files
+- existing `.agents/project-profile/agent-roster.md`
+- existing `.agents/project-profile/evidence.md`
+- existing `AGENTS.md` guidance
+
+Decision rules:
+
+1. Add a new skill to an existing role when it strengthens that role's current responsibility.
+2. Add a new MCP to an existing role only when that role needs that external surface and auth/status evidence supports it.
+3. Prefer conditional assignment for new skills/MCPs until repeated use proves they are workflow-defining.
+4. Promote a skill to always-use only when it defines the role workflow, such as `tdd` for behavior-changing implementers or a debugging loop for debugger roles.
+5. Create a new role only when the new capability introduces a distinct responsibility that existing roles should not own.
+6. Do not create roles for every installed skill. Capability inventory is not a team roster.
+7. Remove or mark assignments unavailable only when the current inventory shows the surface is missing or disabled.
+8. Keep manual repo-specific edits. Patch the smallest section needed.
+9. If a new skill/MCP is useful but risky, unauthenticated, or write-capable, recommend it but require approval before assignment.
+10. If the new surface does not add value to the repo's domain or workflow, document `no role change recommended`.
+
+Refresh recommendations should use:
+
+| Recommendation | Apply To | Reason | Risk | Files To Patch |
+|---|---|---|---|---|
+
+Examples:
+
+- New `swift-testing-expert` in an Apple repo: add as conditional skill for tester and reviewer.
+- New `context7` MCP in a web repo: add to docs researcher, not implementer, unless implementation requires API examples.
+- New deploy skill in a non-deployed library repo: record as available but do not assign.
+- New security scanner skill in an auth-heavy repo: add conditional use to reviewer or create `security_reviewer` only if security review is a recurring workflow.
+
 ## MCP and Tool Assignment Policy
 
 Assign MCPs narrowly.

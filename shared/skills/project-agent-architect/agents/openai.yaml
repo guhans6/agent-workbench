@@ -1,4 +1,4 @@
 interface:
   display_name: "Project Agent Architect"
   short_description: "Design repo-local agent teams from evidence"
-  default_prompt: "Use $project-agent-architect to analyze this repository evidence-first and draft a repo-local project skill plus Codex custom-agent roster before writing files."
+  default_prompt: "Use $project-agent-architect to analyze or refresh this repository evidence-first and draft repo-local project skill and Codex custom-agent changes before writing files."
