@@ -13,7 +13,7 @@ This inventory summarizes what this repo currently carries.
 
 The first-level skill folders from `~/.agents/skills` are vendored under `shared/skills/`, excluding backup/runtime folders.
 
-Shared skills count: 74
+Shared skills count: 75
 
 ## Codex Platform Assets
 
