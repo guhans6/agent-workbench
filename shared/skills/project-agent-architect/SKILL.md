@@ -77,6 +77,8 @@ The main role must be domain-specific, not generic. Derive it from evidence, for
 
 Use subagents selectively, not by default. The smallest useful team wins.
 
+Generated project teams must include the high-reasoning budget from `references/role-model-policy.md`: use at most one high-reasoning subagent per user task by default, then stop and ask before spending more high-reasoning work.
+
 ## Phase 4: Refresh an Existing Project Team
 
 Use refresh mode when repo-local project-agent files already exist or the user says they installed new global/local skills, MCPs, tools, or custom agents.
@@ -122,16 +124,23 @@ Include:
 6. Subagent roster proposal
 7. Skill/MCP assignment proposal
 8. Model and reasoning proposal
-9. Research gate and when web/docs lookup is required
-10. For refresh mode: skill/MCP/role delta table
-11. Files proposed for creation/modification
-12. Risks and unknowns
-13. Approval checklist
+9. High-reasoning budget proposal
+10. Research gate and when web/docs lookup is required
+11. For refresh mode: skill/MCP/role delta table
+12. Files proposed for creation/modification
+13. Risks and unknowns
+14. Approval checklist
 
 For each proposed role, include:
 
 | Agent | Persona | Specialty | Thinking Style | Trigger | Model | Reasoning | Sandbox | Always-Use Skills | Conditional Skills | MCPs/Tools | Evidence |
 |---|---|---|---|---|---|---|---|---|---|---|---|
+
+Also include:
+
+| Budget | Default | Escalation Rule |
+|---|---|---|
+| High-reasoning subagents per user task | 1 | If more is needed, stop, summarize why, and ask the user before spawning another high-reasoning subagent. |
 
 ## Phase 6: Proposed Files
 

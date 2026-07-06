@@ -19,6 +19,44 @@ Defaults:
 - max open threads: 4 to 6
 - subagent outputs: concise summary, file paths, risks, evidence, and next action
 
+## High-Reasoning Budget Policy
+
+High-reasoning subagents are expensive. Treat them as an escalation, not a default worker pool.
+
+Default per user task:
+
+- high-reasoning subagent budget: 1
+- high-reasoning retry budget: 0
+- max concurrent high-reasoning subagents: 1
+- max sequential high-reasoning subagents without user approval: 1
+
+The main orchestrator may use one high-reasoning subagent when the task is clearly risky, ambiguous, security-sensitive, concurrency-heavy, architecture-heavy, or blocked after normal exploration.
+
+After one high-reasoning subagent returns, the main orchestrator must integrate the result itself or use medium/mini workers for follow-up. Do not automatically spawn another high-reasoning implementer, reviewer, debugger, or tester.
+
+If another high-reasoning pass appears necessary, stop and report to the user:
+
+- what was already tried
+- why medium/mini work is insufficient
+- what the next high-reasoning agent would do
+- expected cost/latency tradeoff
+- the exact approval needed
+
+Allowed without extra approval:
+
+- one high-reasoning reviewer for a risky completed diff
+- one high-reasoning debugger for a hard unresolved failure
+- one high-reasoning security reviewer for security-sensitive code
+
+Not allowed without explicit user approval:
+
+- high-reasoning implementer followed by high-reasoning reviewer for the same small task
+- repeated high-reasoning debuggers after each failed attempt
+- parallel high-reasoning reviewers unless the user asks for a big audit
+- upgrading every role to high because the task feels important
+
+Generated project skills and Codex agent instructions must include this budget rule. Generated project-team workflows should say: "Use at most one high-reasoning subagent per user task by default; if more high-reasoning work is needed, report back and ask before spawning it."
+
 ## Model Budget Policy
 
 Generated Codex custom agents must set model and reasoning explicitly instead of relying on parent inheritance.
@@ -39,6 +77,8 @@ Generated Codex custom agents must set model and reasoning explicitly instead of
 | Security reviewer | `gpt-5.4` | high | read-only | threat modeling, auth, data risk, exploitability review |
 
 If a named model is unavailable, use the closest available fallback and state the fallback in the draft.
+
+Prefer `gpt-5.4-mini` or `gpt-5.4` medium for first-pass exploration, implementation, test running, docs lookup, issue slicing, and release hygiene. Use `gpt-5.4` high only when the high-reasoning budget policy permits it.
 
 ## Domain-Specific Personas
 
@@ -216,6 +256,8 @@ Summarize used research as:
 | Security/concurrency/data/build/deploy | Use high-reasoning role and targeted official-doc research |
 | Simple edit | Main agent only, no web unless uncertainty appears |
 
+For any task that would use high reasoning, first check whether the single high-reasoning budget has already been spent. If it has, stop and ask before spawning another high-reasoning subagent.
+
 ## Generated Project Skill Requirements
 
 The repo-local project skill must include:
@@ -228,6 +270,7 @@ The repo-local project skill must include:
 - when to use subagents
 - role roster
 - model/reasoning/sandbox assignments
+- high-reasoning budget and stop/report rule
 - skill/MCP assignments
 - research gate
 - validation checklist
@@ -264,6 +307,7 @@ Generated instructions must include:
 - domain-specific persona
 - trigger and boundaries
 - required first step
+- high-reasoning budget rule when the role uses or requests high reasoning
 - allowed skills and conditional skill rules
 - allowed MCPs/tools
 - research gate
