@@ -4,7 +4,11 @@ Use this reference when designing the project team and generated files.
 
 ## Team Sizing
 
-Default to the main agent only. Use subagents only when at least one condition is true:
+If no repo-local project team exists, default to the main agent for the architect setup and draft.
+
+If a repo-local project team exists, default to main-agent orchestration plus the cheapest suitable worker for non-trivial work. The main agent should not do all implementation, research, testing, or exploration itself when a suitable project worker exists.
+
+Use project subagents when at least one condition is true:
 
 - work is naturally parallel
 - the codebase area is unfamiliar or large
@@ -12,12 +16,47 @@ Default to the main agent only. Use subagents only when at least one condition i
 - independent review is valuable
 - external docs/tool research should be isolated
 - multiple independent surfaces are involved, such as frontend, backend, tests, infra, or platform APIs
+- the user explicitly says to use the team
+- the task has an approved plan and needs implementation
 
 Defaults:
 
 - max depth: 1
 - max open threads: 4 to 6
 - subagent outputs: concise summary, file paths, risks, evidence, and next action
+
+## Delegation Policy
+
+The main agent is the orchestrator and integrator, not the default worker. It should define scope, choose the smallest useful worker set, delegate scoped work to cheaper subagents, integrate returned evidence, make final decisions, and report to the user.
+
+Direct main-agent execution is allowed only for:
+
+- tiny one-file edits, typo fixes, or small documentation/catalog wording changes
+- sensitive integration decisions where preserving full context is more valuable than delegation
+- secret-sensitive tasks where copying context to a worker is risky
+- cases where no suitable project subagent exists or subagent spawning is unavailable
+- explicit user instruction to avoid subagents
+
+Delegate by default when:
+
+- the task touches multiple files or an unfamiliar area
+- an approved plan exists and needs implementation
+- targeted docs/API research is needed
+- validation or failure triage is needed
+- implementation and verification should be separated
+- the user says to use the team
+
+| Work Type | Default Worker | Default Model | Reasoning | Sandbox | Rule |
+|---|---|---|---|---|---|
+| File discovery or impact scan | explorer | `gpt-5.4-mini` | medium | read-only | Spawn for unfamiliar or multi-file work. |
+| Focused implementation | implementer | `gpt-5.4` | medium | workspace-write | Spawn for most non-trivial approved implementation. |
+| Simple mechanical edit | main or small worker | `gpt-5.4-mini` | medium | workspace-write | Main may do it only when delegation costs more than the work. |
+| Test running or failure summary | tester | `gpt-5.4-mini` | medium | workspace-write | Spawn when validation is needed. |
+| Targeted docs/API research | docs researcher | `gpt-5.4-mini` | high | read-only | Spawn for version-sensitive, unfamiliar, or API-specific questions. |
+| Issue slicing or acceptance criteria | PM or issue slicer | `gpt-5.4-mini` | high | read-only | Spawn for PRD/plan breakdowns and acceptance criteria. |
+| Hard debugging | debugger | `gpt-5.4` | high | workspace-write | Escalation only; counts against high-reasoning budget. |
+| Risky review, security, concurrency, or architecture | reviewer or specialist | `gpt-5.4` | high | read-only | Escalation only; counts against high-reasoning budget. |
+| Final tradeoff and user report | main agent | current session | current | current session | Do not delegate final judgment. |
 
 ## High-Reasoning Budget Policy
 
@@ -73,14 +112,14 @@ Generated Codex custom agents must set model and reasoning explicitly instead of
 | Tester | `gpt-5.4-mini` | medium | workspace-write | run checks, summarize failures, simple diagnosis |
 | Debugger | `gpt-5.4` | high | workspace-write | hard bugs, flakes, runtime behavior, unclear failures |
 | Reviewer | `gpt-5.4` | high | read-only | correctness, regressions, maintainability, tests, security-sensitive review |
-| Docs researcher | `gpt-5.4-mini` | medium | read-only | official docs lookup and concise source-backed summary |
-| PM or issue slicer | `gpt-5.4-mini` | medium | read-only | issue breakdown, acceptance criteria, risk list |
+| Docs researcher | `gpt-5.4-mini` | high | read-only | official docs lookup and concise source-backed summary |
+| PM or issue slicer | `gpt-5.4-mini` | high | read-only | issue breakdown, acceptance criteria, risk list |
 | Release manager | `gpt-5.4-mini` | medium | read-only or workspace-write | changelog, release checklist, PR hygiene |
 | Security reviewer | `gpt-5.4` | high | read-only | threat modeling, auth, data risk, exploitability review |
 
 If a named model is unavailable, use the closest available fallback and state the fallback in the draft. If the current main session is already GPT-5.4 medium, keep it as the orchestrator unless the user explicitly asks to move planning to a stronger model.
 
-Prefer `gpt-5.4-mini` or `gpt-5.4` medium for first-pass exploration, implementation, test running, docs lookup, issue slicing, and release hygiene. Use `gpt-5.4` high only when the high-reasoning budget policy permits it.
+Prefer `gpt-5.4-mini` or `gpt-5.4` medium for first-pass exploration, implementation, test running, and release hygiene. Use `gpt-5.4-mini` high for targeted docs/API research and issue slicing when those tasks require careful reasoning but should stay cheap. Use `gpt-5.4` high only when the high-reasoning budget policy permits it.
 
 ## Domain-Specific Personas
 
@@ -137,6 +176,8 @@ Rules:
 8. Implementers should not get broad external-system tools unless needed.
 9. Docs researchers should get docs/search MCPs and no write access.
 10. If a useful skill is missing, list it as `recommended but unavailable`.
+
+Reviewer output must include more than findings. After listing concrete issues, reviewers must also recommend checks to run, files or behaviors to inspect during fixes, and post-fix review areas that could catch regressions.
 
 Generated custom-agent instructions should include explicit skill rules, for example:
 
@@ -198,7 +239,7 @@ Assign MCPs narrowly.
 - Implementers: repo file tools and build/test tools needed for the task
 - Testers: build/test tools, simulator/browser tools only when relevant
 - Reviewers: read-only file/search/diff tools
-- Docs researchers: official docs, Context7, Apple docs, web search, or framework docs tools when observed
+- Docs researchers: official docs, Context7, Apple docs, web search, or framework docs tools when observed; default to mini high reasoning for targeted docs/API research
 - Release managers: GitHub or issue tracker tools only when needed and authenticated
 
 Do not assign an MCP that is not observed in the inventory. Do not include secrets or local absolute credential paths in generated files.
@@ -251,11 +292,11 @@ Summarize used research as:
 
 | Task Type | Required First Step |
 |---|---|
-| Approved plan exists | Read plan, verify touched files, do targeted research only if needed |
-| No plan and non-trivial change | Draft plan from repo evidence, research uncertain parts, then proceed according to user scope |
-| Bug/debugging | Reproduce or collect failure evidence, inspect local path, research exact error/pattern if local evidence is insufficient |
+| Approved plan exists | Read plan, verify touched files, delegate implementation to the cheapest suitable implementer unless the work is tiny or crucial, and do targeted research only if needed |
+| No plan and non-trivial change | Draft plan from repo evidence, delegate research/exploration for uncertain parts, then proceed according to user scope |
+| Bug/debugging | Reproduce or collect failure evidence, delegate failure triage or exact-error research when useful, then inspect local path before fixes |
 | Framework/API change | Check official docs for current version before editing |
-| Security/concurrency/data/build/deploy | Use high-reasoning role and targeted official-doc research |
+| Security/concurrency/data/build/deploy | Use at most one high-reasoning specialist by default plus targeted official-doc research |
 | Simple edit | Main agent only, no web unless uncertainty appears |
 
 For any task that would use high reasoning, first check whether the single high-reasoning budget has already been spent. If it has, stop and ask before spawning another high-reasoning subagent.
@@ -270,6 +311,7 @@ The repo-local project skill must include:
 - done criteria
 - local conventions
 - when to use subagents
+- delegation defaults and when the main agent may work directly
 - role roster
 - model/reasoning/sandbox assignments
 - high-reasoning budget and stop/report rule
@@ -315,3 +357,4 @@ Generated instructions must include:
 - research gate
 - output format
 - evidence requirements
+- reviewer follow-up checks and post-fix inspection areas

@@ -77,7 +77,7 @@ The main role must be domain-specific, not generic. Derive it from evidence, for
 - ML repo: ML systems engineer specializing in pipelines, evals, data contracts, and runtime constraints
 - CLI/tooling repo: senior tooling engineer specializing in command UX, integration tests, packaging, and release flow
 
-Use subagents selectively, not by default. The smallest useful team wins.
+When a repo-local project team exists, delegate non-trivial implementation, research, testing, and exploration to the cheapest suitable project subagent by default. The main agent should orchestrate, integrate, make final tradeoff decisions, and report. Direct main-agent execution is reserved for tiny edits, crucial integration decisions, secret-sensitive work, unavailable subagents, or explicit user instruction.
 
 Generated project teams must include the high-reasoning budget from `references/role-model-policy.md`: use at most one high-reasoning subagent per user task by default, then stop and ask before spending more high-reasoning work.
 
