@@ -370,8 +370,7 @@
         "gh-address-comments",
         "gh-fix-ci",
         "publish-workflow",
-        "setup-matt-pocock-skills",
-        "yeet"
+        "setup-matt-pocock-skills"
       ]
     },
     {
@@ -960,13 +959,6 @@
       "path_kind": "user_local_not_portable",
       "same_machine_locator": "~/.agents/skills/write-a-skill/SKILL.md",
       "description": "Create new agent skills with proper structure, progressive disclosure, and bundled resources."
-    },
-    {
-      "name": "yeet",
-      "source": "shared_agents",
-      "path_kind": "user_local_not_portable",
-      "same_machine_locator": "~/.agents/skills/yeet/SKILL.md",
-      "description": "Use only when the user explicitly asks to stage, commit, push, and open a GitHub pull request in one flow using gh."
     },
     {
       "name": "zoom-out",
