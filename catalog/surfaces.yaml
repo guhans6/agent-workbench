@@ -250,7 +250,7 @@ skill_sources:
         description: "Creates and maintains a small repo-local workflow contract for Xcode-first Apple app repositories and SwiftPM-only Apple codebases. Use when bootstrapping, refreshing, or auditing build/test/verify commands, AGENTS.md workflow guidance, or lightweight repo workflow scripts for iOS/macOS projects and Swift packages."
       - name: "publish-workflow"
         path: "platforms/codex/skills/publish-workflow/SKILL.md"
-        description: "Create or reuse the right branch, commit and optionally push code changes with issue-aware scope, then recommend PR follow-up without creating or editing the PR unless approved. Use when user asks to create a branch, commit, push, publish local changes, or prepare PR-ready git output with disciplined workflow hygiene."
+        description: "Safe neutral Git/GitHub workflow for creating or reusing branches/worktrees, committing intended changes, pushing/publishing branches, and preparing PR-ready handoff. Use when the user asks to create a branch or worktree, commit, push, publish, or make local changes PR-ready. Do not create/edit/merge/close/delete PRs or rewrite history without explicit approval."
   codex_system:
     install: "Install or update Codex; do not copy system folders."
     skills:

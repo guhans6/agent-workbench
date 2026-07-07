@@ -177,11 +177,12 @@ Do not use when:
 
 Description:
 
-- Creates or reuses the right branch, commits scoped changes, optionally pushes, and keeps issue and PR hygiene disciplined.
+- Safely creates or reuses branches/worktrees, commits intended changes, optionally pushes/publishes branches, and prepares PR-ready handoff without creating or editing PRs unless explicitly approved.
 
 Use when:
 
 - the user asks to create a branch
+- the user asks to create a worktree
 - the user asks to commit
 - the user asks to push or publish local changes
 - the user wants PR-ready git output without auto-creating a PR

@@ -1,99 +1,235 @@
 ---
 name: publish-workflow
-description: Create or reuse the right branch, commit and optionally push code changes with issue-aware scope, then recommend PR follow-up without creating or editing the PR unless approved. Use when user asks to create a branch, commit, push, publish local changes, or prepare PR-ready git output with disciplined workflow hygiene.
+description: Safe neutral Git/GitHub workflow for creating or reusing branches/worktrees, committing intended changes, pushing/publishing branches, and preparing PR-ready handoff. Use when the user asks to create a branch or worktree, commit, push, publish, or make local changes PR-ready. Do not create/edit/merge/close/delete PRs or rewrite history without explicit approval.
 ---
 
-# Publish Workflow
+# Git Publish Workflow
 
-Create the right branch when needed, then commit and optionally push with deliberate scope, issue hygiene, and clean history.
-Default behavior is branch if needed, then `commit` + `push` only when the user asked to publish or push.
-PR creation or PR metadata updates require explicit approval after push.
-Pushing new commits to a branch with an existing PR is allowed unless the user says to hold push for review.
+Turn local work into a clean branch, commit set, optional push, and PR-ready handoff without sweeping in unrelated changes.
 
-## Quick Start
+## Defaults
 
-Use this skill when the user says:
+- Use a dedicated branch for non-trivial work.
+- Use a worktree only when requested or when isolation protects unrelated local changes.
+- Commit only files clearly owned by the current task.
+- Push only when the user asks to push/publish or explicitly approves it.
+- Create or edit PRs only when the user explicitly asks for that PR action.
 
-- "create a branch for this"
-- "commit this"
-- "commit and push"
-- "publish these changes"
-- "push and prepare a PR"
+## First Checks
 
-## Rules
+Before branch, worktree, staging, commit, or push, inspect repo state:
 
-- Use current conversation context first to infer scope.
-- For non-trivial implementation work, prefer a dedicated branch over working on the default branch.
-- If already on a clearly scoped non-default branch that matches the task, reuse it.
-- If on the default branch, do not commit there without explicit approval. Create a branch before staging or committing unless the user clearly asked to stay on the default branch.
-- Do not use issue-number-only branch names by default.
-- Default branch naming should be semantic and prefixed by work type, such as `feature/<slug>`, `fix/<slug>`, `refactor/<slug>`, or `chore/<slug>`.
-- Add an issue identifier in the branch name only when issue mapping is explicit and useful. Prefer semantic slug first, then issue, for example `feature/editor-selection-188`.
-- Add issue references only when issue IDs or issue-reference convention are confirmed by explicit user input, repo-local docs, or tracker evidence.
-- If issue mapping is unclear, inspect repo issue-tracker docs or tracker state before committing. If still unclear, omit issue refs and report that no reliable mapping was found, or stop and ask if issue linkage is materially important.
-- Never add AI attribution, agent names, or generated-by text to commits or PRs.
-- Never default to `git add -A` unless the whole worktree is clearly in scope.
-- Treat `git diff --cached`, unstaged changes, and untracked files as separate scope surfaces.
-- If the index already contains out-of-scope work, stop and ask before committing.
-- Stage only clearly in-scope files when all of the following are true: files match the current task, diff intent is coherent, no unrelated staged or untracked files would be swept in, and issue mapping is confirmed if issue refs will be used.
-- Stop and ask when the worktree contains mixed or ambiguous changes.
-- Split into a small number of meaningful commits, not one dump and not micro-commits.
-- Keep commit subjects focused on the code change, not issue metadata.
-- Use the repo's issue-reference convention in commit footers by default, for example `Refs: #123`.
-- Reserve `Closes:`, `Closes #123`, `Fixes #123`, and similar closing keywords for the PR body by default.
-- Check current branch, upstream remote, and default branch before push.
-- Do not push directly to the default or protected branch unless the user explicitly asked for that exact push after the branch target is clear.
-- If the branch has no upstream, creating one against the expected primary writable remote is allowed only when there is a single obvious remote target. Otherwise stop and ask.
-- After non-fast-forward, auth, protected-branch, or hook-related push failures, stop and ask unless the next step is unambiguously safe.
-- Report only observed validation. If none ran, say unverified.
+```bash
+git status --short --branch
+git diff --name-status
+git diff --cached --name-status
+git ls-files --others --exclude-standard
+git branch --show-current
+git branch -vv
+git remote -v
+git worktree list
+```
 
-## Workflow
+When GitHub PR state matters and `gh` is available, inspect it with `gh pr status` or `gh pr view`.
 
-1. Inspect `git status`, `git diff`, `git diff --cached`, and untracked files separately.
-2. Infer which files belong to the current request from conversation context and repo state.
-3. Check the current branch, default branch base, and remote tracking state against the task.
-4. If a new branch is needed, ensure the default branch base is validated by remote-tracking evidence, an approved fetch/update step, or explicit user acceptance of branching from the current local base. Otherwise stop and ask.
-5. If a new branch is needed, create one with a semantic prefix and concise slug before staging or committing.
-6. Check whether the chosen branch already backs an open PR and confirm that updating that branch is in scope when it matters.
-7. Check for issue-tracker truth in repo docs such as `docs/agents/issue-tracker.md`, `docs/agents/triage-labels.md`, `AGENTS.md`, or equivalent local guidance.
-8. If issue linkage is still unclear and the user expects issue-aware publishing, inspect the tracker before committing. If no reliable issue mapping is found, omit issue refs or stop and ask when issue linkage materially changes the result.
-9. Propose an internal commit grouping plan and apply it directly unless scope is ambiguous.
-10. Stage only the files for the first coherent commit.
-11. Write a clean Conventional Commit message. Add body only when needed. Add footer refs when relevant.
-12. Repeat for each meaningful commit group.
-13. If the user asked to publish or push, check branch name, upstream, default branch, and whether the branch already backs an open PR.
-14. If the user asked to publish or push, push the branch when the target is safe.
-15. Stop and present a concise summary:
-   - branch created or reused
-   - commits created
-   - whether the branch was pushed
-   - linked issues, if reliably known
-   - whether the branch already has an open PR
-   - recommended PR title
-   - whether the PR should close any issues
-   - observed validation or `unverified`
-16. Create or update the PR only after explicit approval.
+Do not modify, stage, commit, or push until staged, unstaged, and untracked changes have been treated as separate scopes.
 
-## When To Stop And Ask
+## Hard Rules
 
-- unrelated or surprising local changes are mixed into the worktree
-- current branch is unrelated to the task or branch naming intent is ambiguous
-- the default branch base is stale or unclear before creating a new branch
-- issue mapping materially affects commit grouping or wording
-- no reliable issue mapping exists and issue linkage matters
-- the diff could reasonably belong to multiple unrelated issues
-- the repo has conflicting issue-tracker guidance
-- push target, branch strategy, PR target, or direct-push safety is unclear
-- the branch is detached, unnamed, default, protected, or points at an unsafe upstream
-- the branch has no upstream and there is no single obvious remote target
-- the branch already backs an open PR and the user asked not to update it yet
+- Do not commit or push directly on the default/protected/release/production branch unless the user explicitly approves that exact target.
+- Do not use `git add -A` or `git add .` unless the whole worktree is clearly in scope.
+- Do not invent issue numbers, PR links, validation results, branch state, remotes, or repo conventions.
+- Do not add AI, tool, assistant, model, or agent attribution to branch names, commits, tags, or PR text.
+- Do not run destructive or history-changing commands without explicit approval: `reset --hard`, `clean`, force push, rebase, branch deletion, worktree removal, amend-after-push, or history rewrite.
+- Stop if the diff contains secrets, tokens, private keys, credentials, private data, or suspicious generated artifacts.
+- When publishing existing work, do not make extra source changes just to clean it up. Report needed fixes, or make them only when they are clearly part of the requested task.
+- Report only observed validation. If none ran, say `unverified`.
 
-## Branch And Commit Policy
+## Branches
 
-- Branch: semantic work-type prefix plus concise slug, no issue-only names by default, optional issue suffix only when explicit
-- Subject: Conventional Commit form, short, imperative, no issue numbers by default
-- Body: only when rationale, risk, migration, or behavior change is not obvious
-- Footer: structured metadata using the repo's issue-reference convention
-- Small self-explanatory commit may omit body and footer when no issue mapping is needed
+Reuse the current branch only when it is non-default, task-matched, and safe to update.
 
-See [REFERENCE.md](REFERENCE.md) for branch strategy, grouping rules, commit standards, and PR policy.
+Create a branch when the current branch is default, detached, unrelated, unsafe, or the user asks for one.
+
+Branch format:
+
+```text
+<type>/<short-kebab-slug>
+```
+
+Preferred prefixes:
+
+```text
+feature/  fix/  refactor/  docs/  test/  chore/  ci/  build/  perf/  hotfix/  release/  spike/
+```
+
+Rules:
+
+- Prefer semantic names: `fix/popover-row-spacing`, not `fix-123` or `123`.
+- Add an issue suffix only when mapping is reliable: `fix/popover-row-spacing-123`.
+- Use lowercase kebab-case after the prefix.
+- Avoid spaces, shell-special characters, emoji, private context, and tool/agent names.
+- Validate uncertain names with `git check-ref-format --branch <branch>`.
+- If base freshness matters, verify the base from local/remote evidence or stop and ask before branching from a stale or unclear base.
+
+## Worktrees
+
+Use a worktree when the user asks, parallel work is needed, the current checkout has unrelated changes, or isolation is safer.
+
+Before creating one:
+
+- Run `git worktree list`.
+- Confirm the branch is not already checked out elsewhere.
+- Prefer a sibling path outside the repo, such as `../<repo>-<slug>`, unless the user gives a path.
+- If using a repo-local worktree directory, verify it is ignored before creating it.
+- Confirm the base branch/commit is appropriate for the requested work.
+
+Commands:
+
+```bash
+# New branch in a new worktree
+git worktree add -b <branch> <path> <base>
+
+# Existing branch in a new worktree
+git worktree add <path> <branch>
+```
+
+Do not remove, prune, lock, unlock, or delete worktrees without explicit approval. Before removal, verify the target worktree is clean.
+
+## Issues
+
+Use issue references only when reliable:
+
+- User-provided issue number or URL.
+- Repo docs such as `AGENTS.md`, `CONTRIBUTING.md`, `.github/pull_request_template.md`, or tracker docs.
+- Existing branch, PR, or issue state verified through repo tools or `gh`.
+
+If issue mapping is unclear, omit issue references unless issue linkage materially changes the result.
+
+Commit footer style when reliable:
+
+```text
+Refs: #123
+```
+
+Use closing keywords such as `Closes #123` or `Fixes #123` only when the change fully resolves the issue and the user/repo convention supports auto-closing. Prefer those in the PR body, not every commit.
+
+## Staging And Commits
+
+Stage only task-owned files:
+
+```bash
+git add path/to/fileA path/to/fileB
+git add -p path/to/file
+```
+
+Before each commit:
+
+```bash
+git diff --cached --name-status
+git diff --cached
+```
+
+Stop before staging or committing when changes are mixed, surprising, generated unexpectedly, binary-heavy, secret-looking, or ambiguous.
+
+Commit grouping:
+
+- Use a small number of meaningful commits.
+- Separate unrelated fixes/features.
+- Separate formatting-only changes from behavior changes.
+- Keep tests with the behavior change unless test infrastructure changed separately.
+- Keep dependency or lockfile changes separate when meaningful.
+- If hooks modify files, re-inspect before finalizing.
+
+Use the repo's existing commit style. If none is clear, use Conventional Commits:
+
+```text
+<type>(optional-scope): <imperative summary>
+
+<body only when useful>
+
+<footer only when useful>
+```
+
+Common types: `feat`, `fix`, `docs`, `refactor`, `test`, `chore`, `ci`, `build`, `perf`, `style`, `revert`.
+
+Message rules:
+
+- Subject describes the code change, not the issue number.
+- Use imperative mood.
+- Body explains rationale, risk, migration, or non-obvious behavior only when useful.
+- Footer is only for reliable metadata such as `Refs: #123` or a real `BREAKING CHANGE:`.
+- No AI/tool/agent attribution.
+
+## Validation
+
+Run validation when practical and proportional:
+
+- Prefer repo-documented commands from README, CONTRIBUTING, package scripts, Makefile, CI config, or prior conversation.
+- Use targeted tests before full suites when faster and meaningful.
+- Run formatting/linting only when already configured.
+
+If skipped, state why. If failed, report the exact command and short failure summary.
+
+## Push And PR Handoff
+
+Push only when requested or approved.
+
+Before pushing:
+
+```bash
+git status --short --branch
+git branch -vv
+git remote -v
+```
+
+Rules:
+
+- If there is one obvious writable remote and no upstream, `git push -u <remote> <branch>` is allowed.
+- If multiple remotes exist and the target is unclear, stop and ask.
+- If an open PR already exists for this branch, push only when updating that PR is in scope.
+- If push fails due to auth, protection, hooks, non-fast-forward, or rejection, stop and report the failure.
+- Do not force push unless explicitly approved for the exact branch and reason.
+
+After push, provide PR-ready output. Create/edit the PR only when explicitly requested.
+
+Final report format:
+
+```text
+Branch: <branch>
+Worktree: <path or none>
+Commits:
+- <short-sha> <subject>
+Pushed: <yes/no, remote/branch>
+PR: <existing PR or recommended title; not created unless approved>
+Issues: <refs or none>
+Validation: <observed result or unverified>
+Notes: <important caveats only>
+```
+
+Suggested PR body format:
+
+```markdown
+## Summary
+- ...
+
+## Validation
+- ...
+
+## Issue links
+Refs: #123
+```
+
+If the change fully resolves an issue, separately recommend whether the PR body should use `Closes #123`.
+
+## Stop And Ask
+
+Stop when any of these would affect correctness or safety:
+
+- Branch, base, worktree path, remote, upstream, or PR target is unclear.
+- Current branch is default, detached, protected, unrelated, or unsafe for the requested action.
+- Existing staged changes are not clearly in scope.
+- Untracked, generated, binary, lockfile, or secret-looking files are ambiguous.
+- The diff could belong to multiple unrelated tasks or issues.
+- Issue linkage materially affects branch name, commit wording, or PR body.
+- A destructive operation, history rewrite, force push, branch deletion, or worktree removal is needed.
