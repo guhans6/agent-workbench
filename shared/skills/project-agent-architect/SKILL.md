@@ -9,6 +9,8 @@ Create or refresh a repo-local agent operating model from evidence. Do not imple
 
 Read `references/role-model-policy.md` before drafting roles, model assignments, skill/MCP assignments, or research rules.
 
+This skill is parent-model neutral. The invoking main agent may be GPT-5.5, GPT-5.4, GPT-5.4-mini, or another capable model. Do not refuse orchestration or subagent planning because the current main agent is not GPT-5.5. Treat model names as recommended assignments for generated subagents and fallbacks, not as requirements for using this skill.
+
 ## Non-Negotiable Rules
 
 1. Keep the first pass read-only.

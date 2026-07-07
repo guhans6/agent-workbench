@@ -59,11 +59,13 @@ Generated project skills and Codex agent instructions must include this budget r
 
 ## Model Budget Policy
 
-Generated Codex custom agents must set model and reasoning explicitly instead of relying on parent inheritance.
+This policy is parent-model neutral. The main orchestrator is the currently invoking agent/session, not a hardcoded model identity. A GPT-5.5 main session is preferred for broad planning when available, but GPT-5.4 medium or another capable main agent may use this skill, draft project teams, and orchestrate subagents under the same evidence, budget, and approval rules.
+
+Generated Codex custom agents must set model and reasoning explicitly instead of relying on parent inheritance. Do not write generated instructions that say the main role "is GPT-5.5" or that subagent orchestration requires GPT-5.5. Instead, describe the main role by domain responsibility, such as "Senior Apple Platform Engineer plus product-minded technical lead."
 
 | Role Type | Default Model | Reasoning | Sandbox | Use For |
 |---|---|---|---|---|
-| Main orchestrator | `gpt-5.5` | medium or high | current session | planning, user intent, integration, final judgment |
+| Main orchestrator | current invoking session; prefer `gpt-5.5` when available for broad planning | medium or high | current session | planning, user intent, integration, final judgment |
 | Explorer | `gpt-5.4-mini` | medium | read-only | cheap mapping, file discovery, impact scan |
 | Complex explorer | `gpt-5.4` | medium | read-only | large repo tracing or subtle architecture mapping |
 | Implementer | `gpt-5.4` | medium | workspace-write | normal code changes, refactors, test updates |
@@ -76,7 +78,7 @@ Generated Codex custom agents must set model and reasoning explicitly instead of
 | Release manager | `gpt-5.4-mini` | medium | read-only or workspace-write | changelog, release checklist, PR hygiene |
 | Security reviewer | `gpt-5.4` | high | read-only | threat modeling, auth, data risk, exploitability review |
 
-If a named model is unavailable, use the closest available fallback and state the fallback in the draft.
+If a named model is unavailable, use the closest available fallback and state the fallback in the draft. If the current main session is already GPT-5.4 medium, keep it as the orchestrator unless the user explicitly asks to move planning to a stronger model.
 
 Prefer `gpt-5.4-mini` or `gpt-5.4` medium for first-pass exploration, implementation, test running, docs lookup, issue slicing, and release hygiene. Use `gpt-5.4` high only when the high-reasoning budget policy permits it.
 
