@@ -106,6 +106,7 @@ def render(repository: Path, global_profiles: list[tuple[str, str, str, str, str
 
     if global_profiles:
         routing = "ROUTING: " + "; ".join(" | ".join(profile) for profile in global_profiles)
+        routing += "; no Repository-Specific Profiles proposed"
     else:
         status = "WARN"
         routing = "ROUTING: unavailable global profile inventory; no Repository-Specific Profiles proposed"

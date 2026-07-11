@@ -50,7 +50,7 @@ class BootstrapCommandTests(unittest.TestCase):
                     "STATUS: WARN",
                     "PRECHECK: WARN missing-repository-context AGENTS.md",
                     "EVIDENCE: docs/plan.md, package.json",
-                    "ROUTING: terra | normal implementation | gpt-5.6-terra | medium | workspace-write",
+                    "ROUTING: terra | normal implementation | gpt-5.6-terra | medium | workspace-write; no Repository-Specific Profiles proposed",
                     "ATTENTION: add a concise Managed Routing Block to AGENTS.md",
                     "FILES: AGENTS.md",
                     "CHECKLIST: review context pointer; review global profile assignments; approve minimal Managed Routing Block; validate before write",
@@ -116,7 +116,10 @@ class BootstrapCommandTests(unittest.TestCase):
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
         self.assertIn("STATUS: PASS", result.stdout)
         self.assertIn("PRECHECK: PASS repository-context-observed", result.stdout)
-        self.assertIn("ROUTING: terra | normal implementation | gpt-5.6-terra | medium | workspace-write", result.stdout)
+        self.assertIn(
+            "ROUTING: terra | normal implementation | gpt-5.6-terra | medium | workspace-write; no Repository-Specific Profiles proposed",
+            result.stdout,
+        )
         self.assertIn("FILES: AGENTS.md", result.stdout)
 
     def test_incomplete_repository_context_warns(self) -> None:
