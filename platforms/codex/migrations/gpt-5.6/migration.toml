@@ -5,6 +5,7 @@ name = "explorer"
 disposition = "merge"
 current_model = "gpt-5.4-mini"
 current_reasoning = "low"
+current_access = "read-only"
 proposed_model = "gpt-5.6-luna"
 proposed_reasoning = "medium"
 replacement = "global_scout"
@@ -15,6 +16,7 @@ name = "spark_editor"
 disposition = "merge"
 current_model = "gpt-5.3-codex-spark"
 current_reasoning = "low"
+current_access = "workspace-write"
 proposed_model = "gpt-5.6-luna"
 proposed_reasoning = "medium"
 replacement = "spark_editor_gpt56"
@@ -25,70 +27,84 @@ name = "swift_explorer"
 disposition = "modify"
 current_model = "gpt-5.4-mini"
 current_reasoning = "medium"
+current_access = "read-only"
 proposed_model = "gpt-5.6-terra"
 proposed_reasoning = "medium"
 replacement = "swift_explorer"
-install_before_remove = true
+install_before_remove = false
+patch_fields = ["model", "model_reasoning_effort", "sandbox_mode"]
 
 [[existing_agents]]
 name = "swift_worker"
 disposition = "modify"
 current_model = "gpt-5.4"
 current_reasoning = "medium"
+current_access = "workspace-write"
 proposed_model = "gpt-5.6-terra"
 proposed_reasoning = "medium"
 replacement = "swift_worker"
-install_before_remove = true
+install_before_remove = false
+patch_fields = ["model", "model_reasoning_effort", "sandbox_mode"]
 
 [[existing_agents]]
 name = "xcode_triager"
 disposition = "modify"
 current_model = "gpt-5.4"
 current_reasoning = "medium"
+current_access = "workspace-write"
 proposed_model = "gpt-5.6-terra"
 proposed_reasoning = "medium"
 replacement = "xcode_triager"
-install_before_remove = true
+install_before_remove = false
+patch_fields = ["model", "model_reasoning_effort", "sandbox_mode"]
 
 [[existing_agents]]
 name = "apple_docs_researcher"
 disposition = "modify"
 current_model = "gpt-5.4-mini"
 current_reasoning = "medium"
+current_access = "read-only"
 proposed_model = "gpt-5.6-terra"
 proposed_reasoning = "high"
 replacement = "apple_docs_researcher"
-install_before_remove = true
+install_before_remove = false
+patch_fields = ["model", "model_reasoning_effort", "sandbox_mode"]
 
 [[existing_agents]]
 name = "deep_debugger"
 disposition = "modify"
 current_model = "gpt-5.5"
 current_reasoning = "high"
+current_access = "workspace-write"
 proposed_model = "gpt-5.6-sol"
 proposed_reasoning = "high"
 replacement = "deep_debugger"
-install_before_remove = true
+install_before_remove = false
+patch_fields = ["model", "model_reasoning_effort", "sandbox_mode"]
 
 [[existing_agents]]
 name = "swift_reviewer"
 disposition = "modify"
 current_model = "gpt-5.5"
 current_reasoning = "high"
+current_access = "read-only"
 proposed_model = "gpt-5.6-sol"
 proposed_reasoning = "high"
 replacement = "swift_reviewer"
-install_before_remove = true
+install_before_remove = false
+patch_fields = ["model", "model_reasoning_effort", "sandbox_mode"]
 
 [[existing_agents]]
 name = "gatekeeper"
 disposition = "modify"
 current_model = "gpt-5.5"
 current_reasoning = "high"
+current_access = "read-only"
 proposed_model = "gpt-5.6-sol"
 proposed_reasoning = "high"
 replacement = "gatekeeper"
-install_before_remove = true
+install_before_remove = false
+patch_fields = ["model", "model_reasoning_effort", "sandbox_mode"]
 
 [[proposed_profiles]]
 name = "global_scout"
@@ -96,7 +112,7 @@ trigger = "bounded inventory or mechanical verification"
 model = "gpt-5.6-luna"
 reasoning = "medium"
 access = "read-only"
-skills = ["implement"]
+skills = []
 
 [[proposed_profiles]]
 name = "global_worker"
@@ -168,7 +184,7 @@ trigger = "Apple framework semantics or availability research"
 model = "gpt-5.6-terra"
 reasoning = "high"
 access = "read-only"
-skills = ["openai-docs"]
+skills = []
 
 [[proposed_profiles]]
 name = "deep_debugger"

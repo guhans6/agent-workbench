@@ -26,7 +26,8 @@ def main() -> int:
         current = f"{agent.get('current_model', 'none')} / {agent.get('current_reasoning', 'none')}"
         proposed = f"{agent.get('proposed_model', 'none')} / {agent.get('proposed_reasoning', 'none')}"
         replacement = agent.get("replacement", "none")
-        print(f"AGENT DELTA: {name} | {disposition} | {current} -> {proposed} | {replacement} | install then validate before removal")
+        action = "patch only model, reasoning, and sandbox; preserve description and instructions" if disposition == "modify" else "install then validate before removal"
+        print(f"AGENT DELTA: {name} | {disposition} | {current} -> {proposed} | {replacement} | {action}")
     for profile in migration.get("proposed_profiles", []):
         if not isinstance(profile, dict):
             continue
@@ -35,9 +36,9 @@ def main() -> int:
             f"ROUTING: {profile.get('name', 'unknown')} | {profile.get('trigger', 'unspecified')} | {profile.get('model', 'none')} | "
             f"{profile.get('reasoning', 'none')} | {profile.get('access', 'none')} | {skills or 'none'}"
         )
-    print("ATTENTION: install new global profiles before retiring legacy generic profiles; no silent fallback")
+    print("ATTENTION: install new global profiles before retiring legacy generic profiles; patch same-name profiles minimally; no silent fallback")
     print("FILES: AGENTS.md; agents/*.toml")
-    print("CHECKLIST: verify live inventory; run Sol review; install; validate refreshed observations; then consider removal")
+    print("CHECKLIST: verify live inventory; run Sol review; dry-run; back up; install or patch; validate; then separately consider removal")
     print("GLOBAL RUNTIME: unchanged")
     return 0
 
