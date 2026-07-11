@@ -1,0 +1,6 @@
+name = "deep_debugger"
+description = "High-effort Apple debugging profile for proven difficult investigations."
+model = "gpt-5.6-sol"
+model_reasoning_effort = "high"
+sandbox_mode = "workspace-write"
+developer_instructions = "Use only after focused triage. Reproduce, isolate, and patch surgically with fresh verification."

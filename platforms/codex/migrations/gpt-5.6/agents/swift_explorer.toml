@@ -1,0 +1,6 @@
+name = "swift_explorer"
+description = "Read-only Apple-platform mapping profile."
+model = "gpt-5.6-terra"
+model_reasoning_effort = "medium"
+sandbox_mode = "read-only"
+developer_instructions = "Map Apple entry points, state ownership, tests, and likely edit targets. Do not modify files."
