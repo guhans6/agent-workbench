@@ -64,6 +64,38 @@ def managed_block(text: str) -> str | None:
     return block
 
 
+def safe_read_text(path: Path) -> str | None:
+    try:
+        return path.read_text()
+    except (OSError, UnicodeError):
+        return None
+
+
+def validate_installed(source: Path, installed_root: Path) -> list[Finding]:
+    findings: list[Finding] = []
+    migration = read_toml(source / "migration.toml", findings, "migration.toml")
+    source_agents = source / "AGENTS.md"
+    installed_agents = installed_root / "AGENTS.md"
+    source_text = safe_read_text(source_agents)
+    installed_text = safe_read_text(installed_agents)
+    source_block = managed_block(source_text) if source_text is not None else None
+    installed_block = managed_block(installed_text) if installed_text is not None else None
+    if source_block is None or installed_block != source_block:
+        findings.append(Finding("FAIL", "installed-routing-block-mismatch", "AGENTS.md"))
+    if migration is None:
+        return findings
+    for metadata in migration.get("proposed_profiles", []):
+        if not isinstance(metadata, dict) or not isinstance(metadata.get("name"), str):
+            continue
+        name = metadata["name"]
+        profile = read_toml(installed_root / "agents" / f"{name}.toml", findings, f"installed-agents/{name}.toml")
+        if profile is None:
+            findings.append(Finding("FAIL", "missing-installed-profile", name))
+        elif not assignment_matches(profile, metadata):
+            findings.append(Finding("FAIL", "installed-assignment-mismatch", name))
+    return sorted(set(findings))
+
+
 def validate(source: Path, observed: Path, shared_policy_path: Path, live_agents: Path | None = None) -> list[Finding]:
     findings: list[Finding] = []
     policy = read_toml(shared_policy_path, findings, shared_policy_path.name)
@@ -182,15 +214,22 @@ def main() -> int:
     parser.add_argument("--source", required=True, type=Path)
     parser.add_argument("--observed", required=True, type=Path)
     parser.add_argument("--shared-policy", required=True, type=Path)
-    parser.add_argument("--live-agents", type=Path, help="Read-only current global agents directory to verify the manifest inventory.")
+    runtime = parser.add_mutually_exclusive_group()
+    runtime.add_argument("--live-agents", type=Path, help="Read-only pre-migration agents directory to verify the manifest inventory.")
+    runtime.add_argument("--installed-root", type=Path, help="Read-only installed global root to verify the completed migration.")
     arguments = parser.parse_args()
     findings = validate(arguments.source, arguments.observed, arguments.shared_policy, arguments.live_agents)
+    if arguments.installed_root is not None:
+        findings.extend(validate_installed(arguments.source, arguments.installed_root))
+        findings = sorted(set(findings))
     for finding in findings:
         print(finding.render())
     if findings:
-        print("FAIL global routing migration has errors")
+        noun = "installation" if arguments.installed_root is not None else "migration"
+        print(f"FAIL global routing {noun} has errors")
         return 1
-    print("PASS global routing migration is structurally valid")
+    noun = "installation" if arguments.installed_root is not None else "migration"
+    print(f"PASS global routing {noun} is structurally valid")
     return 0
 
 

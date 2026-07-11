@@ -53,7 +53,12 @@ class GlobalRoutingMigrationCommandTests(unittest.TestCase):
     '''
 
     def run_validator(
-        self, source_files: dict[str, str], observed: str, shared_policy: str | None = None, live_agents: dict[str, str] | None = None
+        self,
+        source_files: dict[str, str],
+        observed: str,
+        shared_policy: str | None = None,
+        live_agents: dict[str, str] | None = None,
+        installed_files: dict[str, str] | None = None,
     ) -> subprocess.CompletedProcess[str]:
         with tempfile.TemporaryDirectory() as temporary_directory:
             fixture = Path(temporary_directory)
@@ -66,6 +71,9 @@ class GlobalRoutingMigrationCommandTests(unittest.TestCase):
             live_agents_path = fixture / "live-agents"
             if live_agents is not None:
                 self.write_tree(live_agents_path, live_agents)
+            installed_root = fixture / "installed"
+            if installed_files is not None:
+                self.write_tree(installed_root, installed_files)
             command = [
                     sys.executable,
                     str(COMMAND),
@@ -78,12 +86,47 @@ class GlobalRoutingMigrationCommandTests(unittest.TestCase):
                 ]
             if live_agents is not None:
                 command.extend(("--live-agents", str(live_agents_path)))
+            if installed_files is not None:
+                command.extend(("--installed-root", str(installed_root)))
             return subprocess.run(
                 command,
                 capture_output=True,
                 text=True,
                 check=False,
             )
+
+    def test_validates_an_already_installed_migration(self) -> None:
+        routing_block = "<!-- routing:start -->\nGeneral routing first.\nSelect the best-value profile by expected quality, cost, latency, access, and coordination overhead.\nExplicit user instructions override routing.\nEvery assignment is exact; an unavailable model stops routing instead of falling back.\nThe orchestrator owns classification and workers do not self-promote.\nA concrete Luna failure escalates once to Terra.\nTerra escalates to Sol only for conflicting evidence, architectural ambiguity, repeated failure, or elevated risk.\nAt most one Sol/high subagent runs automatically per user task.\nMatt workflow routing.\nUse `grill-with-docs` for an idea needing clarification and `wayfinder` when a huge effort's route remains unclear.\nApple exceptions second.\n<!-- routing:end -->\n"
+        profile = 'name = "global_scout"\nmodel = "gpt-5.6-luna"\nmodel_reasoning_effort = "medium"\nsandbox_mode = "read-only"\n'
+        result = self.run_validator(
+            {
+                "AGENTS.md": routing_block,
+                "migration.toml": '''
+                    [[existing_agents]]
+                    name = "explorer"
+                    disposition = "replace"
+                    current_model = "gpt-5.4-mini"
+                    current_reasoning = "low"
+                    proposed_model = "gpt-5.6-luna"
+                    proposed_reasoning = "medium"
+                    replacement = "global_scout"
+                    install_before_remove = true
+
+                    [[proposed_profiles]]
+                    name = "global_scout"
+                    model = "gpt-5.6-luna"
+                    reasoning = "medium"
+                    access = "read-only"
+                    skills = []
+                ''',
+                "agents/global_scout.toml": profile,
+            },
+            'models = ["gpt-5.6-luna"]\nskills = []\n',
+            installed_files={"AGENTS.md": "Manual guidance.\n" + routing_block, "agents/global_scout.toml": profile},
+        )
+
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertEqual(result.stdout, "PASS global routing installation is structurally valid\n")
 
     def test_validates_exact_assignments_and_shared_policy_projection(self) -> None:
         result = self.run_validator(

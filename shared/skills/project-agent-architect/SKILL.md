@@ -12,10 +12,10 @@ Bootstrap a routing contract for a repository that has no existing routing contr
 1. Keep the pass read-only. Do not read secrets or install dependencies.
 2. Inspect repository instructions, context, plans, manifests, scripts, tests, and existing routing surfaces. Treat missing or conflicting boundaries as unresolved; never invent architecture.
 3. Inspect available global execution profiles and exact model, reasoning, access, skill, and tool assignments. Reject unavailable profiles or capabilities; never silently substitute one.
-4. Run `scripts/bootstrap-routing.py --repository <repo> --global-profile '<name>|<trigger>|<model>|<reasoning>|<access>'` for the compact preflight. Supply every observed global profile; use its PASS/WARN/FAIL result as the first approval-surface row.
+4. Run the bundled `scripts/bootstrap-routing.py --repository <repo> --global-profile '<name>|<trigger>|<model>|<reasoning>|<access>'` relative to this skill directory for the compact preflight. Supply every observed global profile; use its PASS/WARN/FAIL result as the first approval-surface row.
 5. Select global profiles first. Propose a repository-specific profile only when the task class, distinct execution boundary, concise local instruction delta, recurring evidence, and value over coordination cost are all demonstrated.
 6. Propose only a Managed Routing Block in `AGENTS.md` and justified `.codex/agents/*.toml` files. Do not propose a project-team skill, evidence ledger, architecture profile, or roster by default.
 7. Present only status, routing table, attention-required changes, file delta, and approval checklist. Keep detailed evidence available on request.
-8. Stop for approval before writing. After approval, make a minimal patch, run `scripts/validate-routing.py --bootstrap` against a no-profile proposal (or its normal mode when Repository-Specific Profiles are proposed), fix all FAIL findings, and report accepted/deferred WARN findings.
+8. Stop for approval before writing. After approval, make a minimal patch, run the bundled `scripts/validate-routing.py --bootstrap` relative to this skill directory against a no-profile proposal (or its normal mode when Repository-Specific Profiles are proposed), fix all FAIL findings, and report accepted/deferred WARN findings.
 
 `No Repository-Specific Profiles proposed` is a successful bootstrap outcome.
