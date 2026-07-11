@@ -31,59 +31,106 @@ def observed_evidence(repository: Path) -> list[str]:
     return sorted(evidence)
 
 
-def render(repository: Path) -> tuple[int, str]:
+def approval_surface(
+    status: str, precheck: str, evidence: list[str], routing: str, attention: str, files: str, checklist: str
+) -> str:
+    return "\n".join(
+        (
+            f"STATUS: {status}",
+            precheck,
+            f"EVIDENCE: {', '.join(evidence) if evidence else 'none'}",
+            routing,
+            attention,
+            f"FILES: {files}",
+            checklist,
+        )
+    ) + "\n"
+
+
+def parse_global_profiles(values: list[str]) -> list[tuple[str, str, str, str, str]]:
+    profiles: list[tuple[str, str, str, str, str]] = []
+    for value in values:
+        fields = tuple(part.strip() for part in value.split("|"))
+        if len(fields) != 5 or not all(fields):
+            raise ValueError("global profiles must use name|trigger|model|reasoning|access")
+        profiles.append(fields)
+    return profiles
+
+
+def has_routing_contract(repository: Path, agents_path: Path) -> bool:
+    return (
+        (agents_path.is_file() and "<!-- routing:start -->" in agents_path.read_text(errors="replace"))
+        or (repository / "routing.toml").is_file()
+        or any((repository / ".codex" / "agents").glob("*.toml"))
+    )
+
+
+def render(repository: Path, global_profiles: list[tuple[str, str, str, str, str]]) -> tuple[int, str]:
     evidence = observed_evidence(repository)
     if not evidence:
-        lines = (
-            "STATUS: FAIL",
+        return 1, approval_surface(
+            "FAIL",
             "PRECHECK: FAIL insufficient-repository-evidence",
-            "EVIDENCE: none",
+            evidence,
             "ROUTING: blocked",
             "ATTENTION: provide repository instructions, plans, manifests, scripts, tests, or confirmed decisions",
-            "FILES: none",
+            "none",
             "CHECKLIST: resolve evidence gap before proposing a write-capable route",
         )
-        return 1, "\n".join(lines) + "\n"
 
     agents_path = repository / "AGENTS.md"
-    if agents_path.is_file() and "<!-- routing:start -->" in agents_path.read_text(errors="replace"):
-        lines = (
-            "STATUS: FAIL",
+    if has_routing_contract(repository, agents_path):
+        return 1, approval_surface(
+            "FAIL",
             "PRECHECK: FAIL existing-routing-contract",
-            f"EVIDENCE: {', '.join(evidence)}",
-            "ROUTING: blocked; use refresh-project-agent-routing explicitly",
+            evidence,
+            "ROUTING: blocked; use a dedicated refresh workflow explicitly",
             "ATTENTION: bootstrap never infers refresh mode",
-            "FILES: none",
-            "CHECKLIST: invoke the refresh skill and preserve the existing managed block",
+            "none",
+            "CHECKLIST: invoke the refresh workflow and preserve the existing Managed Routing Block",
         )
-        return 1, "\n".join(lines) + "\n"
 
-    if agents_path.is_file():
+    context_path = repository / "CONTEXT.md"
+    if agents_path.is_file() and agents_path.read_text(errors="replace").strip() and context_path.is_file() and context_path.read_text(errors="replace").strip():
         status = "PASS"
-        precheck = "PRECHECK: PASS repository-context-ready"
-        attention = "ATTENTION: inspect existing repository context before any minimal managed-block patch"
+        precheck = "PRECHECK: PASS repository-context-observed"
+        attention = "ATTENTION: inspect observed repository context before any minimal Managed Routing Block patch"
+    elif agents_path.is_file() and agents_path.read_text(errors="replace").strip():
+        status = "WARN"
+        precheck = "PRECHECK: WARN missing-repository-context CONTEXT.md"
+        attention = "ATTENTION: add or confirm the repository context pointer before proposing a Managed Routing Block"
     else:
         status = "WARN"
         precheck = "PRECHECK: WARN missing-repository-context AGENTS.md"
-        attention = "ATTENTION: add a concise managed routing/context block to AGENTS.md"
+        attention = "ATTENTION: add a concise Managed Routing Block to AGENTS.md"
 
-    lines = (
-        f"STATUS: {status}",
+    if global_profiles:
+        routing = "ROUTING: " + "; ".join(" | ".join(profile) for profile in global_profiles)
+    else:
+        status = "WARN"
+        routing = "ROUTING: unavailable global profile inventory; no Repository-Specific Profiles proposed"
+        attention = "ATTENTION: inspect global profiles before approval; " + attention.removeprefix("ATTENTION: ")
+    return 0, approval_surface(
+        status,
         precheck,
-        f"EVIDENCE: {', '.join(evidence)}",
-        "ROUTING: global execution profiles first; no local profiles proposed",
+        evidence,
+        routing,
         attention,
-        "FILES: AGENTS.md",
-        "CHECKLIST: review context pointer; approve minimal managed block; validate before write",
+        "AGENTS.md",
+        "CHECKLIST: review context pointer; review global profile assignments; approve minimal Managed Routing Block; validate before write",
     )
-    return 0, "\n".join(lines) + "\n"
 
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--repository", required=True, type=Path)
+    parser.add_argument("--global-profile", action="append", default=[], metavar="NAME|TRIGGER|MODEL|REASONING|ACCESS")
     arguments = parser.parse_args()
-    code, output = render(arguments.repository)
+    try:
+        global_profiles = parse_global_profiles(arguments.global_profile)
+    except ValueError as error:
+        parser.error(str(error))
+    code, output = render(arguments.repository, global_profiles)
     print(output, end="")
     return code
 

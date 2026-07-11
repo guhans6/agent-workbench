@@ -38,6 +38,7 @@ class ValidatorCommandTests(unittest.TestCase):
         repository_files: dict[str, str],
         routing_files: dict[str, str],
         approved_files: tuple[str, ...] = ("AGENTS.md", ".codex/agents/worker.toml"),
+        bootstrap: bool = False,
     ) -> subprocess.CompletedProcess[str]:
         with tempfile.TemporaryDirectory() as temporary_directory:
             fixture = Path(temporary_directory)
@@ -55,6 +56,8 @@ class ValidatorCommandTests(unittest.TestCase):
             ]
             for approved_file in approved_files:
                 command.extend(("--approved-file", approved_file))
+            if bootstrap:
+                command.append("--bootstrap")
             return subprocess.run(command, capture_output=True, text=True, check=False)
 
     @staticmethod
@@ -89,6 +92,17 @@ class ValidatorCommandTests(unittest.TestCase):
         self.assertEqual(result.returncode, 1, result.stdout + result.stderr)
         self.assertIn("FAIL missing-routing-configuration routing.toml", result.stdout)
         self.assertTrue(result.stdout.rstrip().endswith("FAIL routing configuration has errors"))
+
+    def test_bootstrap_managed_block_without_local_profiles_passes(self) -> None:
+        result = self.run_validator(
+            repository_files={"CONTEXT.md": "# Repository context\n", ".routing-observations.toml": self.OBSERVED},
+            routing_files={"AGENTS.md": "<!-- routing:start -->\nUse global profiles.\n<!-- routing:end -->\n"},
+            approved_files=("AGENTS.md",),
+            bootstrap=True,
+        )
+
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertEqual(result.stdout, "PASS routing configuration is structurally valid\n")
 
     def test_structural_and_safety_defects_fail_deterministically(self) -> None:
         scenarios = {

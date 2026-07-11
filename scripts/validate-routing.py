@@ -72,11 +72,13 @@ def text_corpus(root: Path) -> str:
     return "\n".join(parts)
 
 
-def validate(repository: Path, routing: Path, approved_files: set[str]) -> list[Finding]:
+def validate(repository: Path, routing: Path, approved_files: set[str], bootstrap: bool = False) -> list[Finding]:
     findings: list[Finding] = []
     routing_path = routing / "routing.toml"
     if routing_path.is_file():
         configuration = load_toml(routing_path, findings, "routing.toml")
+    elif bootstrap:
+        configuration = {}
     else:
         findings.append(Finding("FAIL", "missing-routing-configuration", "routing.toml"))
         configuration = None
@@ -171,8 +173,9 @@ def main() -> int:
     parser.add_argument("--repository", required=True, type=Path)
     parser.add_argument("--routing", required=True, type=Path)
     parser.add_argument("--approved-file", action="append", default=[])
+    parser.add_argument("--bootstrap", action="store_true", help="Allow a managed block with no Repository-Specific Profiles.")
     arguments = parser.parse_args()
-    findings = validate(arguments.repository, arguments.routing, set(arguments.approved_file))
+    findings = validate(arguments.repository, arguments.routing, set(arguments.approved_file), arguments.bootstrap)
     for finding in findings:
         print(finding.render())
     if any(finding.severity == "FAIL" for finding in findings):

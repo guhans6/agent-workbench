@@ -13,15 +13,22 @@ COMMAND = ROOT / "scripts" / "bootstrap-routing.py"
 
 
 class BootstrapCommandTests(unittest.TestCase):
-    def run_bootstrap(self, files: dict[str, str]) -> subprocess.CompletedProcess[str]:
+    GLOBAL_PROFILE = "terra|normal implementation|gpt-5.6-terra|medium|workspace-write"
+
+    def run_bootstrap(
+        self, files: dict[str, str], global_profiles: tuple[str, ...] = (GLOBAL_PROFILE,)
+    ) -> subprocess.CompletedProcess[str]:
         with tempfile.TemporaryDirectory() as temporary_directory:
             repository = Path(temporary_directory) / "repository"
             for relative_path, contents in files.items():
                 path = repository / relative_path
                 path.parent.mkdir(parents=True, exist_ok=True)
                 path.write_text(textwrap.dedent(contents).lstrip())
+            command = [sys.executable, str(COMMAND), "--repository", str(repository)]
+            for profile in global_profiles:
+                command.extend(("--global-profile", profile))
             return subprocess.run(
-                [sys.executable, str(COMMAND), "--repository", str(repository)],
+                command,
                 capture_output=True,
                 text=True,
                 check=False,
@@ -43,10 +50,10 @@ class BootstrapCommandTests(unittest.TestCase):
                     "STATUS: WARN",
                     "PRECHECK: WARN missing-repository-context AGENTS.md",
                     "EVIDENCE: docs/plan.md, package.json",
-                    "ROUTING: global execution profiles first; no local profiles proposed",
-                    "ATTENTION: add a concise managed routing/context block to AGENTS.md",
+                    "ROUTING: terra | normal implementation | gpt-5.6-terra | medium | workspace-write",
+                    "ATTENTION: add a concise Managed Routing Block to AGENTS.md",
                     "FILES: AGENTS.md",
-                    "CHECKLIST: review context pointer; approve minimal managed block; validate before write",
+                    "CHECKLIST: review context pointer; review global profile assignments; approve minimal Managed Routing Block; validate before write",
                     "",
                 )
             ),
@@ -88,10 +95,10 @@ class BootstrapCommandTests(unittest.TestCase):
                     "STATUS: FAIL",
                     "PRECHECK: FAIL existing-routing-contract",
                     "EVIDENCE: AGENTS.md, CONTEXT.md",
-                    "ROUTING: blocked; use refresh-project-agent-routing explicitly",
+                    "ROUTING: blocked; use a dedicated refresh workflow explicitly",
                     "ATTENTION: bootstrap never infers refresh mode",
                     "FILES: none",
-                    "CHECKLIST: invoke the refresh skill and preserve the existing managed block",
+                    "CHECKLIST: invoke the refresh workflow and preserve the existing Managed Routing Block",
                     "",
                 )
             ),
@@ -108,9 +115,28 @@ class BootstrapCommandTests(unittest.TestCase):
 
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
         self.assertIn("STATUS: PASS", result.stdout)
-        self.assertIn("PRECHECK: PASS repository-context-ready", result.stdout)
-        self.assertIn("ROUTING: global execution profiles first; no local profiles proposed", result.stdout)
+        self.assertIn("PRECHECK: PASS repository-context-observed", result.stdout)
+        self.assertIn("ROUTING: terra | normal implementation | gpt-5.6-terra | medium | workspace-write", result.stdout)
         self.assertIn("FILES: AGENTS.md", result.stdout)
+
+    def test_incomplete_repository_context_warns(self) -> None:
+        result = self.run_bootstrap({"AGENTS.md": "# Repository instructions\n"})
+
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertIn("STATUS: WARN", result.stdout)
+        self.assertIn("PRECHECK: WARN missing-repository-context CONTEXT.md", result.stdout)
+
+    def test_existing_agent_profile_requires_explicit_refresh(self) -> None:
+        result = self.run_bootstrap(
+            {
+                "AGENTS.md": "# Repository instructions\n",
+                "CONTEXT.md": "# Repository context\n",
+                ".codex/agents/local.toml": 'name = "local"\n',
+            }
+        )
+
+        self.assertEqual(result.returncode, 1, result.stdout + result.stderr)
+        self.assertIn("PRECHECK: FAIL existing-routing-contract", result.stdout)
 
 
 if __name__ == "__main__":
