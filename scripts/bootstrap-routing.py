@@ -25,7 +25,11 @@ def observed_evidence(repository: Path) -> list[str]:
     for directory in ("docs", "scripts", "tests", "test"):
         root = repository / directory
         if root.is_dir():
-            files = sorted(path for path in root.rglob("*") if path.is_file())
+            files = sorted(
+                path
+                for path in root.rglob("*")
+                if path.is_file() and "__pycache__" not in path.parts and path.suffix != ".pyc"
+            )
             if files:
                 evidence.append(files[0].relative_to(repository).as_posix())
     return sorted(evidence)

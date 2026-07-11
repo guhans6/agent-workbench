@@ -141,6 +141,19 @@ class BootstrapCommandTests(unittest.TestCase):
         self.assertEqual(result.returncode, 1, result.stdout + result.stderr)
         self.assertIn("PRECHECK: FAIL existing-routing-contract", result.stdout)
 
+    def test_ignores_python_cache_files_when_collecting_evidence(self) -> None:
+        result = self.run_bootstrap(
+            {
+                "package.json": '{"name": "sample"}\n',
+                "scripts/__pycache__/generated.pyc": "cache\n",
+                "scripts/verify.py": "print('verify')\n",
+            }
+        )
+
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertIn("EVIDENCE: package.json, scripts/verify.py", result.stdout)
+        self.assertNotIn("__pycache__", result.stdout)
+
 
 if __name__ == "__main__":
     unittest.main()
