@@ -9,7 +9,7 @@ Create or refresh a repo-local agent operating model from evidence. Do not imple
 
 Read `references/role-model-policy.md` before drafting roles, model assignments, skill/MCP assignments, or research rules.
 
-This skill is parent-model neutral. The invoking main agent may be GPT-5.5, GPT-5.4, GPT-5.4-mini, or another capable model. Do not refuse orchestration or subagent planning because the current main agent is not GPT-5.5. Treat model names as recommended assignments for generated subagents and fallbacks, not as requirements for using this skill.
+This skill is parent-model neutral. The invoking main agent is the current capable session, regardless of model family. Do not require a particular parent model for orchestration or subagent planning. Treat model names as explicit assignments for generated subagents under the current model policy, not as requirements for invoking this skill.
 
 ## Non-Negotiable Rules
 
@@ -70,6 +70,8 @@ Record surfaces as:
 
 Use the policy in `references/role-model-policy.md`.
 
+Use the current GPT-5.6 model policy for newly generated teams. Verify that every proposed model is observable in the current environment and state any unavailable assignment as `unknown`; never select a fallback silently.
+
 The main role must be domain-specific, not generic. Derive it from evidence, for example:
 
 - Apple repo: senior Apple platform engineer plus product-minded technical lead
@@ -90,6 +92,7 @@ Refresh mode is still read-only until approval.
 Compare:
 
 - current observable skills, MCPs, custom agents, and instructions
+- every current model and reasoning assignment
 - existing `.agents/skills/<repo-slug>-project-team/SKILL.md`
 - existing `.agents/project-profile/*.md`
 - existing `.codex/agents/*.toml`
@@ -101,16 +104,20 @@ Produce a delta draft instead of a full rewrite:
 | Change Type | Surface | Current State | New Evidence | Recommendation | Files Affected |
 |---|---|---|---|---|---|
 
+Every refresh must produce the separate model-assignment delta defined in `references/role-model-policy.md` before proposing file edits. If no assignments would change, state `No model-assignment changes proposed` instead of omitting the section.
+
+Preserve every existing model and reasoning assignment until the user approves its exact delta. Updating this central skill never migrates an existing generated team.
+
 Allowed recommendations:
 
 - add a new skill/MCP as conditional use for an existing role
 - change a skill from conditional to always-use only when workflow-defining and justified
 - create a new role only when existing roles cannot cover the new capability
 - remove or deprecate stale assignments only when evidence shows the surface is unavailable
-- update model/reasoning/sandbox only when role risk or task type changed
+- update model/reasoning/sandbox only when role risk or task type changed, or when the user explicitly requests migration to the current model policy
 - update project profile evidence and roster notes
 
-Do not overwrite generated files wholesale. Propose minimal patches and preserve local manual edits.
+Do not overwrite generated files wholesale. Propose minimal patches and preserve local manual edits. Never apply a model-assignment delta until the user approves it.
 
 ## Phase 5: Required Draft Output
 
@@ -128,7 +135,7 @@ Include:
 8. Model and reasoning proposal
 9. High-reasoning budget proposal
 10. Research gate and when web/docs lookup is required
-11. For refresh mode: skill/MCP/role delta table
+11. For refresh mode: skill/MCP/role delta table and a separate model-assignment delta, including an explicit no-change result when applicable
 12. Files proposed for creation/modification
 13. Risks and unknowns
 14. Approval checklist
@@ -178,7 +185,7 @@ I have not written files yet.
 Approve one:
 
 1. Approve as-is.
-2. Approve but remove/change these roles: ...
+2. Approve but change these model assignments or roles: ...
 3. Approve only the project skill, not Codex custom agents.
 4. Revise the plan before writing files.
 
@@ -195,4 +202,4 @@ After approval I will create/modify only the listed files.
 6. Parse TOML if a parser is available.
 7. Check skill frontmatter.
 8. Run `git diff --stat`.
-9. Report files changed, invocation commands, checks run, manual steps, and risks.
+9. Report files changed, exact model policy changes, what was intentionally preserved, remaining risks or unknowns, invocation commands, checks run, manual steps, and `git diff --stat`.

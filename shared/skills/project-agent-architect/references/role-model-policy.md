@@ -46,17 +46,19 @@ Delegate by default when:
 - implementation and verification should be separated
 - the user says to use the team
 
-| Work Type | Default Worker | Default Model | Reasoning | Sandbox | Rule |
-|---|---|---|---|---|---|
-| File discovery or impact scan | explorer | `gpt-5.4-mini` | medium | read-only | Spawn for unfamiliar or multi-file work. |
-| Focused implementation | implementer | `gpt-5.4` | medium | workspace-write | Spawn for most non-trivial approved implementation. |
-| Simple mechanical edit | main or small worker | `gpt-5.4-mini` | medium | workspace-write | Main may do it only when delegation costs more than the work. |
-| Test running or failure summary | tester | `gpt-5.4-mini` | medium | workspace-write | Spawn when validation is needed. |
-| Targeted docs/API research | docs researcher | `gpt-5.4-mini` | high | read-only | Spawn for version-sensitive, unfamiliar, or API-specific questions. |
-| Issue slicing or acceptance criteria | PM or issue slicer | `gpt-5.4-mini` | high | read-only | Spawn for PRD/plan breakdowns and acceptance criteria. |
-| Hard debugging | debugger | `gpt-5.4` | high | workspace-write | Escalation only; counts against high-reasoning budget. |
-| Risky review, security, concurrency, or architecture | reviewer or specialist | `gpt-5.4` | high | read-only | Escalation only; counts against high-reasoning budget. |
-| Final tradeoff and user report | main agent | current session | current | current session | Do not delegate final judgment. |
+| Work Type | Default Worker | Reasoning | Sandbox | Rule |
+|---|---|---|---|---|
+| Bounded repository discovery | scout | medium | read-only | Start here for clear file, symbol, manifest, dependency, test, or configuration inventory. |
+| Analytical exploration | explorer | medium | read-only | Use when findings require subsystem interpretation, cross-component tracing, or impact analysis. |
+| Architectural investigation | investigator | medium | read-only | Escalation only for conflicting evidence, competing hypotheses, or architecture and migration tradeoffs. |
+| Focused implementation | implementer | medium | workspace-write | Spawn for most non-trivial approved implementation. |
+| Simple mechanical edit | main or small worker | medium | workspace-write | Main may do it only when delegation costs more than the work. |
+| Test running or failure summary | tester | medium | workspace-write | Spawn when validation is needed. |
+| Targeted docs/API research | docs researcher | high | read-only | Spawn for version-sensitive, unfamiliar, or API-specific questions. |
+| Issue slicing or acceptance criteria | PM or issue slicer | high | read-only | Spawn for PRD/plan breakdowns and acceptance criteria. |
+| Hard debugging | debugger | high | workspace-write | Escalation only; counts against high-reasoning budget. |
+| Risky review, security, concurrency, or architecture | reviewer or specialist | high | read-only | Escalation only; counts against high-reasoning budget. |
+| Final tradeoff and user report | main agent | current | current session | Do not delegate final judgment. |
 
 ## High-Reasoning Budget Policy
 
@@ -71,12 +73,12 @@ Default per user task:
 
 The main orchestrator may use one high-reasoning subagent when the task is clearly risky, ambiguous, security-sensitive, concurrency-heavy, architecture-heavy, or blocked after normal exploration.
 
-After one high-reasoning subagent returns, the main orchestrator must integrate the result itself or use medium/mini workers for follow-up. Do not automatically spawn another high-reasoning implementer, reviewer, debugger, or tester.
+After one high-reasoning subagent returns, the main orchestrator must integrate the result itself or use medium-reasoning workers for follow-up. Do not automatically spawn another high-reasoning implementer, reviewer, debugger, or tester.
 
 If another high-reasoning pass appears necessary, stop and report to the user:
 
 - what was already tried
-- why medium/mini work is insufficient
+- why medium-reasoning work is insufficient
 - what the next high-reasoning agent would do
 - expected cost/latency tradeoff
 - the exact approval needed
@@ -96,30 +98,38 @@ Not allowed without explicit user approval:
 
 Generated project skills and Codex agent instructions must include this budget rule. Generated project-team workflows should say: "Use at most one high-reasoning subagent per user task by default; if more high-reasoning work is needed, report back and ask before spawning it."
 
-## Model Budget Policy
+## Current Model Policy
 
-This policy is parent-model neutral. The main orchestrator is the currently invoking agent/session, not a hardcoded model identity. A GPT-5.5 main session is preferred for broad planning when available, but GPT-5.4 medium or another capable main agent may use this skill, draft project teams, and orchestrate subagents under the same evidence, budget, and approval rules.
+This policy is parent-model neutral. The main orchestrator is the currently invoking agent/session, not a hardcoded model identity. Any capable main agent may use this skill, draft project teams, and orchestrate subagents under the same evidence, budget, and approval rules.
 
-Generated Codex custom agents must set model and reasoning explicitly instead of relying on parent inheritance. Do not write generated instructions that say the main role "is GPT-5.5" or that subagent orchestration requires GPT-5.5. Instead, describe the main role by domain responsibility, such as "Senior Apple Platform Engineer plus product-minded technical lead."
+Use the GPT-5.6 family for newly generated subagents. Sol handles complex, open-ended, high-value, or high-risk work; Terra handles everyday implementation, analytical exploration, and source-backed synthesis; Luna handles clear, repeatable, structured work.
 
-| Role Type | Default Model | Reasoning | Sandbox | Use For |
+Changing this central policy never updates an existing generated team. Generated agents pin exact model strings. A refresh must inventory those strings, show every current and proposed assignment, and obtain approval before changing any model or reasoning effort.
+
+| Role Type | Model | Reasoning | Sandbox | Use For |
 |---|---|---|---|---|
-| Main orchestrator | current invoking session; prefer `gpt-5.5` when available for broad planning | medium or high | current session | planning, user intent, integration, final judgment |
-| Explorer | `gpt-5.4-mini` | medium | read-only | cheap mapping, file discovery, impact scan |
-| Complex explorer | `gpt-5.4` | medium | read-only | large repo tracing or subtle architecture mapping |
-| Implementer | `gpt-5.4` | medium | workspace-write | normal code changes, refactors, test updates |
-| Complex implementer | `gpt-5.4` | high | workspace-write | risky architecture, concurrency, security-sensitive, data, build, deploy |
-| Tester | `gpt-5.4-mini` | medium | workspace-write | run checks, summarize failures, simple diagnosis |
-| Debugger | `gpt-5.4` | high | workspace-write | hard bugs, flakes, runtime behavior, unclear failures |
-| Reviewer | `gpt-5.4` | high | read-only | correctness, regressions, maintainability, tests, security-sensitive review |
-| Docs researcher | `gpt-5.4-mini` | high | read-only | official docs lookup and concise source-backed summary |
-| PM or issue slicer | `gpt-5.4-mini` | high | read-only | issue breakdown, acceptance criteria, risk list |
-| Release manager | `gpt-5.4-mini` | medium | read-only or workspace-write | changelog, release checklist, PR hygiene |
-| Security reviewer | `gpt-5.4` | high | read-only | threat modeling, auth, data risk, exploitability review |
+| Main orchestrator | current invoking session | current | current session | planning, user intent, integration, final judgment |
+| Repository scout | `gpt-5.6-luna` | medium | read-only | locate files, symbols, tests, manifests, dependencies, and configurations; return bounded inventories or structured summaries |
+| Analytical explorer | `gpt-5.6-terra` | medium | read-only | understand unfamiliar subsystems, trace behavior across components, interpret conventions, and assess impact |
+| Architectural investigator | `gpt-5.6-sol` | medium | read-only | resolve conflicting evidence or hypotheses and analyze architecture or migration tradeoffs |
+| Simple mechanical worker | `gpt-5.6-luna` | medium | workspace-write | narrow renames, formatting, catalog edits, or command-only work |
+| Implementer | `gpt-5.6-terra` | medium | workspace-write | normal code changes, refactors, and test updates |
+| Complex implementer | `gpt-5.6-sol` | high | workspace-write | risky architecture, concurrency, security-sensitive, data, build, or deploy changes |
+| Tester | `gpt-5.6-luna` | medium | workspace-write | run checks, summarize failures, and perform simple diagnosis |
+| Debugger | `gpt-5.6-sol` | high | workspace-write | hard bugs, flakes, runtime behavior, and unclear failures |
+| Reviewer | `gpt-5.6-sol` | high | read-only | correctness, regressions, maintainability, tests, and security-sensitive review |
+| Docs researcher | `gpt-5.6-terra` | high | read-only | official docs lookup and source-backed synthesis |
+| PM or issue slicer | `gpt-5.6-terra` | high | read-only | issue breakdown, acceptance criteria, and risk lists |
+| Release manager | `gpt-5.6-luna` | medium | read-only or workspace-write | changelog, release checklist, and PR hygiene |
+| Security reviewer | `gpt-5.6-sol` | high | read-only | threat modeling, auth, data risk, and exploitability review |
 
-If a named model is unavailable, use the closest available fallback and state the fallback in the draft. If the current main session is already GPT-5.4 medium, keep it as the orchestrator unless the user explicitly asks to move planning to a stronger model.
+Within exploration, start with the Luna scout. The main orchestrator evaluates its evidence, uses Terra when interpretation is needed, and uses Sol only for unresolved ambiguity or architectural judgment. Outside exploration, use Sol for the explicitly listed high-risk roles. When repo evidence justifies a reusable exploration lane, generate both the Luna scout and Terra explorer so this routing is available; an architectural investigator remains escalation-only unless that work recurs.
 
-Prefer `gpt-5.4-mini` or `gpt-5.4` medium for first-pass exploration, implementation, test running, and release hygiene. Use `gpt-5.4-mini` high for targeted docs/API research and issue slicing when those tasks require careful reasoning but should stay cheap. Use `gpt-5.4` high only when the high-reasoning budget policy permits it.
+Generated Codex custom agents must set model and reasoning explicitly instead of relying on parent inheritance. Describe the main role by domain responsibility, such as "Senior Apple Platform Engineer plus product-minded technical lead," never by a required parent model.
+
+Model family and reasoning effort are independent. Every high-reasoning role counts against the single high-reasoning budget. Use medium reasoning for the architectural investigator by default and raise it to high only as an explicit escalation under that budget. Do not assign `xhigh`, `max`, or `ultra` by default; propose them separately and obtain explicit approval. Automatic delegation associated with `ultra` must not bypass the skill's team-depth, concurrency, or high-reasoning limits.
+
+Before drafting assignments, verify that each named model is observable in the current environment. If a model is unavailable, do not silently choose the closest model. Mark the assignment `unknown`, propose a specific observed fallback in the draft, and wait for approval. An older model such as `gpt-5.4-mini` may be proposed as a fallback when it is observed and justified, but it is not part of the current default roster.
 
 ## Domain-Specific Personas
 
@@ -198,6 +208,13 @@ Refresh starts with a delta inventory:
 | Surface | Name | Previous State | Current State | Change | Evidence |
 |---|---|---|---|---|---|
 
+Every refresh must produce a separate model-assignment delta before proposing file edits:
+
+| Agent | Current Model | Current Reasoning | Proposed Model | Proposed Reasoning | Reason | Files To Patch |
+|---|---|---|---|---|---|---|
+
+If no model or reasoning assignment would change, state `No model-assignment changes proposed` instead of omitting this section. The refresh still stops for approval before writing files.
+
 Compare current inventory against:
 
 - existing project-team skill role roster
@@ -218,6 +235,9 @@ Decision rules:
 8. Keep manual repo-specific edits. Patch the smallest section needed.
 9. If a new skill/MCP is useful but risky, unauthenticated, or write-capable, recommend it but require approval before assignment.
 10. If the new surface does not add value to the repo's domain or workflow, document `no role change recommended`.
+11. Preserve all current model and reasoning assignments during unrelated skill, MCP, or instruction refreshes.
+12. Migrate assignments to the current model policy only after an explicit user request and approved model-assignment delta.
+13. Apply no model-assignment change until the user approves the separate delta.
 
 Refresh recommendations should use:
 
@@ -239,7 +259,7 @@ Assign MCPs narrowly.
 - Implementers: repo file tools and build/test tools needed for the task
 - Testers: build/test tools, simulator/browser tools only when relevant
 - Reviewers: read-only file/search/diff tools
-- Docs researchers: official docs, Context7, Apple docs, web search, or framework docs tools when observed; default to mini high reasoning for targeted docs/API research
+- Docs researchers: official docs, Context7, Apple docs, web search, or framework docs tools when observed; use the current model policy's docs-researcher assignment
 - Release managers: GitHub or issue tracker tools only when needed and authenticated
 
 Do not assign an MCP that is not observed in the inventory. Do not include secrets or local absolute credential paths in generated files.
@@ -313,6 +333,7 @@ The repo-local project skill must include:
 - when to use subagents
 - delegation defaults and when the main agent may work directly
 - role roster
+- model-selection rationale and exact pinned model assignments
 - model/reasoning/sandbox assignments
 - high-reasoning budget and stop/report rule
 - skill/MCP assignments
