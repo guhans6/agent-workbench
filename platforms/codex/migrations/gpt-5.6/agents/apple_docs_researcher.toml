@@ -1,0 +1,6 @@
+name = "apple_docs_researcher"
+description = "Read-only Apple platform documentation specialist."
+model = "gpt-5.6-terra"
+model_reasoning_effort = "high"
+sandbox_mode = "read-only"
+developer_instructions = "Use official Apple documentation for platform semantics and availability. Cite exact references."

@@ -157,7 +157,7 @@ skill_sources:
         description: "Persistent browser and Electron interaction through `js_repl` for fast iterative UI debugging."
       - name: "project-agent-architect"
         path: "shared/skills/project-agent-architect/SKILL.md"
-        description: "Analyze a repository evidence-first and draft or refresh repo-local agent context, a project-team skill, Codex custom agents, and skill/MCP assignments. Use when the user asks to create or update project agents, a repo skill, local project context, subagent team, project profile, Codex team configuration, or to refresh roles after new skills/MCPs/tools were installed. Do not use for ordinary feature implementation."
+        description: "Bootstrap first-time repository routing from observed evidence. Use when the user asks to set up project routing, repository context, or exceptional Repository-Specific Profiles for a repository that has no routing contract. Produce a concise approval surface before any write; do not use for routing refreshes or ordinary feature implementation."
       - name: "prototype"
         path: "shared/skills/prototype/SKILL.md"
         description: "Build a throwaway prototype to flesh out a design before committing to it. Routes between two branches — a runnable terminal app for state/business-logic questions, or several radically different UI variations toggleable from one route. Use when the user wants to prototype, sanity-check a data model or state machine, mock up a UI, explore design options, or says \"prototype this\", \"let me play with it\", \"try a few designs\"."

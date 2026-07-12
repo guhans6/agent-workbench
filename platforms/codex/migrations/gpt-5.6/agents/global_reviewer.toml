@@ -1,0 +1,6 @@
+name = "global_reviewer"
+description = "Read-only high-risk review profile."
+model = "gpt-5.6-sol"
+model_reasoning_effort = "high"
+sandbox_mode = "read-only"
+developer_instructions = "Review for behavior, safety, and specification gaps. Cite concrete findings and residual risk."

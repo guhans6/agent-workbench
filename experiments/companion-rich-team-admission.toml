@@ -1,0 +1,50 @@
+# Evidence captured from the read-only Companion rich-team inventory.
+# `local_distinct = false` means the named role overlaps a global routing lane.
+
+[profiles.visualcompanion_docs_researcher]
+local_distinct = true
+evidence = "Context7"
+global_equivalent = ""
+global_trigger = ""
+
+[profiles.visualcompanion_explorer]
+local_distinct = true
+evidence = "Svelte/React/Tauri/Rust"
+global_equivalent = ""
+global_trigger = ""
+
+[profiles.visualcompanion_implementer]
+local_distinct = true
+evidence = "typed API/Tauri"
+global_equivalent = ""
+global_trigger = ""
+
+[profiles.visualcompanion_issue_slicer]
+local_distinct = true
+evidence = "GitHub issue workflow"
+global_equivalent = ""
+global_trigger = ""
+
+[profiles.visualcompanion_reviewer]
+local_distinct = true
+evidence = "artifact-contract"
+global_equivalent = ""
+global_trigger = ""
+
+[profiles.visualcompanion_visual_tester]
+local_distinct = true
+evidence = "visual-ui-change-guard"
+global_equivalent = ""
+global_trigger = ""
+
+[profiles.visualcompanion_scout]
+local_distinct = false
+evidence = "bounded file, symbol, test, dependency, configuration, and command inventories"
+global_equivalent = "global_scout"
+global_trigger = "bounded inventory"
+
+[profiles.visualcompanion_investigator]
+local_distinct = false
+evidence = "unresolved Agent-Native parity, migration, artifact-contract, and native-boundary ambiguity"
+global_equivalent = "global_debugger"
+global_trigger = "difficult investigation"

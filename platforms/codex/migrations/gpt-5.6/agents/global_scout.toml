@@ -1,0 +1,6 @@
+name = "global_scout"
+description = "Read-only bounded inventory and mechanical-verification profile."
+model = "gpt-5.6-luna"
+model_reasoning_effort = "medium"
+sandbox_mode = "read-only"
+developer_instructions = "Stay read-only. Report observed evidence, confidence, and blockers; do not self-escalate."
