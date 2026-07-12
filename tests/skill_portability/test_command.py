@@ -1,7 +1,8 @@
 from __future__ import annotations
 
-import subprocess
+import re
 import shutil
+import subprocess
 import sys
 import tempfile
 import unittest
@@ -12,6 +13,49 @@ ROOT = Path(__file__).resolve().parents[2]
 
 
 class RoutingSkillPortabilityTests(unittest.TestCase):
+    def test_skill_packages_expose_only_relevant_references_and_metadata(self) -> None:
+        architect = ROOT / "shared" / "skills" / "project-agent-architect"
+        refresh = ROOT / "shared" / "skills" / "refresh-project-agent-routing"
+        architect_text = (architect / "SKILL.md").read_text()
+        refresh_text = (refresh / "SKILL.md").read_text()
+
+        self.assertFalse((architect / "references" / "role-model-policy.md").exists())
+        self.assertTrue((architect / "references" / "routing-contract.md").is_file())
+        self.assertIn("[routing-contract.md](references/routing-contract.md)", architect_text)
+        self.assertTrue((refresh / "agents" / "openai.yaml").is_file())
+
+        for text in (architect_text, refresh_text):
+            steps = [line for line in text.splitlines() if re.match(r"^\d+\. ", line)]
+            self.assertGreater(len(steps), 0)
+            self.assertTrue(all("Complete when" in step for step in steps), steps)
+
+    def test_refresh_skill_is_cataloged(self) -> None:
+        catalog = (ROOT / "catalog" / "skills.md").read_text()
+        surfaces = (ROOT / "catalog" / "surfaces.yaml").read_text()
+        self.assertIn("| `refresh-project-agent-routing` |", catalog)
+        self.assertIn('name: "refresh-project-agent-routing"', surfaces)
+
+    def test_routing_contract_discloses_every_validator_input(self) -> None:
+        contract = (
+            ROOT / "shared" / "skills" / "project-agent-architect" / "references" / "routing-contract.md"
+        ).read_text()
+        for required in (
+            "context_pointers",
+            "[[routes]]",
+            "[[profiles]]",
+            "access_requirement",
+            "Temporary observations",
+            "--observations",
+            "models",
+            "unavailable_models",
+            "skills",
+            "tools",
+            "model_reasoning_effort",
+            "sandbox_mode",
+        ):
+            with self.subTest(required=required):
+                self.assertIn(required, contract)
+
     def test_bootstrap_skill_bundles_runnable_helpers(self) -> None:
         with tempfile.TemporaryDirectory() as temporary_directory:
             root = Path(temporary_directory)
@@ -73,7 +117,8 @@ class RoutingSkillPortabilityTests(unittest.TestCase):
             (repository / ".codex" / "agents").mkdir(parents=True)
             (candidate / ".codex" / "agents").mkdir(parents=True)
             (repository / "AGENTS.md").write_text("<!-- routing:start -->\nUse planner.\n<!-- routing:end -->\n")
-            (repository / ".routing-observations.toml").write_text('models = ["gpt-5.6-terra"]\nskills = ["to-spec", "to-tickets"]\ntools = []\n')
+            observations = root / "observations.toml"
+            observations.write_text('models = ["gpt-5.6-terra"]\nskills = ["to-spec", "to-tickets"]\ntools = []\n')
             (repository / "routing.toml").write_text(
                 'context_pointers = []\n[[routes]]\ntrigger = "planning"\nprofile = "planner"\n'
                 '[[profiles]]\nname = "planner"\naccess_requirement = "workspace-write"\n'
@@ -95,6 +140,8 @@ class RoutingSkillPortabilityTests(unittest.TestCase):
                     str(repository),
                     "--routing",
                     str(candidate),
+                    "--observations",
+                    str(observations),
                     "--approved-file",
                     ".codex/agents/planner.toml",
                 ],

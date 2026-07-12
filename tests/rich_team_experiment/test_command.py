@@ -60,7 +60,6 @@ class RichTeamRefreshExperimentTests(unittest.TestCase):
                     '''
                 )
             )
-        (root / ".routing-observations.toml").write_text('models = ["gpt-5.6-terra"]\nskills = []\ntools = []\n')
         routing = ['context_pointers = ["AGENTS.md"]\n']
         for role in self.ROLES:
             access = "workspace-write" if role in {"implementer", "visual_tester"} else "read-only"
@@ -94,7 +93,7 @@ class RichTeamRefreshExperimentTests(unittest.TestCase):
             dirty_file = repository / "active-work.md"
             dirty_file.write_text("do not touch\n")
             subprocess.run(["git", "init", "-q", str(repository)], check=True)
-            subprocess.run(["git", "-C", str(repository), "add", "AGENTS.md", ".agents", "routing.toml", ".routing-observations.toml"], check=True)
+            subprocess.run(["git", "-C", str(repository), "add", "AGENTS.md", ".agents", "routing.toml"], check=True)
             for role in self.ROLES:
                 if role not in {"scout", "investigator"}:
                     subprocess.run(
@@ -181,6 +180,8 @@ class RichTeamRefreshExperimentTests(unittest.TestCase):
             destination = candidate / ".codex" / "agents" / source.name
             destination.parent.mkdir(parents=True)
             destination.write_text(source.read_text().replace("to-prd and to-issues", "to-spec and to-tickets"))
+            observations = Path(temporary_directory) / "observations.toml"
+            observations.write_text('models = ["gpt-5.6-terra"]\nskills = []\ntools = []\n')
 
             result = subprocess.run(
                 [
@@ -190,6 +191,8 @@ class RichTeamRefreshExperimentTests(unittest.TestCase):
                     str(repository),
                     "--routing",
                     str(candidate),
+                    "--observations",
+                    str(observations),
                     "--approved-file",
                     ".codex/agents/visualcompanion_issue_slicer.toml",
                 ],

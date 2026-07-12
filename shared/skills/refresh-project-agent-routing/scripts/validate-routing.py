@@ -72,7 +72,13 @@ def text_corpus(root: Path) -> str:
     return "\n".join(parts)
 
 
-def validate(repository: Path, routing: Path, approved_files: set[str], bootstrap: bool = False) -> list[Finding]:
+def validate(
+    repository: Path,
+    routing: Path,
+    approved_files: set[str],
+    bootstrap: bool = False,
+    observations_path: Path | None = None,
+) -> list[Finding]:
     findings: list[Finding] = []
     routing_path = routing / "routing.toml"
     if routing_path.is_file():
@@ -82,8 +88,7 @@ def validate(repository: Path, routing: Path, approved_files: set[str], bootstra
     else:
         findings.append(Finding("FAIL", "missing-routing-configuration", "routing.toml"))
         configuration = None
-    observation_path = repository / ".routing-observations.toml"
-    observations = load_toml(observation_path, findings, ".routing-observations.toml") if observation_path.is_file() else {}
+    observations = load_toml(observations_path, findings, "observations.toml") if observations_path is not None else {}
 
     for path in sorted(routing.glob("skills/*/SKILL.md")):
         if not valid_frontmatter(path):
@@ -174,8 +179,15 @@ def main() -> int:
     parser.add_argument("--routing", required=True, type=Path)
     parser.add_argument("--approved-file", action="append", default=[])
     parser.add_argument("--bootstrap", action="store_true", help="Allow a managed block with no Repository-Specific Profiles.")
+    parser.add_argument("--observations", type=Path, help="Temporary observed model, skill, and tool inventory.")
     arguments = parser.parse_args()
-    findings = validate(arguments.repository, arguments.routing, set(arguments.approved_file), arguments.bootstrap)
+    findings = validate(
+        arguments.repository,
+        arguments.routing,
+        set(arguments.approved_file),
+        arguments.bootstrap,
+        arguments.observations,
+    )
     for finding in findings:
         print(finding.render())
     if any(finding.severity == "FAIL" for finding in findings):
