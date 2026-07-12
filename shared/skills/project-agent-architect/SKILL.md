@@ -1,21 +1,21 @@
 ---
 name: project-agent-architect
-description: Bootstrap first-time repository routing from observed evidence. Use when the user asks to set up project routing, Repository Context, or exceptional Repository-Specific Profiles for a repository that has no existing routing contract. Produce a concise approval surface before any write; do not use for routing refreshes or ordinary feature implementation.
+description: Bootstrap first-time repository routing when a repository has no routing contract and needs Repository Context or exceptional Repository-Specific Profiles. Existing contracts route to refresh-project-agent-routing.
 ---
 
 # Project Agent Architect
 
-Bootstrap a routing contract for a repository that has no existing routing contract. Do not infer refresh mode; stop and use a dedicated refresh workflow when a routing contract already exists.
+Bootstrap a routing contract for a repository that has no existing routing contract. An existing contract routes to `refresh-project-agent-routing`.
 
-## Draft
+## Bootstrap
 
-1. Keep the pass read-only. Do not read secrets or install dependencies.
-2. Inspect repository instructions, context, plans, manifests, scripts, tests, and existing routing surfaces. Treat missing or conflicting boundaries as unresolved; never invent architecture.
-3. Inspect available global execution profiles and exact model, reasoning, access, skill, and tool assignments. Reject unavailable profiles or capabilities; never silently substitute one.
-4. Run the bundled `scripts/bootstrap-routing.py --repository <repo> --global-profile '<name>|<trigger>|<model>|<reasoning>|<access>'` relative to this skill directory for the compact preflight. Supply every observed global profile; use its PASS/WARN/FAIL result as the first approval-surface row.
-5. Select global profiles first. Propose a repository-specific profile only when the task class, distinct execution boundary, concise local instruction delta, recurring evidence, and value over coordination cost are all demonstrated.
-6. Propose only a Managed Routing Block in `AGENTS.md` and justified `.codex/agents/*.toml` files. Do not propose a project-team skill, evidence ledger, architecture profile, or roster by default.
-7. Present only status, routing table, attention-required changes, file delta, and approval checklist. Keep detailed evidence available on request.
-8. Stop for approval before writing. After approval, make a minimal patch, run the bundled `scripts/validate-routing.py --bootstrap` relative to this skill directory against a no-profile proposal (or its normal mode when Repository-Specific Profiles are proposed), fix all FAIL findings, and report accepted/deferred WARN findings.
+1. Keep the target repository read-only while inspecting its instructions, context, plans, manifests, scripts, tests, and existing routing surfaces. Treat missing or conflicting boundaries as unresolved. Complete when every repository claim cites a path, every unknown is named, and no target file changed.
+2. Inventory available global execution profiles and their exact model, reasoning, access, skill, and tool assignments in a temporary observations file outside the target repository. Complete when every profile referenced by the proposal has observed assignments and every unavailable capability is excluded rather than substituted.
+3. Run the bundled `scripts/bootstrap-routing.py --repository <repo> --global-profile '<name>|<trigger>|<model>|<reasoning>|<access>'` relative to this skill directory, supplying every observed global profile. Complete when its PASS/WARN/FAIL result and evidence list are captured as the first approval-surface row.
+4. Select global profiles first. A Repository-Specific Profile is admitted only when a recognizable task class, distinct execution boundary, concise local instruction delta, recurring evidence, and value over coordination cost are all demonstrated. When one is admitted, read [routing-contract.md](references/routing-contract.md) before drafting it. Complete when every proposed local profile cites evidence for all five conditions, or the result explicitly says `No Repository-Specific Profiles proposed`.
+5. Draft the Managed Routing Block in `AGENTS.md`; when local profiles are admitted, also draft `routing.toml` and their `.codex/agents/*.toml` files. Complete when the exact proposed-file list is limited to those contract files and excludes unrelated artifacts.
+6. Present status, routing table, attention-required changes, file delta, and approval checklist, with detailed evidence available on request. Complete when every proposed route, model, reasoning level, access boundary, warning, and file appears exactly once.
+7. Stop before target writes and obtain approval for the exact file list. Complete when the user approves that list or the run ends without repository changes.
+8. After approval, apply the minimal patch and run the bundled `scripts/validate-routing.py --bootstrap` relative to this skill directory for a no-profile proposal, or normal mode with `--observations <temporary-observations>` when local profiles exist. Complete when no FAIL remains and every WARN is fixed, accepted, or explicitly deferred.
 
 `No Repository-Specific Profiles proposed` is a successful bootstrap outcome.

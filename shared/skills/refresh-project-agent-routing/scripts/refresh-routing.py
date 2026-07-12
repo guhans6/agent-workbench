@@ -91,7 +91,7 @@ def routing_rows(repository: Path, candidate: Path, changed: list[str]) -> list[
     return rows
 
 
-def validate(repository: Path, candidate: Path) -> tuple[bool, list[str]]:
+def validate(repository: Path, candidate: Path, observations: Path | None = None) -> tuple[bool, list[str]]:
     with tempfile.TemporaryDirectory() as temporary_directory:
         materialized = Path(temporary_directory) / "routing"
         for source in managed_files(repository):
@@ -110,12 +110,14 @@ def validate(repository: Path, candidate: Path) -> tuple[bool, list[str]]:
             relative = source.relative_to(materialized).as_posix()
             if relative not in CONTROL_FILES:
                 command.extend(("--approved-file", relative))
+        if observations is not None:
+            command.extend(("--observations", str(observations)))
         result = subprocess.run(command, capture_output=True, text=True, check=False)
     findings = [line for line in result.stdout.splitlines() if line.startswith(("FAIL ", "WARN "))]
     return result.returncode == 0 and not any(line.startswith("FAIL ") for line in findings), findings
 
 
-def render(repository: Path, candidate: Path, approved_files: set[str]) -> tuple[int, str]:
+def render(repository: Path, candidate: Path, approved_files: set[str], observations: Path | None = None) -> tuple[int, str]:
     agents = repository / "AGENTS.md"
     if not agents.is_file() or MANAGED_START not in agents.read_text(errors="replace"):
         return 1, "\n".join(
@@ -165,7 +167,7 @@ def render(repository: Path, candidate: Path, approved_files: set[str]) -> tuple
 
     if not changed:
         failures.append("FAIL no-routing-delta")
-    valid, findings = validate(repository, candidate)
+    valid, findings = validate(repository, candidate, observations)
     failures.extend(line for line in findings if line.startswith("FAIL "))
     warnings = [line for line in findings if line.startswith("WARN ")]
     status = "FAIL" if failures or not valid else "WARN" if warnings else "PASS"
@@ -194,8 +196,9 @@ def main() -> int:
     parser.add_argument("--repository", required=True, type=Path)
     parser.add_argument("--routing", required=True, type=Path, help="Proposed changed files only.")
     parser.add_argument("--approved-file", action="append", default=[])
+    parser.add_argument("--observations", type=Path, help="Temporary observed model, skill, and tool inventory.")
     arguments = parser.parse_args()
-    code, output = render(arguments.repository, arguments.routing, set(arguments.approved_file))
+    code, output = render(arguments.repository, arguments.routing, set(arguments.approved_file), arguments.observations)
     print(output, end="")
     return code
 

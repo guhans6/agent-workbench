@@ -34,7 +34,7 @@ class RefreshCommandTests(unittest.TestCase):
     REFRESHED_PROFILE = LEGACY_PROFILE.replace("to-prd and to-issues", "to-spec and to-tickets")
 
     def run_refresh(
-        self, repository_files: dict[str, str], routing_files: dict[str, str]
+        self, repository_files: dict[str, str], routing_files: dict[str, str], observations: str | None = OBSERVED
     ) -> subprocess.CompletedProcess[str]:
         with tempfile.TemporaryDirectory() as temporary_directory:
             fixture = Path(temporary_directory)
@@ -42,8 +42,7 @@ class RefreshCommandTests(unittest.TestCase):
             routing = fixture / "routing"
             self.write_tree(repository, repository_files)
             self.write_tree(routing, routing_files)
-            return subprocess.run(
-                [
+            command = [
                     sys.executable,
                     str(COMMAND),
                     "--repository",
@@ -52,11 +51,32 @@ class RefreshCommandTests(unittest.TestCase):
                     str(routing),
                     "--approved-file",
                     ".codex/agents/planner.toml",
-                ],
+                ]
+            if observations is not None:
+                observations_path = fixture / "observations.toml"
+                observations_path.write_text(observations)
+                command.extend(("--observations", str(observations_path)))
+            return subprocess.run(
+                command,
                 capture_output=True,
                 text=True,
                 check=False,
             )
+
+    def test_temporary_observations_drive_refresh_validation(self) -> None:
+        result = self.run_refresh(
+            {
+                "CONTEXT.md": "# Repository context\n",
+                "routing.toml": self.ROUTING,
+                ".codex/agents/planner.toml": self.LEGACY_PROFILE,
+                "AGENTS.md": "<!-- routing:start -->\nUse planner.\n<!-- routing:end -->\n",
+            },
+            {".codex/agents/planner.toml": self.REFRESHED_PROFILE},
+            observations=self.OBSERVED,
+        )
+
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertIn("STATUS: PASS", result.stdout)
 
     @staticmethod
     def write_tree(root: Path, files: dict[str, str]) -> None:
@@ -69,7 +89,6 @@ class RefreshCommandTests(unittest.TestCase):
         result = self.run_refresh(
             {
                 "CONTEXT.md": "# Repository context\n",
-                ".routing-observations.toml": self.OBSERVED,
                 "routing.toml": self.ROUTING,
                 ".codex/agents/planner.toml": self.LEGACY_PROFILE,
                 "AGENTS.md": "<!-- routing:start -->\nUse planner for planning.\n<!-- routing:end -->\n",
@@ -99,7 +118,6 @@ class RefreshCommandTests(unittest.TestCase):
         result = self.run_refresh(
             {
                 "CONTEXT.md": "# Repository context\n",
-                ".routing-observations.toml": self.OBSERVED,
                 "routing.toml": self.ROUTING,
                 ".codex/agents/planner.toml": self.LEGACY_PROFILE,
                 "AGENTS.md": "<!-- routing:start -->\nUse planner for planning.\n<!-- routing:end -->\n",
@@ -118,7 +136,6 @@ class RefreshCommandTests(unittest.TestCase):
         result = self.run_refresh(
             {
                 "CONTEXT.md": "# Repository context\n",
-                ".routing-observations.toml": self.OBSERVED,
                 "routing.toml": self.ROUTING,
                 ".codex/agents/planner.toml": self.LEGACY_PROFILE,
                 "AGENTS.md": "<!-- routing:start -->\nUse planner for planning.\n<!-- routing:end -->\n",
@@ -134,7 +151,6 @@ class RefreshCommandTests(unittest.TestCase):
         result = self.run_refresh(
             {
                 "CONTEXT.md": "# Repository context\n",
-                ".routing-observations.toml": self.OBSERVED,
                 "routing.toml": self.ROUTING,
                 ".codex/agents/planner.toml": self.LEGACY_PROFILE,
                 "AGENTS.md": "Before\n<!-- routing:start -->\nUse planner.\n<!-- routing:end -->\nAfter\n",
@@ -153,7 +169,6 @@ class RefreshCommandTests(unittest.TestCase):
         result = self.run_refresh(
             {
                 "CONTEXT.md": "# Repository context\n",
-                ".routing-observations.toml": self.OBSERVED,
                 "routing.toml": self.ROUTING,
                 ".codex/agents/planner.toml": self.LEGACY_PROFILE,
                 "AGENTS.md": "<!-- routing:start -->\nUse planner.\n<!-- routing:end -->\n",

@@ -1,6 +1,6 @@
 # Skills Catalog
 
-Snapshot date: 2026-07-06.
+Snapshot date: 2026-07-12.
 
 This catalog is agent-neutral. It lists repo-vendored shared skills, Codex-specific local skills, Codex system skills, and plugin-bundled skills currently visible on this machine.
 
@@ -59,8 +59,9 @@ These folders are committed under `shared/skills/` and are the default source fo
 | `pdf` | Use when tasks involve reading, creating, or reviewing PDF files where rendering and layout matter; prefer visual checks by rendering pages (Poppler) and use Python tools such as `reportlab`, `pdfplumber`, and `pypdf` for generation and extraction. | `shared/skills/pdf` |
 | `playwright` | Use when the task requires automating a real browser from the terminal (navigation, form filling, snapshots, screenshots, data extraction, UI-flow debugging) via `playwright-cli` or the bundled wrapper script. | `shared/skills/playwright` |
 | `playwright-interactive` | Persistent browser and Electron interaction through `js_repl` for fast iterative UI debugging. | `shared/skills/playwright-interactive` |
-| `project-agent-architect` | Bootstrap first-time repository routing from observed evidence. Use when the user asks to set up project routing, repository context, or exceptional Repository-Specific Profiles for a repository that has no routing contract. Produce a concise approval surface before any write; do not use for routing refreshes or ordinary feature implementation. | `shared/skills/project-agent-architect` |
+| `project-agent-architect` | Bootstrap first-time repository routing when a repository has no routing contract and needs Repository Context or exceptional Repository-Specific Profiles. Existing contracts route to refresh-project-agent-routing. | `shared/skills/project-agent-architect` |
 | `prototype` | Build a throwaway prototype to flesh out a design before committing to it. Routes between two branches — a runnable terminal app for state/business-logic questions, or several radically different UI variations toggleable from one route. Use when the user wants to prototype, sanity-check a data model or state machine, mock up a UI, explore design options, or says "prototype this", "let me play with it", "try a few designs". | `shared/skills/prototype` |
+| `refresh-project-agent-routing` | Refresh an existing routing contract when relevant models, capabilities, tools, or repository evidence changed. First-time routing uses project-agent-architect. | `shared/skills/refresh-project-agent-routing` |
 | `render-deploy` | Deploy applications to Render by analyzing codebases, generating render.yaml Blueprints, and providing Dashboard deeplinks. Use when the user wants to deploy, host, publish, or set up their application on Render's cloud platform. | `shared/skills/render-deploy` |
 | `screenshot` | Use when the user explicitly asks for a desktop or system screenshot (full screen, specific app or window, or a pixel region), or when tool-specific capture capabilities are unavailable and an OS-level capture is needed. | `shared/skills/screenshot` |
 | `security-best-practices` | Perform language and framework specific security best-practice reviews and suggest improvements. Trigger only when the user explicitly requests security best practices guidance, a security review/report, or secure-by-default coding help. Trigger only for supported languages (python, javascript/typescript, go). Do not trigger for general code review, debugging, or non-security tasks. | `shared/skills/security-best-practices` |

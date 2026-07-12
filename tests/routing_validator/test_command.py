@@ -39,6 +39,7 @@ class ValidatorCommandTests(unittest.TestCase):
         routing_files: dict[str, str],
         approved_files: tuple[str, ...] = ("AGENTS.md", ".codex/agents/worker.toml"),
         bootstrap: bool = False,
+        observations: str | None = OBSERVED,
     ) -> subprocess.CompletedProcess[str]:
         with tempfile.TemporaryDirectory() as temporary_directory:
             fixture = Path(temporary_directory)
@@ -56,6 +57,10 @@ class ValidatorCommandTests(unittest.TestCase):
             ]
             for approved_file in approved_files:
                 command.extend(("--approved-file", approved_file))
+            if observations is not None:
+                observations_path = fixture / "observations.toml"
+                observations_path.write_text(observations)
+                command.extend(("--observations", str(observations_path)))
             if bootstrap:
                 command.append("--bootstrap")
             return subprocess.run(command, capture_output=True, text=True, check=False)
@@ -71,7 +76,6 @@ class ValidatorCommandTests(unittest.TestCase):
         result = self.run_validator(
             repository_files={
                 "CONTEXT.md": "# Repository context\n",
-                ".routing-observations.toml": self.OBSERVED,
             },
             routing_files={
                 "routing.toml": self.ROUTE,
@@ -85,7 +89,7 @@ class ValidatorCommandTests(unittest.TestCase):
 
     def test_missing_routing_configuration_fails(self) -> None:
         result = self.run_validator(
-            repository_files={".routing-observations.toml": self.OBSERVED},
+            repository_files={},
             routing_files={},
         )
 
@@ -95,10 +99,25 @@ class ValidatorCommandTests(unittest.TestCase):
 
     def test_bootstrap_managed_block_without_local_profiles_passes(self) -> None:
         result = self.run_validator(
-            repository_files={"CONTEXT.md": "# Repository context\n", ".routing-observations.toml": self.OBSERVED},
+            repository_files={"CONTEXT.md": "# Repository context\n"},
             routing_files={"AGENTS.md": "<!-- routing:start -->\nUse global profiles.\n<!-- routing:end -->\n"},
             approved_files=("AGENTS.md",),
             bootstrap=True,
+        )
+
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertEqual(result.stdout, "PASS routing configuration is structurally valid\n")
+
+    def test_bootstrap_local_profile_uses_temporary_observations(self) -> None:
+        result = self.run_validator(
+            repository_files={"CONTEXT.md": "# Repository context\n"},
+            routing_files={
+                "routing.toml": self.ROUTE,
+                ".codex/agents/worker.toml": self.PROFILE,
+                "AGENTS.md": "<!-- routing:start -->\nUse worker.\n<!-- routing:end -->\n",
+            },
+            approved_files=("AGENTS.md", "routing.toml", ".codex/agents/worker.toml"),
+            observations=self.OBSERVED,
         )
 
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
@@ -151,7 +170,7 @@ class ValidatorCommandTests(unittest.TestCase):
                 "FAIL unapproved-file README.md",
             ),
         }
-        repository = {"CONTEXT.md": "# Repository context\n", ".routing-observations.toml": self.OBSERVED}
+        repository = {"CONTEXT.md": "# Repository context\n"}
         for name, (routing, expected) in scenarios.items():
             with self.subTest(name=name):
                 result = self.run_validator(repository, routing)
@@ -171,7 +190,6 @@ class ValidatorCommandTests(unittest.TestCase):
         result = self.run_validator(
             repository_files={
                 "HANDBOOK.md": "Canonical build instructions shared by all workers.\n",
-                ".routing-observations.toml": self.OBSERVED,
             },
             routing_files={"routing.toml": routing, ".codex/agents/worker.toml": profile},
         )
@@ -187,7 +205,6 @@ class ValidatorCommandTests(unittest.TestCase):
         result = self.run_validator(
             repository_files={
                 "CONTEXT.md": "# Repository context\n",
-                ".routing-observations.toml": self.OBSERVED,
             },
             routing_files={
                 "routing.toml": self.ROUTE,

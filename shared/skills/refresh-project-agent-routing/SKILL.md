@@ -1,17 +1,17 @@
 ---
 name: refresh-project-agent-routing
-description: Refresh an existing routing contract through a delta-only approval surface. Use when relevant models, capabilities, tools, or repository evidence changed; never use for first-time routing bootstrap.
+description: Refresh an existing routing contract when relevant models, capabilities, tools, or repository evidence changed. First-time routing uses project-agent-architect.
 ---
 
 # Refresh Project Agent Routing
 
-Refresh only an existing Managed Routing Block. Do not infer bootstrap mode or regenerate complete files.
+Refresh an existing Managed Routing Block through a delta-only proposal. First-time routing uses `project-agent-architect`.
 
 ## Draft
 
-1. Keep the pass read-only. Inspect the existing managed block, agent TOMLs, repository context, and only the changed model, skill, MCP, tool, or repository evidence.
-2. Create a proposed-files directory containing only affected files and patch each managed section or TOML field minimally.
-3. Run the bundled `scripts/refresh-routing.py --repository <repo> --routing <proposed-files> --approved-file <path>` relative to this skill directory for every proposed file. Its approval surface must show changed rows, the separate exact model-assignment delta, and `Everything else preserved`.
-4. If capability identities changed, replace stale references only in affected routing or profile fields. Do not change unrelated profiles, models, or reasoning assignments.
-5. Stop for approval before applying the proposed patches. `FAIL` blocks application; `WARN` findings must be fixed, accepted, or deferred explicitly.
-6. After approval, apply only the reviewed minimal patches and rerun the shared validator against the final routing tree. Report the revalidation result.
+1. Keep the target repository read-only while inspecting the existing managed block, agent TOMLs, repository context, and only changed model, skill, MCP, tool, or repository evidence. Record current model, skill, and tool availability in a temporary observations file outside the repository. Complete when every changed input cites evidence and every unaffected route and assignment is marked preserved.
+2. Create a temporary proposed-files directory containing only affected files, patching each managed span or TOML field minimally. Complete when its relative paths exactly equal the intended approval list and no target file changed.
+3. Run the bundled `scripts/refresh-routing.py --repository <repo> --routing <proposed-files> --observations <temporary-observations> --approved-file <path>` relative to this skill directory for every proposed file. Complete when the approval surface accounts for every changed routing row, capability identity, model assignment, and file, and states `Everything else preserved`.
+4. When capability identities changed, replace stale references only in affected routing or profile fields. Complete when stale identities are absent from affected fields and unrelated file hashes remain unchanged.
+5. Stop before applying the proposal and obtain approval for the exact delta. Complete when the user approves it, or the run ends without repository changes; every FAIL blocks approval and every WARN is fixed, accepted, or explicitly deferred.
+6. After approval, apply only the reviewed patches and rerun the bundled validator against the final routing tree with `--observations <temporary-observations>`. Complete when no FAIL remains, every WARN has a recorded disposition, and the final changed-file list equals the approved list.
