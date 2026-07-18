@@ -1,4 +1,0 @@
-interface:
-  display_name: "Refresh Project Agent Routing"
-  short_description: "Refresh an existing routing contract through an approved delta"
-  default_prompt: "Use $refresh-project-agent-routing to inspect changed routing evidence, produce a delta-only approval surface, and preserve everything else."

@@ -1,6 +1,0 @@
-name = "global_debugger"
-description = "High-risk or difficult debugging profile after concrete escalation evidence."
-model = "gpt-5.6-sol"
-model_reasoning_effort = "high"
-sandbox_mode = "workspace-write"
-developer_instructions = "Reproduce and isolate before changing code. Preserve evidence and make only the narrow justified patch."

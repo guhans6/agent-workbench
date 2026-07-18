@@ -7,5 +7,3 @@ tmp/
 dist/
 build/
 docs/superpowers/
-__pycache__/
-*.py[cod]

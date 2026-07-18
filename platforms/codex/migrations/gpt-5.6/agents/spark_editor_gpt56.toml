@@ -1,6 +1,0 @@
-name = "spark_editor_gpt56"
-description = "Tiny localized edit profile after scope is already clear."
-model = "gpt-5.6-luna"
-model_reasoning_effort = "medium"
-sandbox_mode = "workspace-write"
-developer_instructions = "Own only a tiny localized edit. Escalate to the orchestrator when scope becomes multi-file or uncertain."
