@@ -6,6 +6,12 @@
 - Use `apple_docs_researcher` when Apple API behavior, platform availability, or framework semantics are uncertain.
 - Use `swift_reviewer` for read-only review of diffs, regressions, behavior changes, and missing tests.
 
+## Matt Workflow Routing
+
+- Use `ask-matt` when the workflow is unclear; use `grill-with-docs` for an idea needing clarification and `wayfinder` for an uncertain multi-session effort.
+- Use `implement` for approved tickets, `tdd` at agreed public seams, and `code-review` before committing non-trivial changes.
+- Use `to-spec` then `to-tickets` to turn a resolved plan into implementation work.
+
 ## Commit / Issue Hygiene
 
 - Use `publish-workflow` for normal branch, commit, push, and PR-boundary operations.

@@ -1,6 +1,6 @@
 # Skills Catalog
 
-Snapshot date: 2026-07-06.
+Snapshot date: 2026-08-06.
 
 This catalog is agent-neutral. It lists repo-vendored shared skills, Codex-specific local skills, Codex system skills, and plugin-bundled skills currently visible on this machine.
 
@@ -84,6 +84,36 @@ These folders are committed under `shared/skills/` and are the default source fo
 | `winui-app` | Bootstrap, develop, and design modern WinUI 3 desktop applications with C# and the Windows App SDK using official Microsoft guidance, WinUI Gallery patterns, Windows App SDK samples, and CommunityToolkit components. Use when creating a brand new app, preparing a machine for WinUI, reviewing, refactoring, planning, troubleshooting, environment-checking, or setting up WinUI 3 XAML, controls, navigation, windowing, theming, accessibility, responsiveness, performance, deployment, or related Windows app design and development work. | `shared/skills/winui-app` |
 | `write-a-skill` | Create new agent skills with proper structure, progressive disclosure, and bundled resources. Use when user wants to create, write, or build a new skill. | `shared/skills/write-a-skill` |
 | `zoom-out` | Tell the agent to zoom out and give broader context or a higher-level perspective. Use when you're unfamiliar with a section of code or need to understand how it fits into the bigger picture. | `shared/skills/zoom-out` |
+| `ask-matt` | Ask which skill or flow fits your situation. A router over the skills in this repo. | `shared/skills/ask-matt` |
+| `claude-handoff` | Hand the current conversation off to a fresh background agent that picks up the work immediately. | `shared/skills/claude-handoff` |
+| `code-review` | Review the changes since a fixed point (commit, branch, tag, or merge-base) along two axes — Standards (does the code follow this repo's documented coding standards?) and Spec (does the code match what the originating issue/spec asked for?). Runs both reviews in parallel sub-agents and reports them side by side. Use when the user wants to review a branch, a PR, work-in-progress changes, or asks to "review since X". | `shared/skills/code-review` |
+| `codebase-design` | Shared vocabulary for designing deep modules. Use when the user wants to design or improve a module's interface, find deepening opportunities, decide where a seam goes, make code more testable or AI-navigable, or when another skill needs the deep-module vocabulary. | `shared/skills/codebase-design` |
+| `diagnosing-bugs` | Diagnosis loop for hard bugs and performance regressions. Use when the user says "diagnose"/"debug this", or reports something broken/throwing/failing/slow. | `shared/skills/diagnosing-bugs` |
+| `domain-modeling` | Build and sharpen a project's domain model. Use when the user wants to pin down domain terminology or a ubiquitous language, record an architectural decision, or when another skill needs to maintain the domain model. | `shared/skills/domain-modeling` |
+| `git-guardrails-claude-code` | Set up Claude Code hooks to block dangerous git commands (push, reset --hard, clean, branch -D, etc.) before they execute. Use when user wants to prevent destructive git operations, add git safety hooks, or block git push/reset in Claude Code. | `shared/skills/git-guardrails-claude-code` |
+| `grilling` | Grill the user relentlessly about a plan, decision, or idea. Use when the user wants to stress-test their thinking, or uses any 'grill' trigger phrases. | `shared/skills/grilling` |
+| `implement` | Implement a piece of work based on a spec or set of tickets. | `shared/skills/implement` |
+| `loop-me` | Grill me about specs for the workflows I want to build, within this workspace. | `shared/skills/loop-me` |
+| `migrate-to-shoehorn` | Migrate test files from `as` type assertions to @total-typescript/shoehorn. Use when user mentions shoehorn, wants to replace `as` in tests, or needs partial test data. | `shared/skills/migrate-to-shoehorn` |
+| `refresh-project-agent-routing` | Refresh an existing routing contract when relevant models, capabilities, tools, or repository evidence changed. First-time routing uses project-agent-architect. | `shared/skills/refresh-project-agent-routing` |
+| `research` | Investigate a question against high-trust primary sources and capture the findings as a Markdown file in the repo. Use when the user wants a topic researched, docs or API facts gathered, or reading legwork delegated to a background agent. | `shared/skills/research` |
+| `resolving-merge-conflicts` | Use when you need to resolve an in-progress git merge/rebase conflict. | `shared/skills/resolving-merge-conflicts` |
+| `scaffold-exercises` | Create exercise directory structures with sections, problems, solutions, and explainers that pass linting. Use when user wants to scaffold exercises, create exercise stubs, or set up a new course section. | `shared/skills/scaffold-exercises` |
+| `setup-pre-commit` | Set up Husky pre-commit hooks with lint-staged (Prettier), type checking, and tests in the current repo. Use when user wants to add pre-commit hooks, set up Husky, configure lint-staged, or add commit-time formatting/typechecking/testing. | `shared/skills/setup-pre-commit` |
+| `setup-ts-deep-modules` | Wire dependency-cruiser into a TypeScript repo so each package is a deep module — implementation hidden in subfolders, reachable only through its entry-point files. User-invoked. | `shared/skills/setup-ts-deep-modules` |
+| `swift-concurrency-pro` | Reviews Swift code for concurrency correctness, modern API usage, and common async/await pitfalls. Use when reading, writing, or reviewing Swift concurrency code. | `shared/skills/swift-concurrency-pro` |
+| `swift-testing-pro` | Writes, reviews, and improves Swift Testing code using modern APIs and best practices. Use when reading, writing, or reviewing projects that use Swift Testing. | `shared/skills/swift-testing-pro` |
+| `teach` | Teach the user a new skill or concept, within this workspace. | `shared/skills/teach` |
+| `to-questionnaire` | Turn a decision you can't fully answer into a questionnaire for someone else to fill in. | `shared/skills/to-questionnaire` |
+| `to-spec` | Turn the current conversation into a spec and publish it to the project issue tracker — no interview, just synthesis of what you've already discussed. | `shared/skills/to-spec` |
+| `to-tickets` | Break a plan, spec, or the current conversation into a set of tracer-bullet tickets, each declaring its blocking edges, published to the configured tracker — edges as text in one file per ticket locally, or native blocking links on a real tracker. | `shared/skills/to-tickets` |
+| `wait-what` | Stop. That last message did not land — re-pitch it. | `shared/skills/wait-what` |
+| `wayfinder` | Plan a huge chunk of work — more than one agent session can hold — as a shared map of decision tickets on your issue tracker, and resolve them one at a time until the way to the destination is clear. | `shared/skills/wayfinder` |
+| `wizard` | Generate an interactive bash wizard that walks a human through steps only they can perform. Use when provisioning infrastructure, setting up credentials or CI secrets, walking an unfamiliar third-party dashboard, or running a one-off migration or cutover. Don't invoke this for steps the agent can perform itself. | `shared/skills/wizard` |
+| `writing-beats` | Writing, exploit — assemble raw material into a journey of beats, grounding each term before a beat leans on it. | `shared/skills/writing-beats` |
+| `writing-for-agents` | Writing documents for agents. Use when creating or editing skills, or modifying AGENTS.md or CLAUDE.md. | `shared/skills/writing-for-agents` |
+| `writing-fragments` | Writing, explore — mine raw fragments, no structure yet. | `shared/skills/writing-fragments` |
+| `writing-shape` | Writing, exploit — shape raw material into an article, paragraph by paragraph. | `shared/skills/writing-shape` |
 
 ## Codex-Specific Local Skills
 
