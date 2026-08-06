@@ -431,10 +431,10 @@
         "handoff",
         "improve-codebase-architecture",
         "prototype",
-        "to-issues",
-        "to-prd",
+        "to-tickets",
+        "to-spec",
         "triage",
-        "zoom-out"
+        "wayfinder"
       ]
     },
     {
@@ -476,7 +476,7 @@
       "family": "quality_debugging",
       "skills": [
         "caveman-review",
-        "diagnose",
+        "diagnosing-bugs",
         "security-best-practices",
         "security-ownership-map",
         "security-threat-model",
@@ -509,8 +509,7 @@
         "migrate-to-codex",
         "playwright",
         "playwright-interactive",
-        "winui-app",
-        "write-a-skill"
+        "winui-app"
       ]
     }
   ],
@@ -618,13 +617,6 @@
       "description": "Help the user define a concrete, measurable goal before starting work."
     },
     {
-      "name": "diagnose",
-      "source": "shared_agents",
-      "path_kind": "user_local_not_portable",
-      "same_machine_locator": "~/.agents/skills/diagnose/SKILL.md",
-      "description": "Disciplined diagnosis loop for hard bugs and performance regressions."
-    },
-    {
       "name": "figma",
       "source": "shared_agents",
       "path_kind": "user_local_not_portable",
@@ -706,21 +698,21 @@
       "source": "shared_agents",
       "path_kind": "user_local_not_portable",
       "same_machine_locator": "~/.agents/skills/grill-me/SKILL.md",
-      "description": "Interview the user relentlessly about a plan or design until reaching shared understanding."
+      "description": "A relentless interview to sharpen a plan or design."
     },
     {
       "name": "grill-with-docs",
       "source": "shared_agents",
       "path_kind": "user_local_not_portable",
       "same_machine_locator": "~/.agents/skills/grill-with-docs/SKILL.md",
-      "description": "Stress-test a plan against the project's domain model and documented decisions."
+      "description": "A relentless interview to sharpen a plan or design, which also creates docs (ADR's and glossary) as we go."
     },
     {
       "name": "handoff",
       "source": "shared_agents",
       "path_kind": "user_local_not_portable",
       "same_machine_locator": "~/.agents/skills/handoff/SKILL.md",
-      "description": "Compact the current conversation into a handoff document for another agent."
+      "description": "Compact the current conversation into a handoff document for another agent to pick up."
     },
     {
       "name": "hatch-pet",
@@ -741,7 +733,7 @@
       "source": "shared_agents",
       "path_kind": "user_local_not_portable",
       "same_machine_locator": "~/.agents/skills/improve-codebase-architecture/SKILL.md",
-      "description": "Find deepening opportunities in a codebase and improve architecture, modularity, and AI navigability."
+      "description": "Scan a codebase for deepening opportunities, present them as a visual HTML report, then grill through whichever one you pick."
     },
     {
       "name": "ios-debugger-agent",
@@ -853,7 +845,7 @@
       "source": "shared_agents",
       "path_kind": "user_local_not_portable",
       "same_machine_locator": "~/.agents/skills/prototype/SKILL.md",
-      "description": "Build a throwaway prototype to flesh out a design before committing to it."
+      "description": "Build a throwaway prototype to answer a design question. Use when the user wants to sanity-check whether a state model or logic feels right, or explore what a UI should look like."
     },
     {
       "name": "render-deploy",
@@ -902,7 +894,7 @@
       "source": "shared_agents",
       "path_kind": "user_local_not_portable",
       "same_machine_locator": "~/.agents/skills/setup-matt-pocock-skills/SKILL.md",
-      "description": "Set up repo issue-tracker, triage-label, and domain-doc context for planning and engineering skills."
+      "description": "Configure this repo for the engineering skills \u2014 set up its issue tracker, triage label vocabulary, and domain doc layout. Run once before first use of the other engineering skills."
     },
     {
       "name": "speech",
@@ -951,7 +943,7 @@
       "source": "shared_agents",
       "path_kind": "user_local_not_portable",
       "same_machine_locator": "~/.agents/skills/tdd/SKILL.md",
-      "description": "Test-driven development with the red-green-refactor loop for features and bug fixes."
+      "description": "Test-driven development. Use when the user wants to build features or fix bugs test-first, mentions \"red-green-refactor\", or wants integration tests."
     },
     {
       "name": "thermo-nuclear-code-quality-review",
@@ -959,20 +951,6 @@
       "path_kind": "user_local_not_portable",
       "same_machine_locator": "~/.agents/skills/thermo-nuclear-code-quality-review/SKILL.md",
       "description": "Extremely strict maintainability review focused on abstraction quality, giant files, and spaghetti-condition growth."
-    },
-    {
-      "name": "to-issues",
-      "source": "shared_agents",
-      "path_kind": "user_local_not_portable",
-      "same_machine_locator": "~/.agents/skills/to-issues/SKILL.md",
-      "description": "Break a plan, spec, or PRD into independently grabbable issues using tracer-bullet vertical slices."
-    },
-    {
-      "name": "to-prd",
-      "source": "shared_agents",
-      "path_kind": "user_local_not_portable",
-      "same_machine_locator": "~/.agents/skills/to-prd/SKILL.md",
-      "description": "Turn the current conversation context into a PRD and publish it to the project issue tracker."
     },
     {
       "name": "transcribe",
@@ -986,7 +964,7 @@
       "source": "shared_agents",
       "path_kind": "user_local_not_portable",
       "same_machine_locator": "~/.agents/skills/triage/SKILL.md",
-      "description": "Triage issues through a state machine driven by triage roles."
+      "description": "Move issues and external PRs through a state machine of triage roles \u2014 categorise, verify, grill if needed, and write agent-ready briefs."
     },
     {
       "name": "vercel-deploy",
@@ -1001,20 +979,6 @@
       "path_kind": "user_local_not_portable",
       "same_machine_locator": "~/.agents/skills/winui-app/SKILL.md",
       "description": "Bootstrap, develop, and design modern WinUI 3 desktop applications with C# and the Windows App SDK."
-    },
-    {
-      "name": "write-a-skill",
-      "source": "shared_agents",
-      "path_kind": "user_local_not_portable",
-      "same_machine_locator": "~/.agents/skills/write-a-skill/SKILL.md",
-      "description": "Create new agent skills with proper structure, progressive disclosure, and bundled resources."
-    },
-    {
-      "name": "zoom-out",
-      "source": "shared_agents",
-      "path_kind": "user_local_not_portable",
-      "same_machine_locator": "~/.agents/skills/zoom-out/SKILL.md",
-      "description": "Tell the agent to zoom out and give broader context or a higher-level perspective."
     },
     {
       "name": "ask-matt",
@@ -1226,5 +1190,10 @@
       "same_machine_locator": "~/.agents/skills/writing-shape/SKILL.md",
       "description": "Writing, exploit \u2014 shape raw material into an article, paragraph by paragraph."
     }
-  ]
+  ],
+  "matt_pocock_source": {
+    "repository": "mattpocock/skills",
+    "version": "v1.2.2",
+    "commit": "8b36d4f"
+  }
 }

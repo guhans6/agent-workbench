@@ -256,10 +256,10 @@ skill_families:
       - handoff
       - improve-codebase-architecture
       - prototype
-      - to-issues
-      - to-prd
+      - to-spec
+      - to-tickets
       - triage
-      - zoom-out
+      - wayfinder
   - family: docs_research
     skills:
       - aspnet-core
@@ -289,7 +289,7 @@ skill_families:
   - family: quality_debugging
     skills:
       - caveman-review
-      - diagnose
+      - diagnosing-bugs
       - security-best-practices
       - security-ownership-map
       - security-threat-model
@@ -317,7 +317,6 @@ skill_families:
       - playwright
       - playwright-interactive
       - winui-app
-      - write-a-skill
 
 skills:
   - name: apple-ci-bootstrap
@@ -392,11 +391,6 @@ skills:
     path_kind: user_local_not_portable
     same_machine_locator: ~/.agents/skills/define-goal/SKILL.md
     description: Help the user define a concrete, measurable goal before starting work.
-  - name: diagnose
-    source: shared_agents
-    path_kind: user_local_not_portable
-    same_machine_locator: ~/.agents/skills/diagnose/SKILL.md
-    description: Disciplined diagnosis loop for hard bugs and performance regressions.
   - name: figma
     source: shared_agents
     path_kind: user_local_not_portable
@@ -637,16 +631,6 @@ skills:
     path_kind: user_local_not_portable
     same_machine_locator: ~/.agents/skills/thermo-nuclear-code-quality-review/SKILL.md
     description: Extremely strict maintainability review focused on abstraction quality, giant files, and spaghetti-condition growth.
-  - name: to-issues
-    source: shared_agents
-    path_kind: user_local_not_portable
-    same_machine_locator: ~/.agents/skills/to-issues/SKILL.md
-    description: Break a plan, spec, or PRD into independently grabbable issues using tracer-bullet vertical slices.
-  - name: to-prd
-    source: shared_agents
-    path_kind: user_local_not_portable
-    same_machine_locator: ~/.agents/skills/to-prd/SKILL.md
-    description: Turn the current conversation context into a PRD and publish it to the project issue tracker.
   - name: transcribe
     source: shared_agents
     path_kind: user_local_not_portable
@@ -667,16 +651,6 @@ skills:
     path_kind: user_local_not_portable
     same_machine_locator: ~/.agents/skills/winui-app/SKILL.md
     description: Bootstrap, develop, and design modern WinUI 3 desktop applications with C# and the Windows App SDK.
-  - name: write-a-skill
-    source: shared_agents
-    path_kind: user_local_not_portable
-    same_machine_locator: ~/.agents/skills/write-a-skill/SKILL.md
-    description: Create new agent skills with proper structure, progressive disclosure, and bundled resources.
-  - name: zoom-out
-    source: shared_agents
-    path_kind: user_local_not_portable
-    same_machine_locator: ~/.agents/skills/zoom-out/SKILL.md
-    description: Tell the agent to zoom out and give broader context or a higher-level perspective.
   - name: ask-matt
     source: shared_agents
     path_kind: user_local_not_portable

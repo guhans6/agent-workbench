@@ -169,7 +169,7 @@ Rules:
 1. Prefer conditional skill invocation over always-use.
 2. Always-use is allowed only for workflow-defining skills and only when available and approved.
 3. For behavior-changing implementation, assign `tdd` as always-use when available unless the repo evidence says otherwise.
-4. For debugging, assign a debugging skill such as `diagnose` or `systematic-debugging` when available.
+4. For debugging, assign a debugging skill such as `diagnosing-bugs` or `systematic-debugging` when available.
 5. For Apple work, assign Apple/Swift skills conditionally, such as iOS HIG, SwiftUI, Swift concurrency, Swift testing, Xcode, or Apple docs skills when observed.
 6. For web UI work, assign browser, Playwright, design, accessibility, framework, or deployment skills only when observed and relevant.
 7. Reviewers should be read-only and should not use implementation skills unless the review task explicitly asks for a fix.
@@ -185,7 +185,7 @@ Generated custom-agent instructions should include explicit skill rules, for exa
 For behavior-changing implementation, use the `tdd` skill when available before editing.
 For SwiftUI changes, use the `swiftui-pro` skill when available.
 For Swift concurrency changes, use the `swift-concurrency-expert` skill when available.
-For unclear failures, use the `diagnose` skill when available before proposing fixes.
+For unclear failures, use the `diagnosing-bugs` skill when available before proposing fixes.
 If a required skill is unavailable, report the fallback approach.
 ```
 
