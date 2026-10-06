@@ -1,9 +1,7 @@
 schema_version: 1
 generated_on: "2026-08-06"
 purpose: >
-  Agent-only routing and capability catalog for skill and agent selection.
-  Use this file to select the right agent, skill, product, or MCP surface
-  for a task before implementation starts.
+  Agent-only routing and capability catalog for skill and agent selection. Use this file to select the right agent, skill, product, or MCP surface for a task before implementation starts.
 
 path_rules:
   repo_curated:
@@ -12,10 +10,7 @@ path_rules:
     meaning: User-local shared skill outside the repo; do not assume it exists on another machine.
     same_machine_locator: ~/.agents/skills/<skill-name>/SKILL.md
     remote_machine_policy: >
-      If the shared local skill is missing on this machine, do not try to open
-      a user-specific absolute path. Tell the agent to either install or sync
-      the shared skill set for the target machine, or fall back to repo-curated
-      routing assets when possible.
+      If the shared local skill is missing on this machine, do not try to open a user-specific absolute path. Tell the agent to either install or sync the shared skill set for the target machine, or fall back to repo-curated routing assets when possible.
 
 entrypoints:
   human_router:
@@ -43,62 +38,62 @@ selection_rules:
 
 task_routes:
   - task: Understand an Apple codebase before editing
-    preferred_agents: [swift_explorer]
+    preferred_agents: [ swift_explorer ]
     preferred_skills: []
   - task: Understand a non-Apple codebase before editing
-    preferred_agents: [explorer]
+    preferred_agents: [ explorer ]
     preferred_skills: []
   - task: Make a tiny localized code or UI tweak
-    preferred_agents: [spark_editor]
+    preferred_agents: [ spark_editor ]
     preferred_skills: []
   - task: Implement a normal Apple feature or medium refactor
-    preferred_agents: [swift_worker]
+    preferred_agents: [ swift_worker ]
     preferred_skills: []
   - task: Triage build, test, simulator, or scheme failures
-    preferred_agents: [xcode_triager]
+    preferred_agents: [ xcode_triager ]
     preferred_skills: []
   - task: Investigate a hard runtime, concurrency, or migration bug
-    preferred_agents: [deep_debugger]
-    preferred_skills: [diagnosing-bugs]
+    preferred_agents: [ deep_debugger ]
+    preferred_skills: [ diagnosing-bugs ]
   - task: Check Apple API behavior or availability
-    preferred_agents: [apple_docs_researcher]
+    preferred_agents: [ apple_docs_researcher ]
     preferred_skills: []
   - task: Review a diff for regressions or missing tests
-    preferred_agents: [swift_reviewer]
+    preferred_agents: [ swift_reviewer ]
     preferred_skills: []
   - task: Run an exhaustive pre-submit review
-    preferred_agents: [gatekeeper]
-    preferred_skills: [thermo-nuclear-code-quality-review]
+    preferred_agents: [ gatekeeper ]
+    preferred_skills: [ thermo-nuclear-code-quality-review ]
   - task: Bootstrap or refresh repo-local Apple workflow scripts and AGENTS guidance
-    preferred_agents: [swift_explorer, swift_worker]
-    preferred_skills: [ios-macos-repo-workflow]
+    preferred_agents: [ swift_explorer, swift_worker ]
+    preferred_skills: [ ios-macos-repo-workflow ]
   - task: Bootstrap or refresh Apple CI workflows
-    preferred_agents: [swift_explorer, swift_worker]
-    preferred_skills: [apple-ci-bootstrap]
+    preferred_agents: [ swift_explorer, swift_worker ]
+    preferred_skills: [ apple-ci-bootstrap ]
   - task: Create a branch, commit, push, and prepare PR-ready output
-    preferred_agents: [swift_worker]
-    preferred_skills: [publish-workflow]
+    preferred_agents: [ swift_worker ]
+    preferred_skills: [ publish-workflow ]
   - task: Research current third-party framework or library docs
-    preferred_agents: [explorer]
-    preferred_skills: [context7-mcp]
+    preferred_agents: [ explorer ]
+    preferred_skills: [ context7-mcp ]
   - task: Turn a broad request into a PRD or implementation issue breakdown
-    preferred_agents: [explorer]
-    preferred_skills: [to-spec, to-tickets]
+    preferred_agents: [ explorer ]
+    preferred_skills: [ to-spec, to-tickets ]
   - task: Choose a workflow for an unclear request
-    preferred_agents: [explorer]
-    preferred_skills: [ask-matt]
+    preferred_agents: [ explorer ]
+    preferred_skills: [ ask-matt ]
   - task: Stress-test an idea against repository documentation
-    preferred_agents: [explorer]
-    preferred_skills: [grill-with-docs]
+    preferred_agents: [ explorer ]
+    preferred_skills: [ grill-with-docs ]
   - task: Plan a multi-session effort with an uncertain route
-    preferred_agents: [explorer]
-    preferred_skills: [wayfinder]
+    preferred_agents: [ explorer ]
+    preferred_skills: [ wayfinder ]
   - task: Implement approved tickets at established seams
-    preferred_agents: [swift_worker]
-    preferred_skills: [implement, tdd]
+    preferred_agents: [ swift_worker ]
+    preferred_skills: [ implement, tdd ]
   - task: Review a non-trivial change before committing
-    preferred_agents: [swift_reviewer]
-    preferred_skills: [code-review]
+    preferred_agents: [ swift_reviewer ]
+    preferred_skills: [ code-review ]
 
 products:
   - name: Browser
@@ -450,17 +445,20 @@ skills:
     source: shared_agents
     path_kind: user_local_not_portable
     same_machine_locator: ~/.agents/skills/grill-me/SKILL.md
-    description: Interview the user relentlessly about a plan or design until reaching shared understanding.
+    description: A relentless interview to sharpen a plan or design.
+    invocation: user
   - name: grill-with-docs
     source: shared_agents
     path_kind: user_local_not_portable
     same_machine_locator: ~/.agents/skills/grill-with-docs/SKILL.md
-    description: Stress-test a plan against the project's domain model and documented decisions.
+    description: A relentless interview to sharpen a plan or design, which also creates docs (ADR's and glossary) as we go.
+    invocation: user
   - name: handoff
     source: shared_agents
     path_kind: user_local_not_portable
     same_machine_locator: ~/.agents/skills/handoff/SKILL.md
-    description: Compact the current conversation into a handoff document for another agent.
+    description: Compact the current conversation into a handoff document for another agent to pick up.
+    invocation: user
   - name: hatch-pet
     source: shared_agents
     path_kind: user_local_not_portable
@@ -475,7 +473,8 @@ skills:
     source: shared_agents
     path_kind: user_local_not_portable
     same_machine_locator: ~/.agents/skills/improve-codebase-architecture/SKILL.md
-    description: Find deepening opportunities in a codebase and improve architecture, modularity, and AI navigability.
+    description: Scan a codebase for deepening opportunities, present them as a visual HTML report, then grill through whichever one you pick.
+    invocation: user
   - name: ios-debugger-agent
     source: shared_agents
     path_kind: user_local_not_portable
@@ -555,7 +554,8 @@ skills:
     source: shared_agents
     path_kind: user_local_not_portable
     same_machine_locator: ~/.agents/skills/prototype/SKILL.md
-    description: Build a throwaway prototype to flesh out a design before committing to it.
+    description: Build a throwaway prototype to answer a design question. Use when the user wants to sanity-check whether a state model or logic feels right, or explore what a UI should look like.
+    invocation: model
   - name: render-deploy
     source: shared_agents
     path_kind: user_local_not_portable
@@ -590,7 +590,8 @@ skills:
     source: shared_agents
     path_kind: user_local_not_portable
     same_machine_locator: ~/.agents/skills/setup-matt-pocock-skills/SKILL.md
-    description: Set up repo issue-tracker, triage-label, and domain-doc context for planning and engineering skills.
+    description: "Configure this repo for the engineering skills: set up its issue tracker, triage label vocabulary, and domain doc layout. Run once before first use of the other engineering skills."
+    invocation: user
   - name: speech
     source: shared_agents
     path_kind: user_local_not_portable
@@ -625,7 +626,8 @@ skills:
     source: shared_agents
     path_kind: user_local_not_portable
     same_machine_locator: ~/.agents/skills/tdd/SKILL.md
-    description: Test-driven development with the red-green-refactor loop for features and bug fixes.
+    description: Test-driven development. Use when the user wants to build features or fix bugs test-first, mentions "red-green-refactor", or wants integration tests.
+    invocation: model
   - name: thermo-nuclear-code-quality-review
     source: shared_agents
     path_kind: user_local_not_portable
@@ -640,7 +642,8 @@ skills:
     source: shared_agents
     path_kind: user_local_not_portable
     same_machine_locator: ~/.agents/skills/triage/SKILL.md
-    description: Triage issues through a state machine driven by triage roles.
+    description: Move issues and external PRs through a state machine of triage roles, categorise, verify, grill if needed, and write agent-ready briefs.
+    invocation: user
   - name: vercel-deploy
     source: shared_agents
     path_kind: user_local_not_portable
@@ -656,56 +659,67 @@ skills:
     path_kind: user_local_not_portable
     same_machine_locator: ~/.agents/skills/ask-matt/SKILL.md
     description: "Ask which skill or flow fits your situation. A router over the skills in this repo."
+    invocation: user
   - name: claude-handoff
     source: shared_agents
     path_kind: user_local_not_portable
     same_machine_locator: ~/.agents/skills/claude-handoff/SKILL.md
     description: "Hand the current conversation off to a fresh background agent that picks up the work immediately."
+    invocation: user
   - name: code-review
     source: shared_agents
     path_kind: user_local_not_portable
     same_machine_locator: ~/.agents/skills/code-review/SKILL.md
-    description: "Review the changes since a fixed point (commit, branch, tag, or merge-base) along two axes \u2014 Standards (does the code follow this repo's documented coding standards?) and Spec (does the code match what the originating issue/spec asked for?). Runs both reviews in parallel sub-agents and reports them side by side. Use when the user wants to review a branch, a PR, work-in-progress changes, or asks to \"review since X\"."
+    description: "Review the changes since a fixed point (commit, branch, tag, or merge-base) along two axes: Standards (does the code follow this repo's documented coding standards?) and Spec (does the code match what the originating issue/spec asked for?). Runs both reviews in parallel sub-agents and reports them side by side. Use when the user wants to review a branch, a PR, work-in-progress changes, or asks to \"review since X\"."
+    invocation: model
   - name: codebase-design
     source: shared_agents
     path_kind: user_local_not_portable
     same_machine_locator: ~/.agents/skills/codebase-design/SKILL.md
     description: "Shared vocabulary for designing deep modules. Use when the user wants to design or improve a module's interface, find deepening opportunities, decide where a seam goes, make code more testable or AI-navigable, or when another skill needs the deep-module vocabulary."
+    invocation: model
   - name: diagnosing-bugs
     source: shared_agents
     path_kind: user_local_not_portable
     same_machine_locator: ~/.agents/skills/diagnosing-bugs/SKILL.md
     description: "Diagnosis loop for hard bugs and performance regressions. Use when the user says \"diagnose\"/\"debug this\", or reports something broken/throwing/failing/slow."
+    invocation: model
   - name: domain-modeling
     source: shared_agents
     path_kind: user_local_not_portable
     same_machine_locator: ~/.agents/skills/domain-modeling/SKILL.md
-    description: "Build and sharpen a project's domain model. Use when the user wants to pin down domain terminology or a ubiquitous language, record an architectural decision, or when another skill needs to maintain the domain model."
+    description: "Build and sharpen a project's domain model. Use when discussing codebase terminology, writing or editing a GLOSSARY.md, or recording or editing an ADR."
+    invocation: model
   - name: git-guardrails-claude-code
     source: shared_agents
     path_kind: user_local_not_portable
     same_machine_locator: ~/.agents/skills/git-guardrails-claude-code/SKILL.md
     description: "Set up Claude Code hooks to block dangerous git commands (push, reset --hard, clean, branch -D, etc.) before they execute. Use when user wants to prevent destructive git operations, add git safety hooks, or block git push/reset in Claude Code."
+    invocation: model
   - name: grilling
     source: shared_agents
     path_kind: user_local_not_portable
     same_machine_locator: ~/.agents/skills/grilling/SKILL.md
     description: "Grill the user relentlessly about a plan, decision, or idea. Use when the user wants to stress-test their thinking, or uses any 'grill' trigger phrases."
+    invocation: model
   - name: implement
     source: shared_agents
     path_kind: user_local_not_portable
     same_machine_locator: ~/.agents/skills/implement/SKILL.md
     description: "Implement a piece of work based on a spec or set of tickets."
+    invocation: user
   - name: loop-me
     source: shared_agents
     path_kind: user_local_not_portable
     same_machine_locator: ~/.agents/skills/loop-me/SKILL.md
     description: "Grill me about specs for the workflows I want to build, within this workspace."
+    invocation: user
   - name: migrate-to-shoehorn
     source: shared_agents
     path_kind: user_local_not_portable
     same_machine_locator: ~/.agents/skills/migrate-to-shoehorn/SKILL.md
     description: "Migrate test files from `as` type assertions to @total-typescript/shoehorn. Use when user mentions shoehorn, wants to replace `as` in tests, or needs partial test data."
+    invocation: model
   - name: refresh-project-agent-routing
     source: shared_agents
     path_kind: user_local_not_portable
@@ -716,26 +730,25 @@ skills:
     path_kind: user_local_not_portable
     same_machine_locator: ~/.agents/skills/research/SKILL.md
     description: "Investigate a question against high-trust primary sources and capture the findings as a Markdown file in the repo. Use when the user wants a topic researched, docs or API facts gathered, or reading legwork delegated to a background agent."
-  - name: resolving-merge-conflicts
-    source: shared_agents
-    path_kind: user_local_not_portable
-    same_machine_locator: ~/.agents/skills/resolving-merge-conflicts/SKILL.md
-    description: "Use when you need to resolve an in-progress git merge/rebase conflict."
+    invocation: model
   - name: scaffold-exercises
     source: shared_agents
     path_kind: user_local_not_portable
     same_machine_locator: ~/.agents/skills/scaffold-exercises/SKILL.md
     description: "Create exercise directory structures with sections, problems, solutions, and explainers that pass linting. Use when user wants to scaffold exercises, create exercise stubs, or set up a new course section."
+    invocation: model
   - name: setup-pre-commit
     source: shared_agents
     path_kind: user_local_not_portable
     same_machine_locator: ~/.agents/skills/setup-pre-commit/SKILL.md
     description: "Set up Husky pre-commit hooks with lint-staged (Prettier), type checking, and tests in the current repo. Use when user wants to add pre-commit hooks, set up Husky, configure lint-staged, or add commit-time formatting/typechecking/testing."
+    invocation: model
   - name: setup-ts-deep-modules
     source: shared_agents
     path_kind: user_local_not_portable
     same_machine_locator: ~/.agents/skills/setup-ts-deep-modules/SKILL.md
-    description: "Wire dependency-cruiser into a TypeScript repo so each package is a deep module \u2014 implementation hidden in subfolders, reachable only through its entry-point files. User-invoked."
+    description: "Wire dependency-cruiser into a TypeScript repo so each package is a deep module, with implementation hidden in subfolders and reachable only through its entry-point files. User-invoked."
+    invocation: user
   - name: swift-concurrency-pro
     source: shared_agents
     path_kind: user_local_not_portable
@@ -751,53 +764,98 @@ skills:
     path_kind: user_local_not_portable
     same_machine_locator: ~/.agents/skills/teach/SKILL.md
     description: "Teach the user a new skill or concept, within this workspace."
+    invocation: user
   - name: to-questionnaire
     source: shared_agents
     path_kind: user_local_not_portable
     same_machine_locator: ~/.agents/skills/to-questionnaire/SKILL.md
     description: "Turn a decision you can't fully answer into a questionnaire for someone else to fill in."
+    invocation: user
   - name: to-spec
     source: shared_agents
     path_kind: user_local_not_portable
     same_machine_locator: ~/.agents/skills/to-spec/SKILL.md
-    description: "Turn the current conversation into a spec and publish it to the project issue tracker \u2014 no interview, just synthesis of what you've already discussed."
+    description: "Turn the current conversation into a spec and publish it to the project issue tracker: no interview, just synthesis of what you've already discussed."
+    invocation: user
   - name: to-tickets
     source: shared_agents
     path_kind: user_local_not_portable
     same_machine_locator: ~/.agents/skills/to-tickets/SKILL.md
-    description: "Break a plan, spec, or the current conversation into a set of tracer-bullet tickets, each declaring its blocking edges, published to the configured tracker \u2014 edges as text in one file per ticket locally, or native blocking links on a real tracker."
+    description: "Break a plan, spec, or the current conversation into a set of tracer-bullet tickets, each declaring its blocking edges, published to the configured tracker (edges as text in one file per ticket locally, or native blocking links on a real tracker)."
+    invocation: user
   - name: wait-what
     source: shared_agents
     path_kind: user_local_not_portable
     same_machine_locator: ~/.agents/skills/wait-what/SKILL.md
-    description: "Stop. That last message did not land \u2014 re-pitch it."
+    description: "Stop. That last message did not land: re-pitch it."
+    invocation: user
   - name: wayfinder
     source: shared_agents
     path_kind: user_local_not_portable
     same_machine_locator: ~/.agents/skills/wayfinder/SKILL.md
-    description: "Plan a huge chunk of work \u2014 more than one agent session can hold \u2014 as a shared map of decision tickets on your issue tracker, and resolve them one at a time until the way to the destination is clear."
+    description: "Plan a huge chunk of work (more than one agent session can hold) as a shared map of decision tickets on your issue tracker, and resolve them one at a time until the way to the destination is clear."
+    invocation: user
   - name: wizard
     source: shared_agents
     path_kind: user_local_not_portable
     same_machine_locator: ~/.agents/skills/wizard/SKILL.md
     description: "Generate an interactive bash wizard that walks a human through steps only they can perform. Use when provisioning infrastructure, setting up credentials or CI secrets, walking an unfamiliar third-party dashboard, or running a one-off migration or cutover. Don't invoke this for steps the agent can perform itself."
+    invocation: model
   - name: writing-beats
     source: shared_agents
     path_kind: user_local_not_portable
     same_machine_locator: ~/.agents/skills/writing-beats/SKILL.md
-    description: "Writing, exploit \u2014 assemble raw material into a journey of beats, grounding each term before a beat leans on it."
+    description: "Writing, exploit; assemble raw material into a journey of beats, grounding each term before a beat leans on it."
+    invocation: user
   - name: writing-for-agents
     source: shared_agents
     path_kind: user_local_not_portable
     same_machine_locator: ~/.agents/skills/writing-for-agents/SKILL.md
     description: "Writing documents for agents. Use when creating or editing skills, or modifying AGENTS.md or CLAUDE.md."
+    invocation: model
   - name: writing-fragments
     source: shared_agents
     path_kind: user_local_not_portable
     same_machine_locator: ~/.agents/skills/writing-fragments/SKILL.md
-    description: "Writing, explore \u2014 mine raw fragments, no structure yet."
+    description: "Writing, explore: mine raw fragments, no structure yet."
+    invocation: user
   - name: writing-shape
     source: shared_agents
     path_kind: user_local_not_portable
     same_machine_locator: ~/.agents/skills/writing-shape/SKILL.md
-    description: "Writing, exploit \u2014 shape raw material into an article, paragraph by paragraph."
+    description: "Writing, exploit: shape raw material into an article, paragraph by paragraph."
+    invocation: user
+  - name: chief-of-staff
+    source: shared_agents
+    path_kind: user_local_not_portable
+    same_machine_locator: ~/.agents/skills/chief-of-staff/SKILL.md
+    description: Pursue a long-running goal in a single session by co-ordinating subagents.
+    invocation: user
+  - name: implement-spec
+    source: shared_agents
+    path_kind: user_local_not_portable
+    same_machine_locator: ~/.agents/skills/implement-spec/SKILL.md
+    description: Implement the result of /to-spec and /to-tickets in code.
+    invocation: user
+  - name: pr
+    source: shared_agents
+    path_kind: user_local_not_portable
+    same_machine_locator: ~/.agents/skills/pr/SKILL.md
+    description: Use when writing a PR body.
+    invocation: model
+  - name: retro
+    source: shared_agents
+    path_kind: user_local_not_portable
+    same_machine_locator: ~/.agents/skills/retro/SKILL.md
+    description: Conduct a retrospective on a coding session.
+    invocation: user
+  - name: setup-delivery-workflow
+    source: shared_agents
+    path_kind: user_local_not_portable
+    same_machine_locator: ~/.agents/skills/setup-delivery-workflow/SKILL.md
+    description: Agree and record a repository Definition of Done and delivery reporting convention.
+    invocation: user
+matt_pocock_source:
+  repository: mattpocock/skills
+  commit: 4588b32ecab9ecc9fc8cc6b6c5e7d675b6004b0d
+session_sync_date: 2026-10-06

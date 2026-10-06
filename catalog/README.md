@@ -27,4 +27,8 @@ For Codex-specific assets, install from `platforms/codex/` and keep secrets out 
 - rules: `platforms/codex/rules/`
 - config example: `platforms/codex/config.redacted.toml`
 
+Completion guidance is curated in `../platforms/pi/AGENTS.md` and the marked Completion section of `../platforms/codex/AGENTS.md`. Confirm each host's loaded global file (Pi agent directory; Codex `$CODEX_HOME`, normally `~/.codex`, with override precedence), preview a diff, and obtain approval before merging the block once. Preserve existing instructions rather than copying a whole global file over them. Shared skill storage is not a universal global-instruction location.
+
+For pinned skills, explicit-only invocation, and validation limits, read `../shared/workflows/session-asset-sync.md`. The setup skill configures an approved repo reference/pointer; it does not install global guidance.
+
 Plugin/system skills and MCP servers are not copied from runtime caches. Install them through their provider or package command, then verify with the target agent.

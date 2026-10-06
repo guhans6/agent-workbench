@@ -13,7 +13,7 @@ This inventory summarizes what this repo currently carries.
 
 The first-level skill folders from `~/.agents/skills` are vendored under `shared/skills/`, excluding backup/runtime folders.
 
-Shared skills count: 75
+Shared skills count: 102 (verified 2026-10-06). The original platform/MCP snapshot is not refreshed by this limited session sync.
 
 ## Codex Platform Assets
 
@@ -22,6 +22,13 @@ Shared skills count: 75
 - `platforms/codex/AGENT_ROUTING_*.{md,yaml,json}`: Codex routing catalogs.
 - `platforms/codex/config.redacted.toml`: redacted Codex config snapshot.
 - `platforms/codex/rules/default.rules`: Codex rule file.
+
+## Pi and Completion Guidance
+
+- `platforms/pi/AGENTS.md`: approved Pi global Completion block.
+- `platforms/pi/README.md`: loaded-path and approval-first merge guidance.
+- `platforms/codex/AGENTS.md`: existing routing preserved plus the matching Completion block.
+- `shared/workflows/session-asset-sync.md`: pinned skill provenance and verification limits.
 
 ## Redaction Notes
 
