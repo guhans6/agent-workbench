@@ -16,6 +16,7 @@ This repo is a source-of-truth catalogue, not a raw dump of runtime state. It ke
 - `shared/skills/`: vendored local skills intended for any compatible agent.
 - `shared/rules/` and `shared/workflows/`: cross-agent notes and workflows.
 - `platforms/codex/`: Codex-specific agents, routing, rules, config snapshots, and local Codex-home skills.
+- `platforms/pi/`: curated global completion guidance and approval-first installation notes.
 - `inventory/`: local inventory and export notes.
 
 ## Excluded On Purpose

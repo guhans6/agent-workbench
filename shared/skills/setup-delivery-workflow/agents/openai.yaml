@@ -1,0 +1,5 @@
+interface:
+  display_name: "Setup Delivery Workflow"
+  short_description: "Agree a repo Definition of Done"
+policy:
+  allow_implicit_invocation: false
