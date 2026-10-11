@@ -27,3 +27,7 @@ This repo is a source-of-truth catalogue, not a raw dump of runtime state. It ke
 - generated build output
 
 See `catalog/README.md` before installing assets on a new machine or in a different agent.
+
+## Checkpoint engineering workflow
+
+The checkpoint bundle adds evidence-driven increments to ticket planning and implementation, plus a Matt-informed advisor for uncertain engineering decisions. Project setup previews one portable reference/pointer while preserving existing instructions. Start with [maintenance and installation](shared/workflows/skill-maintenance.md); consult [qualification evidence](shared/workflows/checkpoint-qualification.md) before treating source publication as installed or enabled behavior.

@@ -6,6 +6,8 @@ This catalog is agent-neutral. It lists repo-vendored shared skills, Codex-speci
 
 Session sync: 2026-10-06. Matt Pocock’s 38 active skills match upstream commit `4588b32ecab9ecc9fc8cc6b6c5e7d675b6004b0d`; invocation policies are preserved (23 user-only, 15 model-invocable). `setup-delivery-workflow` is independently owned and user-only. Machine-readable catalogs record invocation as `user` or `model`.
 
+Checkpoint adaptation: 2026-10-11. `to-tickets`, `implement` and `setup-matt-pocock-skills` now carry documented local changes; the preceding session sync describes their historical baseline. `matt-informed-engineering` is independently owned and model-discoverable. See `shared/workflows/skill-maintenance.md` and `shared/upstream/matt-pocock/local-adaptations.json`.
+
 ## Shared Vendored Skills
 
 These folders are committed under `shared/skills/` and are the default source for agent-neutral workflows.
@@ -49,6 +51,7 @@ These folders are committed under `shared/skills/` and are the default source fo
 | `jupyter-notebook` | Use when the user asks to create, scaffold, or edit Jupyter notebooks (`.ipynb`) for experiments, explorations, or tutorials; prefer the bundled templates and run the helper script `new_notebook.py` to generate a clean starting notebook. | `shared/skills/jupyter-notebook` |
 | `linear` | Manage issues, projects & team workflows in Linear. Use when the user wants to read, create or updates tickets in Linear. | `shared/skills/linear` |
 | `migrate-to-codex` | Migrate supported instruction files, skills, agents, and MCP config into Codex project and global files. | `shared/skills/migrate-to-codex` |
+| `matt-informed-engineering` | Engineering uncertainty: use when choosing evidence for stalled progress, unproven integration, unclear module seams, or repeated agent-document failures. Applies Matt's published methods to one decision and its smallest observable next move. | `shared/skills/matt-informed-engineering` |
 | `mobile-ios-design` | Master iOS Human Interface Guidelines and SwiftUI patterns for building native iOS apps. Use when designing iOS interfaces, implementing SwiftUI views, or ensuring apps follow Apple's design principles. | `shared/skills/mobile-ios-design` |
 | `netlify-deploy` | Deploy web projects to Netlify using the Netlify CLI (`npx netlify`). Use when the user asks to deploy, host, publish, or link a site/repo on Netlify, including preview and production deploys. | `shared/skills/netlify-deploy` |
 | `notion-knowledge-capture` | Capture conversations and decisions into structured Notion pages; use when turning chats/notes into wiki entries, how-tos, decisions, or FAQs with proper linking. | `shared/skills/notion-knowledge-capture` |

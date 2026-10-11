@@ -6,7 +6,7 @@ repo:
 skill_sources:
   shared:
     root: "shared/skills"
-    install_codex_example: "cp -R shared/skills/<skill-name> ~/.agents/skills/"
+    install_codex_example: "For checkpoint consumers install skills plus sibling workflows/validated-checkpoints.md; see shared/workflows/skill-maintenance.md. Other independent skills may be copied individually."
     skills:
       - name: "apple-on-device-ai"
         path: "shared/skills/apple-on-device-ai/SKILL.md"
@@ -123,6 +123,10 @@ skill_sources:
       - name: "migrate-to-codex"
         path: "shared/skills/migrate-to-codex/SKILL.md"
         description: "Migrate supported instruction files, skills, agents, and MCP config into Codex project and global files."
+      - name: "matt-informed-engineering"
+        path: "shared/skills/matt-informed-engineering/SKILL.md"
+        description: "Engineering uncertainty: use when choosing evidence for stalled progress, unproven integration, unclear module seams, or repeated agent-document failures. Applies Matt's published methods to one decision and its smallest observable next move."
+        invocation: model
       - name: "mobile-ios-design"
         path: "shared/skills/mobile-ios-design/SKILL.md"
         description: "Master iOS Human Interface Guidelines and SwiftUI patterns for building native iOS apps. Use when designing iOS interfaces, implementing SwiftUI views, or ensuring apps follow Apple's design principles."
@@ -702,3 +706,6 @@ mcp_servers:
     auth: "Unsupported"
     status: "enabled"
 session_sync_date: 2026-10-06
+checkpoint_adaptation_date: 2026-10-11
+checkpoint_provenance: shared/upstream/matt-pocock/local-adaptations.json
+checkpoint_bundle_reference: shared/workflows/validated-checkpoints.md

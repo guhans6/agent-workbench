@@ -39,6 +39,13 @@ Give each ticket its **blocking edges**: the other tickets that must complete be
 
 **Wide refactors are the exception to vertical slicing.** A **wide refactor** is one mechanical change (rename a column, retype a shared symbol) whose **blast radius** fans across the whole codebase, so a single edit breaks thousands of call sites at once and no vertical slice can land green. Don't force it into a tracer bullet; sequence it as **expand–contract**. First expand: add the new form beside the old so nothing breaks. Then migrate the call sites over in batches sized by blast radius (per package, per directory), each batch its own ticket blocked by the expand, keeping CI green batch to batch because the old form still exists. Finally contract: delete the old form once no caller remains, in a ticket blocked by every migrate batch. When even the batches can't stay green alone, keep the sequence but let them share an integration branch that all block a final integrate-and-verify ticket; green is promised only there.
 
+For tickets with dependent increments or an uncertain integration boundary, read
+[validated checkpoints](../../workflows/validated-checkpoints.md) and the repository's
+delivery reference. Record the runnable baseline, remaining delta and smallest
+independently observable checkpoints needed to prove the ticket. Keep one-step
+tickets to their acceptance criteria. Use the optional checkpoint section below;
+internal proof boundaries remain inside the complete tracer-bullet ticket.
+
 ### 4. Quiz the user
 
 Present the proposed breakdown as a numbered list. For each ticket, show:
@@ -46,6 +53,7 @@ Present the proposed breakdown as a numbered list. For each ticket, show:
 - **Title**: short descriptive name
 - **Blocked by**: which other tickets (if any) must complete first
 - **What it delivers**: the end-to-end behaviour this ticket makes work
+- **Checkpoint plan**, when needed: baseline/delta, observable increments and focused proof; surface unresolved authority or external-action budgets with the breakdown so the approval covers ordinary advancement
 
 Ask the user:
 
@@ -101,5 +109,29 @@ The end-to-end behaviour this ticket makes work, from the user's perspective, no
 - A reference to each blocking ticket, or "None (can start immediately)".
 
 </issue-template>
+
+For either template, insert this optional section after the acceptance criteria
+only when dependent increments or integration uncertainty warrant it:
+
+<checkpoint-plan-template>
+
+## Checkpoint plan
+
+Baseline and remaining delta: <reusable behavior and what this ticket adds>.
+
+| Increment | Done when | Focused proof |
+| --- | --- | --- |
+| <small observable increment> | <checkable completion condition> | <public boundary / actual target and evidence to retain> |
+| <dependent increment, if needed> | <checkable completion condition> | <public boundary / actual target and evidence to retain> |
+
+Authority and budget: <inherited approved scope; unresolved external-action or
+cost budget only>. Advance after passing proof within that authority.
+
+Delivery target: <applicable local/installed/published/enabled target>.
+
+</checkpoint-plan-template>
+
+Use durable behavior descriptions and existing verification references in the
+plan. Execution records the concrete command/artifact, target and observation.
 
 In either form, avoid specific file paths or code snippets: they go stale fast. Exception: if a prototype produced a snippet that encodes a decision more precisely than prose can (state machine, reducer, schema, type shape), inline it and note briefly that it came from a prototype. Trim to the decision-rich parts, not a working demo, just the important bits.
