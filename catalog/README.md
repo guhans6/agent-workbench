@@ -12,7 +12,7 @@ Use this repo as a catalogue and source checkout:
 
 ## Install Patterns
 
-For shared skills, copy or symlink the selected folder into the target agent's skill directory. For Codex, the user-level target is usually:
+For independent shared skills, copy or symlink the selected folder into the target agent's skill directory. Checkpoint consumers require the complete skills/workflows layout below; a single-folder copy leaves their shared reference unresolved. For Codex, the user-level target is usually:
 
 ```bash
 mkdir -p ~/.agents/skills
@@ -32,3 +32,11 @@ Completion guidance is curated in `../platforms/pi/AGENTS.md` and the marked Com
 For pinned skills, explicit-only invocation, and validation limits, read `../shared/workflows/session-asset-sync.md`. The setup skill configures an approved repo reference/pointer; it does not install global guidance.
 
 Plugin/system skills and MCP servers are not copied from runtime caches. Install them through their provider or package command, then verify with the target agent.
+
+## Validated checkpoint bundle
+
+The locally adapted `to-tickets`, `implement` and `setup-matt-pocock-skills` consume `shared/workflows/validated-checkpoints.md`. Install those folders and `matt-informed-engineering` under the target asset root's `skills/`, with the protocol under its sibling `workflows/`. Preview destination differences and preserve local edits before installation. See [maintenance and installation](../shared/workflows/skill-maintenance.md) for upstream merge rules and project adoption.
+
+Run `python3 scripts/verify-checkpoint-assets.py` from this checkout for structural and temporary installation checks. To read-check an installed or staged bundle, use `python3 scripts/verify-checkpoint-assets.py --installation-root <agent-assets>`. Neither command installs assets, updates global/project instructions, nor establishes live host discovery.
+
+The setup skill previews a checked-in project protocol and one pointer in the existing AGENTS.md/CLAUDE.md. Existing project copies change only through separately approved adoption/update; global skill refreshes do not overwrite them. [Qualification evidence and remaining boundaries](../shared/workflows/checkpoint-qualification.md).

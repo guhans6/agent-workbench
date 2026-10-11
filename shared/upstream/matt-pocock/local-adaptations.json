@@ -1,0 +1,38 @@
+{
+  "repository": "https://github.com/mattpocock/skills",
+  "adaptation_date": "2026-10-11",
+  "adaptations": [
+    {
+      "skill": "to-tickets",
+      "upstream_path": "skills/engineering/to-tickets/SKILL.md",
+      "base_revision": "4588b32ecab9ecc9fc8cc6b6c5e7d675b6004b0d",
+      "baseline": "shared/upstream/matt-pocock/4588b32ecab9ecc9fc8cc6b6c5e7d675b6004b0d/to-tickets/SKILL.md",
+      "baseline_sha256": "5c9fba69845c2519b9b35b9af42ae5142c21f8ca15ac2123dc2722002c8058ae",
+      "local_file": "shared/skills/to-tickets/SKILL.md",
+      "local_intent": "Conditional internal checkpoints; preserve vertical tickets and tracker/invocation behavior."
+    },
+    {
+      "skill": "implement",
+      "upstream_path": "skills/engineering/implement/SKILL.md",
+      "base_revision": "4588b32ecab9ecc9fc8cc6b6c5e7d675b6004b0d",
+      "baseline": "shared/upstream/matt-pocock/4588b32ecab9ecc9fc8cc6b6c5e7d675b6004b0d/implement/SKILL.md",
+      "baseline_sha256": "6d3fd9e83b8f36e5213854779db49b256a457a7ebb4a503e53fa7dcff696adc3",
+      "local_file": "shared/skills/implement/SKILL.md",
+      "local_intent": "Execute checkpoints; repository-scoped checks and explicitly authorized publication."
+    },
+    {
+      "skill": "setup-matt-pocock-skills",
+      "upstream_path": "skills/engineering/setup-matt-pocock-skills/SKILL.md",
+      "base_revision": "4588b32ecab9ecc9fc8cc6b6c5e7d675b6004b0d",
+      "baseline": "shared/upstream/matt-pocock/4588b32ecab9ecc9fc8cc6b6c5e7d675b6004b0d/setup-matt-pocock-skills/SKILL.md",
+      "baseline_sha256": "9a0c21694be19fa3eefc39343355d3af7414716ba364882c7432c2f821eac3e9",
+      "local_file": "shared/skills/setup-matt-pocock-skills/SKILL.md",
+      "local_intent": "Preview a checked-in checkpoint reference and idempotent project instruction pointer."
+    }
+  ],
+  "locally_owned": [
+    "shared/workflows/validated-checkpoints.md",
+    "shared/skills/matt-informed-engineering/"
+  ],
+  "research_revision": "49dd158d1076134a641b33efb035946536778336"
+}
